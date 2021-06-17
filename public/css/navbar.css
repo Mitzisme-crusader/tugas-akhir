@@ -1,0 +1,98 @@
+nav {
+    font-family: "Helvetica", serif;
+    font-weight: bold;
+    letter-spacing: 0.08rem;
+    min-height: var(--navbar_height);
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+nav ul {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: inherit;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    position: relative;
+}
+
+nav ul li a {
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+nav ul li a img {
+    display: block;
+    margin: 0.5em;
+    max-height: 40px;
+    max-width: 120px;
+}
+
+nav ul li a span {
+    color: var(--secondary_color);
+    display: block;
+    font-size: 0.9rem;
+    margin: 0.5em;
+    padding: 0.5em;
+    position: relative;
+    overflow: hidden;
+}
+
+nav ul li a span::before {
+    background: var(--secondary_color);
+    bottom: 0;
+    content: "";
+    height: 0.1rem;
+    left: 0;
+    position: absolute;
+    transition: transform 250ms ease-in-out;
+    width: 100%;
+}
+
+nav ul li.active a span::before {
+    transform: translateY(0%);
+}
+
+nav ul li:not(.active) a span::before {
+    transform: translateY(200%);
+}
+
+nav ul li:not(.active) a span:hover::before {
+    transform: translateY(0%);
+}
+
+nav ul li:nth-last-child(3) {
+    margin-left: auto;
+}
+
+/* nested ul */
+nav ul li ul {
+    display: none;
+    position: absolute;
+}
+
+nav ul li:hover ul {
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+}
+
+nav ul li ul li {
+    background: var(--primary_color);
+    width: 100%;
+}
+
+nav ul li ul li a span {
+    color: var(--secondary_color);
+    display: block;
+    font-size: 0.7rem;
+    margin: 1em;
+    padding: 0.5em;
+}

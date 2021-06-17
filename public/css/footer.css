@@ -1,0 +1,7 @@
+footer {
+    background: var(--primary_color);
+    color: var(--secondary_color);
+    min-height: var(--footer_height);
+    position: relative;
+    z-index: 99;
+}

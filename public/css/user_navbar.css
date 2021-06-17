@@ -1,0 +1,11 @@
+nav ul li:nth-last-child(3) {
+    margin-left: 0;
+}
+
+nav ul li:nth-last-child(2) {
+    margin-left: auto;
+}
+
+nav ul li:nth-last-child(1) ul {
+    right: 0;
+}

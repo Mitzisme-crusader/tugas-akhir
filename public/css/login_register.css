@@ -1,0 +1,30 @@
+.container {
+    background: url("/images/background-clean.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.content {
+    padding: 8rem 0;
+}
+
+.login-register-box {
+    margin: 0 auto;
+    overflow-x: hidden;
+    text-align: center;
+    width: 250px;
+}
+
+.login-register-box h1 {
+    color: var(--primary_color);
+}
+
+.input-wrapper input + label span {
+    color: var(--primary_color);
+}
+
+.g-recaptcha {
+    transform: scale(0.8);
+    transform-origin: 0 0;
+}
