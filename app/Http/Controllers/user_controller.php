@@ -32,7 +32,7 @@ class user_controller extends Controller
         ]);
 
         if ($_POST['email'] == "admin" && $_POST['password'] == "admin") { //cek admin
-            return redirect('/proses_login');
+            return redirect('admin/list_customer');
         } else {
             $result = $this->user_repository->pengecekan_login($_POST['email'], $_POST['password']);
             echo($result->isEmpty());
