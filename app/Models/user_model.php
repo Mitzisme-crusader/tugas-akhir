@@ -12,5 +12,6 @@ class user_model extends Model
         'email',
         'username',
         'password',
+        'status_aktif',
     ];
 }
