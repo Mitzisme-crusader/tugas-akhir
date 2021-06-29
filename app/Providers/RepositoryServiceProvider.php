@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Repository\eloquent_repository_interface;
 use App\Repository\user_repository_interface;
+use App\Repository\admin_repository_interface;
 use App\Repository\Eloquent\user_repository;
+use App\Repository\Eloquent\admin_repository;
 use App\Repository\Eloquent\base_repository;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,5 +25,6 @@ class RepositoryServiceProvider extends ServiceProvider
    {
        $this->app->bind(eloquent_repository_interface::class, base_repository::class);
        $this->app->bind(user_repository_interface::class, user_repository::class);
+       $this->app->bind(admin_repository_interface::class, admin_repository::class);
    }
 }

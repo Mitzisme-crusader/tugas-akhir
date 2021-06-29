@@ -18,6 +18,7 @@ class CreateUserTable extends Migration
             $table->string('email');
             $table->string('username');
             $table->string('password');
+            $table->integer('status_aktif');
             $table->timestamps();
         });
     }

@@ -2,8 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 
 :root {
-    --primary_color: #8a7575;
-    --secondary_color: rgb(201, 139, 139);
+    --primary_color: #296346;
+    --secondary_color: #fffaf7;
     --tertiary_color: #000000;
     --navbar_height: 10vh;
     --footer_height: 10vh;

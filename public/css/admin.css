@@ -1,0 +1,22 @@
+.admin-input-box {
+    background: rgba(0, 0, 0, 0.8);
+    margin: 0 auto;
+    text-align: center;
+    overflow-x: hidden;
+    width: 30%;
+}
+
+.input-box {
+    color: white;
+    margin: 1rem 4rem;
+    transition: all 200ms ease-in-out;
+}
+
+.content {
+    width: 60%;
+}
+
+.message {
+    background-color: rgb(102, 187, 102);
+    color: white;
+}

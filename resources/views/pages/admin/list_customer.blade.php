@@ -16,32 +16,32 @@
             <table>
                 <thead>
                     <th>No</th>
-                    <th>Name</th>
-                    <th>Nutrition Info</th>
-                    <th>Step by Step</th>
-                    <th class="table-image">Thumbnail</th>
-                    <th>Action</th>
-                    <th>Edit</th>
+                    <th>Nama</th>
+                    <th>email</th>
+                    <th>negara</th>
+                    <th>nomor telepon</th>
+                    <th>edit</th>
+                    <th>delete</th>
                 </thead>
                 <tbody>
-                    @foreach($list_resep as $resep)
+                    @foreach($list_customer as $customer)
                     <tr>
-                        <td>{{$resep->id_resep}}</td>
-                        <td>{{$resep->nama_resep}}</td>
-                        <td>{!!$resep->informasi_nutrisi!!}</td>
-                        <td>{!!$resep->step_by_step!!}</td>
-                        <td class="table-image"><img src="{{asset($resep->path_thumbnail_resep)}}" alt=""></td>
+                        <td>{{$customer->id_customer}}</td>
+                        <td>{{$customer->nama}}</td>
+                        <td>{{$customer->email}}</td>
+                        <td>{{$customer->negara}}</td>
+                        <td>{{$customer->nomor_telepon}}</td>
                         <td>
-                            <form action="{{url('admin/edit_resep')}}" method="get">
+                            <form action="{{url('admin/edit_customer')}}" method="get">
                                 {{csrf_field()}}
-                                <input type="hidden" name="id_resep" value="{{$resep->id_resep}}">
+                                <input type="hidden" name="id_customer" value="{{$customer->id_customer}}">
                                 <button type="submit" class="button"><span>Edit</span></button>
                             </form>
                         </td>
                         <td>
-                            <form action="{{url('admin/delete_resep')}}" method="post">
+                            <form action="{{url('admin/delete_customer')}}" method="post">
                                 {{csrf_field()}}
-                                <input type="hidden" name="id_resep" value="{{$resep->id_resep}}">
+                                <input type="hidden" name="id_customer" value="{{$customer->id_customer}}">
                                 <button type="submit" class="button"><span>Delete</span></button>
                             </form>
                         </td>

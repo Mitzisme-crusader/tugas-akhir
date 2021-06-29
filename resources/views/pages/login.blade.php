@@ -31,7 +31,7 @@
         </form>
     </div>
 </div>
-    @foreach ($users as $user)
+    {{-- @foreach ($users as $user)
         <div ><span>{{$user}}</span></div>
-    @endforeach
+    @endforeach --}}
 @endsection
