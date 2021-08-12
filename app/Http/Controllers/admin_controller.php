@@ -14,6 +14,7 @@ class admin_controller extends Controller
        $this->admin_repository = $admin_repository;
    }
 
+   //Customer
    public function proses_add_customer(Request $request){
        $request->validate([
            'nama_customer' => 'required',
@@ -42,6 +43,15 @@ class admin_controller extends Controller
         return redirect()->back();
    }
 
+   public function proses_delete_customer(Request $request){
+        $id_customer = $_POST['id_customer'];
+
+        $this->admin_repository->delete_customer($id_customer);
+
+        $request->session()->flash('message', 'Customer telah di non-aktifkan');
+        return redirect()->back();
+   }
+
    public function pergi_ke_list_customer(Request $request){
        $list_customer = $this->admin_repository->all();
        return view("pages.admin.list_customer")->with('list_customer', $list_customer);
@@ -51,7 +61,44 @@ class admin_controller extends Controller
        return view("pages.admin.add_customer");
    }
 
+   //Service
+   public function proses_add_service(Request $request){
+        $request->validate([
+           'nama_service' => 'required',
+           'deskripsi_service' => 'required',
+           'biaya_service' => 'required|numeric',
+           'detail_biaya' => 'required',
+        ]);
+
+        $data_service = [
+            'nama_service' => $_POST['nama_service'],
+            'deskripsi_service' => $_POST['deskripsi_service'],
+            'biaya_service' => $_POST['biaya_service'],
+            'detail_biaya' => $_POST['detail_biaya'],
+            'status_aktif' => '1'
+        ];
+
+        $this->admin_repository->add_service($data_service);
+
+        $request->session()->flash('message', 'add service berhasil');
+        return redirect()->back();
+    }
+
+   public function pergi_ke_list_service(Request $request){
+       $list_service = $this->admin_repository->all_service();
+       return view("pages.admin.list_service")->with('list_service', $list_service);
+   }
+
+   public function pergi_ke_add_service(Request $request){
+       return view("pages.admin.add_service");
+   }
    public function proses_logout(Request $request){
        return view('pages.login');
+   }
+
+   //Dokumen
+
+   public function pergi_ke_make_document(Request $request){
+       return view("pages.admin.add_service");
    }
 }
