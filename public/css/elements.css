@@ -1,3 +1,10 @@
+.container {
+    background: url("/images/background-clean.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .input-wrapper {
     position: relative;
     width: 100%;
@@ -209,7 +216,6 @@ table tbody tr td img {
     height: 150px;
     width: 200px;
 }
-
 
 @media (max-width: 800px) {
     table {

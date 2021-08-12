@@ -25,6 +25,7 @@ class customer_seeder extends Seeder
             'kode_pos' => '12345',
             'negara' => 'Indonesia',
             'nomor_telepon' => '12345',
+            'status_aktif' => '1',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

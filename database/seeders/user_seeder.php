@@ -21,6 +21,7 @@ class user_seeder extends Seeder
             'username' => 'user_pertama',
             'email' => 'pertama@gmail.com',
             'password' => '12345',
+            'status_aktif' => '1',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

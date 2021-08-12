@@ -20,13 +20,26 @@ Route::post('/proses_login', 'App\Http\Controllers\user_controller@proses_login'
 Route::get('/list_user', 'App\Http\Controllers\user_controller@pergi_ke_list_user');
 
 Route::group(['prefix' => 'admin'], function () {
+    //customer
     Route::get('/list_customer', 'App\Http\Controllers\admin_controller@pergi_ke_list_customer');
 
     Route::get('/add_customer', 'App\Http\Controllers\admin_controller@pergi_ke_add_customer');
 
     Route::post('/proses_add_customer', 'App\Http\Controllers\admin_controller@proses_add_customer');
 
+    Route::post('/delete_customer', 'App\Http\Controllers\admin_controller@proses_delete_customer');
+
+    //service
+    Route::get('/list_service', 'App\Http\Controllers\admin_controller@pergi_ke_list_service');
+
+    Route::get('/add_service', 'App\Http\Controllers\admin_controller@pergi_ke_add_service');
+
+    Route::post('/proses_add_service', 'App\Http\Controllers\admin_controller@proses_add_service');
+
     Route::get('logout', 'App\Http\Controllers\admin_controller@proses_logout');
+
+    //Document
+    Route::get('/make_document', 'App\Http\Controllers\admin_controller@pergi_ke_make_document');
 });
 
 Route::group(['prefix' => 'user'], function () {
