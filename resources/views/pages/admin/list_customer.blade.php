@@ -27,10 +27,10 @@
                     @foreach($list_customer as $customer)
                     <tr>
                         <td>{{$customer->id_customer}}</td>
-                        <td>{{$customer->nama}}</td>
-                        <td>{{$customer->email}}</td>
-                        <td>{{$customer->negara}}</td>
-                        <td>{{$customer->nomor_telepon}}</td>
+                        <td>{{$customer->nama_customer}}</td>
+                        <td>{{$customer->email_customer}}</td>
+                        <td>{{$customer->negara_customer}}</td>
+                        <td>{{$customer->nomor_telepon_customer}}</td>
                         <td>
                             <form action="{{url('admin/edit_customer')}}" method="get">
                                 {{csrf_field()}}

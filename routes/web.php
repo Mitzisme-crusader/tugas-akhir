@@ -39,7 +39,11 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('logout', 'App\Http\Controllers\admin_controller@proses_logout');
 
     //Document
-    Route::get('/make_document', 'App\Http\Controllers\admin_controller@pergi_ke_make_document');
+    Route::get('/make_document_SPK', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SPK');
+
+    Route::get('/make_document_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SO');
+
+    Route::post('/proses_save_document', 'App\Http\Controllers\admin_controller@proses_save_document_SPK');
 });
 
 Route::group(['prefix' => 'user'], function () {

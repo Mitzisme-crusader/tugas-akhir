@@ -22,7 +22,7 @@ class CreateServiceTable extends Migration
             //jenis container LCL/FCL
             //jenis transportasi Sea/air
             //
-            $table->integer('status_aktif');
+            $table->integer('status_aktif_service');
             $table->timestamps();
         });
     }

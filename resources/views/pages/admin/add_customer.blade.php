@@ -29,7 +29,24 @@
                 <label for="email_customer"><span> Email Customer</span></label>
                 <span class="error-message">{{ $errors->first('email_customer') }}</span>
             </div>
-
+            <div class="input-wrapper">
+                <input type="nama_perusahaan_customer" name="nama_perusahaan_customer" id="nama_perusahaan_customer"
+                    value="{{old('nama_perusahaan_customer')}}">
+                <label for="nama_perusahaan_customer"><span> Nama Perusahaan Customer</span></label>
+                <span class="error-message">{{ $errors->first('nama_perusahaan_customer') }}</span>
+            </div>
+            <div class="input-wrapper">
+                <input type="alamat_customer" name="alamat_customer" id="alamat_customer"
+                    value="{{old('alamat_customer')}}">
+                <label for="alamat_customer"><span> Alamat Customer</span></label>
+                <span class="error-message">{{ $errors->first('alamat_customer') }}</span>
+            </div>
+            <div class="input-wrapper">
+                <input type="provinsi_customer" name="provinsi_customer" id="provinsi_customer"
+                    value="{{old('provinsi_customer')}}">
+                <label for="email_customer"><span> Provinsi Customer</span></label>
+                <span class="error-message">{{ $errors->first('alamat_customer') }}</span>
+            </div>
             <div class="input-wrapper">
                 <input type="npwp_customer" name="npwp_customer" id="npwp_customer"
                     value="{{old('npwp_customer')}}">

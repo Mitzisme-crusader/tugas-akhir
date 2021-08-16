@@ -23,7 +23,11 @@
             </ul>
         </li>
         <li>
-            <a href="{{ url('/admin/make_document') }}"><span>Make Document</span></a>
+            <a href="{{ url('/admin/make_document_SPK') }}"><span>Make Document</span></a>
+            <ul>
+                <li><a href="{{ url('/admin/make_document_SPK') }}"><span>SPK</span></a></li>
+                <li><a href="{{ url('/admin/make_document_SO') }}"><span>SO</span></a></li>
+            </ul>
         </li>
         <li><a href="{{ url('/admin/logout') }}"><span>Logout</span></a></li>
     </ul>

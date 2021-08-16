@@ -21,8 +21,7 @@ class service_seeder extends Seeder
             'nama_service' => 'Customer handling Export Import(PPJK)',
             'deskripsi_service' => 'Seperti yang kita ketahui bersama bahwa perdagangan international pasti memiliki banyak peraturan-peraturan yang mengatur semua produk yang melewati “Tata Niaga“ import & export di Wilayah Indonesia. Untuk memenuhi dan mempermudah keperluan client dalam hal ini, PT. Victory Transindo Laris Cemerlang juga siap membantu kepengurusan perizinan import dan export sesuai dengan UPDATE aturan Pemerintah yang berlaku.',
             'biaya_service' => '50000',
-            'detail_biaya' => 'tidak ada diskon',
-            'status_aktif' => '1',
+            'status_aktif_service' => '1',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

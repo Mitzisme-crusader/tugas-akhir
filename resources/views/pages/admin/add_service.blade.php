@@ -37,13 +37,6 @@
                 <span class="error-message">{{ $errors->first('biaya_service') }}</span>
             </div>
 
-            <div class="input-wrapper">
-                <input type="detail_biaya" name="detail_biaya" id="detail_biaya"
-                    value="{{old('detail_biaya')}}">
-                <label for="email_customer"><span> Detail Biaya</span></label>
-                <span class="error-message">{{ $errors->first('detail_biaya') }}</span>
-            </div>
-
             <button type="submit" class="button"><span>Add Service</span></button>
         </form>
     </section>

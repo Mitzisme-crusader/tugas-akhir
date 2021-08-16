@@ -145,9 +145,9 @@ button.button:hover span {
     color: var(--primary_color);
 }
 
-input[type="checkbox"] {
+/* input[type="checkbox"] {
     display: none;
-}
+} */
 
 input[type="checkbox"] + label {
     background: var(--primary_color);
@@ -171,6 +171,30 @@ input[type="checkbox"]:checked + label {
     box-shadow: 0px 0px 0.5rem var(--primary_color);
     color: var(--tertiary_color);
 }
+
+input[type="radio"] + label {
+    background: var(--primary_color);
+    border: 1px solid var(--primary_color);
+    border-radius: 50px;
+    color: var(--secondary_color);
+    cursor: pointer;
+    margin: 0.3rem 0.5rem;
+    padding: 0.3rem 0.5rem;
+    text-transform: capitalize;
+    transition: all 100ms ease-in-out;
+}
+
+input[type="radio"] + label:hover {
+    background: var(--secondary_color);
+    color: var(--tertiary_color);
+}
+
+input[type="radio"]:checked + label {
+    background: var(--secondary_color);
+    box-shadow: 0px 0px 0.5rem var(--primary_color);
+    color: var(--tertiary_color);
+}
+
 
 select {
     padding: 0.2rem 0.5rem;

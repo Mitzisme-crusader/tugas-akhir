@@ -19,7 +19,6 @@
                     <th>Nama</th>
                     <th>Deskripsi</th>
                     <th>Biaya</th>
-                    <th>Detail Biaya</th>
                     <th>edit</th>
                     <th>delete</th>
                 </thead>
@@ -32,7 +31,6 @@
                             <textarea cols="50" rows="4">{{$service->deskripsi_service}}</textarea>
                         </td>
                         <td>{{$service->biaya_service}}</td>
-                        <td>{{$service->detail_biaya}}</td>
                         <td>
                             <form action="{{url('admin/edit_service')}}" method="get">
                                 {{csrf_field()}}

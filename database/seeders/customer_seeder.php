@@ -18,14 +18,17 @@ class customer_seeder extends Seeder
     public function run()
     {
         DB::table('customer')->insert([
-            'nama' => 'customer_pertama',
-            'email' => 'customer_pertama@gmail.com',
-            'npwp' => '93.507',
-            'alamat_pajak' => 'ahmad yani',
-            'kode_pos' => '12345',
-            'negara' => 'Indonesia',
-            'nomor_telepon' => '12345',
-            'status_aktif' => '1',
+            'nama_customer' => 'customer_pertama',
+            'email_customer' => 'customer_pertama@gmail.com',
+            'nama_perusahaan_customer' => 'PT Surya Jaya',
+            'alamat_customer' => 'jalan ahmad yani',
+            'provinsi_customer' => 'Surabaya, Jawa Timur',
+            'npwp_customer' => '93.507',
+            'alamat_pajak_customer' => 'ahmad yani',
+            'kode_pos_customer' => '12345',
+            'negara_customer' => 'Indonesia',
+            'nomor_telepon_customer' => '12345',
+            'status_aktif_customer' => '1',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);

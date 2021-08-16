@@ -12,7 +12,6 @@ class service_model extends Model
         'nama_service',
         'deskripsi_service',
         'biaya_service',
-        'detail_service',
-        'status_aktif',
+        'status_aktif_service',
     ];
 }

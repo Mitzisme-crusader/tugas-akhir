@@ -24,6 +24,7 @@
     </div>
 
     <script src="{{ asset('js/form_input.js') }}"></script>
+    <script src="{{ asset('js/select_input.js') }}"></script>
     <script src="{{ asset('js/popup.js') }}"></script>
     @yield('js')
 </body>
