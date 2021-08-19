@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repository\admin_repository_interface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use PDO;
 use Throwable;
 
@@ -99,36 +100,94 @@ class admin_controller extends Controller
 
    //Dokumen
    public function pergi_ke_make_document_SPK(Request $request){
-       $target_kolom = array('nama_perusahaan_customer', 'id_customer');
-       $list_customer = $this->admin_repository->get_customer($target_kolom);
+        $target_kolom = array('nama_perusahaan_customer', 'id_customer');
+        $list_customer = $this->admin_repository->get_customer($target_kolom);
 
-       $target_kolom = array('nama_service', 'id_service');
-       $list_service = $this->admin_repository->get_service($target_kolom);
-       return view("pages.admin.make_document")->with('list_customer', $list_customer)->with('list_service', $list_service);
+        $target_kolom = array('nama_port', 'id_port');
+        $list_port = $this->admin_repository->get_port($target_kolom);
+
+        $target_kolom = array('nama_service', 'id_service');
+        $list_service = $this->admin_repository->get_service($target_kolom);
+        return view("pages.admin.make_document")->with('list_customer', $list_customer)->with('list_service', $list_service)->with('list_port', $list_port);
    }
 
+   public function pergi_ke_list_SPK(Request $request){
+       $list_dokumen_SPK = $this->admin_repository->get_all_dokumen_SPK();
+
+       return view("pages.admin.list_dokumen_SPK")->with('list_dokumen_SPK', $list_dokumen_SPK);
+   }
    public function proses_save_document_SPK(Request $request){
-       $jenis_service = $_POST['jenis_pekerjaan_radio'];
-       $jenis_pengiriman = $_POST['jenis_pengiriman_radio'];
-       $jenis_pengangkutan = $_POST['jenis_pengangkutan_radio'];
-       dd($jenis_service);
-       $customer = $this->admin_repository->find_customer($_POST['list_id_customer']);
-       $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('template_dokumen\template_SPK_grey.docx'));
-       $template->setValue('nama_customer', $customer->nama_customer);
-       $template->setValue('nama_perusahaan_customer', $customer->nama_perusahaan_customer);
-       $template->setValue('alamat_customer', $customer->alamat_customer);
-       $template->setValue('provinsi_customer', $customer->provinsi_customer);
+    $request->validate([
+        'list_id_customer' => 'required',
+        'list_id_service' => 'required',
+        'list_id_port' => 'required',
+        'list_container' => 'required',
+        'jenis_pengiriman_radio' => 'required',
+        'jenis_pengangkutan_radio' => 'required|in:export,import',
+        'jenis_pekerjaan_radio' => 'required',
+     ]);
+
+        $jenis_service = $_POST['jenis_pekerjaan_radio'];
+        $jenis_pengiriman = $_POST['jenis_pengiriman_radio'];
+        $jenis_pengangkutan = $_POST['jenis_pengangkutan_radio'];
+
+        $customer = $this->admin_repository->find_customer($_POST['list_id_customer']);
+        $port = $this->admin_repository->find_port($_POST['list_id_port']);
+
+        $kode_dokumen = str_pad($this->admin_repository->get_id_dokumen_terbaru(),3,"0",STR_PAD_LEFT);
+        $kode_dokumen = $kode_dokumen.'/SP-'.strtoupper($jenis_pengangkutan[0]);
+        if($jenis_service == "all in"){
+            $kode_dokumen = $kode_dokumen.'/AI-'.strtoupper($jenis_pengiriman[0]);
+        }
+        else{
+            $kode_dokumen = $kode_dokumen.'/'.strtoupper($jenis_service[0]).'-'.strtoupper($jenis_pengiriman[0]);
+        }
+        $kode_bulan = Carbon::now()->month;
+        $map = array('X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+        $returnValue = '';
+        while ($kode_bulan > 0) {
+            foreach ($map as $roman => $int) {
+                if($kode_bulan >= $int) {
+                    $kode_bulan -= $int;
+                    $returnValue .= $roman;
+                        break;
+                }
+            }
+        }
+        $kode_dokumen = $kode_dokumen . '/' . $returnValue . '/' . Carbon::now()->year;
+
+        $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path("template_dokumen/template_SPK_$jenis_service.docx"));
+        $template->setValue('port', $port->nama_port);
+        $template->setValue('kode_dokumen', $kode_dokumen);
+        $template->setValue('tanggal_pembuatan', Carbon::today()->format('d F y'));
+        $template->setValue('nama_customer', $customer->nama_customer);
+        $template->setValue('nama_perusahaan_customer', $customer->nama_perusahaan_customer);
+        $template->setValue('alamat_customer', $customer->alamat_customer);
+        $template->setValue('provinsi_customer', $customer->provinsi_customer);
+
+        $kode_dokumen = str_replace('/','-',$kode_dokumen);
 
         try{
-            $template->saveAs(public_path('hasil_dokumen\user_1.docx'));
+            $template->saveAs(public_path("hasil_dokumen/$kode_dokumen.docx"));
+            $dokumen_spk = [
+                'judul_dokumen' => $kode_dokumen,
+                'id_customer' => $customer->id_customer,
+                'nama_customer' => $customer->nama_customer,
+                'nama_perusahaan_customer' => $customer->nama_perusahaan_customer,
+                'negara_customer' => $customer->negara_customer,
+                'status_aktif_dokumen' => 1,
+            ];
+            $dokumen = $this->admin_repository->create_dokumen_spk($dokumen_spk);
         }catch (Throwable $e){
-            //handle exception
+            $request->session()->flash('message', "fail to safe");
+            return redirect()->back();
         }
 
-        return response()->download(public_path('hasil_dokumen\user_1.docx'));
+        $request->session()->flash('message', 'add dokumen berhasil');
+        return response()->download(public_path("hasil_dokumen/$kode_dokumen.docx"));
    }
 
-   public function proses_logout(Request $request){
-    return view('pages.login');
-}
+    public function proses_logout(Request $request){
+        return view('pages.login');
+    }
 }

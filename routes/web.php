@@ -43,6 +43,10 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/make_document_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SO');
 
+    Route::get('/list_SPK', 'App\Http\Controllers\admin_controller@pergi_ke_list_SPK');
+
+    Route::get('/list_SO', 'App\Http\Controllers\admin_controller@pergi_ke_list_SO');
+
     Route::post('/proses_save_document', 'App\Http\Controllers\admin_controller@proses_save_document_SPK');
 });
 

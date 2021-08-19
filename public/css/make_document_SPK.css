@@ -1,13 +1,4 @@
-/* The container must be positioned relative: */
-.select_id_customer {
-    width: 50%;
-    font-family: Arial;
-}
-/* .select_id_customer {
-
-} */
-
-.select_id_service{
+.select_id{
     width: 50%;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -17,15 +8,18 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.input_radio{
+    width: 50%;
+}
 /* .select_id_service{
 
 } */
 
-.jenis_pengiriman_radio{
-    margin-bottom: 2em;
+.input_radio_wrapper{
+    margin-bottom: 3em;
 }
 
-.jenis_pekerjaan_radio{
-    margin-bottom: 2em;
-}
+/* .container-SPK{
+
+} */
 

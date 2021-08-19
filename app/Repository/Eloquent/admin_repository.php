@@ -4,6 +4,8 @@ namespace App\Repository\Eloquent;
 
 use App\models\customer_model;
 use App\modelS\service_model;
+use App\models\dokumenSpk_model;
+use App\models\port_model;
 use App\Repository\admin_repository_interface;
 use Illuminate\Support\Collection;
 use PDO;
@@ -68,5 +70,38 @@ class admin_repository extends base_repository implements admin_repository_inter
    public function all_service()
    {
        return service_model::all();
+   }
+
+   //dokumenSPK
+   public function get_id_dokumen_terbaru()
+   {
+       $id_dokumen = dokumenSpk_model::max('id_dokumen_spk');
+       if (is_null($id_dokumen)){
+            $id_dokumen = 0;
+       }
+       return $id_dokumen + 1;
+   }
+
+   public function create_dokumen_spk($dokumen_spk)
+   {
+        return dokumenSpk_model::insert($dokumen_spk);
+   }
+
+   public function get_all_dokumen_SPK()
+   {
+       $list_dokumen_SPK = dokumenSpk_model::all();
+       return $list_dokumen_SPK;
+   }
+   //port
+   public function get_port($target_kolom){
+        $hasil = [];
+        foreach($target_kolom as $kolom){
+            $hasil["$kolom"] = port_model::select("$kolom")->get();
+        }
+        return $hasil;
+   }
+
+   public function find_port($id){
+        return port_model::find($id);
    }
 }

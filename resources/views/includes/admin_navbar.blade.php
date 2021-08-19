@@ -23,6 +23,13 @@
             </ul>
         </li>
         <li>
+            <a href="{{ url('/admin/list_SPK') }}"><span>List Document</span></a>
+            <ul>
+                <li><a href="{{ url('/admin/list_SPK') }}"><span>SPK</span></a></li>
+                <li><a href="{{ url('/admin/list_SO') }}"><span>SO</span></a></li>
+            </ul>
+        </li>
+        <li>
             <a href="{{ url('/admin/make_document_SPK') }}"><span>Make Document</span></a>
             <ul>
                 <li><a href="{{ url('/admin/make_document_SPK') }}"><span>SPK</span></a></li>

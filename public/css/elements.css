@@ -11,6 +11,11 @@
     margin-bottom: 1rem;
 }
 
+legend{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
 input {
     font-family: "Lato", sans-serif;
 }
@@ -99,6 +104,13 @@ input {
 }
 
 .input-wrapper span.error-message {
+    color: red;
+    display: block;
+    font-size: 0.7rem;
+    text-align: left;
+}
+
+.input_radio_wrapper span.error-message {
     color: red;
     display: block;
     font-size: 0.7rem;

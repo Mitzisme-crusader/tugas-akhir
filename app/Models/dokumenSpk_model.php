@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class dokumenSpk_model extends Model
 {
-    protected $table = 'dokumenSpk';
-    protected $primaryKey  = 'id_dokumen';
+    protected $table = 'dokumen_spk';
+    protected $primaryKey  = 'id_dokumen_spk';
     protected $fillable = [
         'id_customer',
         'nama_customer',
