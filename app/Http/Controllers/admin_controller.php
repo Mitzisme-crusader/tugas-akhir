@@ -117,15 +117,15 @@ class admin_controller extends Controller
        return view("pages.admin.list_dokumen_SPK")->with('list_dokumen_SPK', $list_dokumen_SPK);
    }
    public function proses_save_document_SPK(Request $request){
-    $request->validate([
-        'list_id_customer' => 'required',
-        'list_id_service' => 'required',
-        'list_id_port' => 'required',
-        'list_container' => 'required',
-        'jenis_pengiriman_radio' => 'required',
-        'jenis_pengangkutan_radio' => 'required|in:export,import',
-        'jenis_pekerjaan_radio' => 'required',
-     ]);
+        $request->validate([
+            'list_id_customer' => 'required',
+            'list_id_service' => 'required',
+            'list_id_port' => 'required',
+            'list_container' => 'required',
+            'jenis_pengiriman_radio' => 'required',
+            'jenis_pengangkutan_radio' => 'required|in:export,import',
+            'jenis_pekerjaan_radio' => 'required',
+        ]);
 
         $jenis_service = $_POST['jenis_pekerjaan_radio'];
         $jenis_pengiriman = $_POST['jenis_pengiriman_radio'];
@@ -168,7 +168,6 @@ class admin_controller extends Controller
         $kode_dokumen = str_replace('/','-',$kode_dokumen);
 
         try{
-            $template->saveAs(public_path("hasil_dokumen/$kode_dokumen.docx"));
             $dokumen_spk = [
                 'judul_dokumen' => $kode_dokumen,
                 'id_customer' => $customer->id_customer,
@@ -178,10 +177,48 @@ class admin_controller extends Controller
                 'status_aktif_dokumen' => 1,
             ];
             $dokumen = $this->admin_repository->create_dokumen_spk($dokumen_spk);
+
         }catch (Throwable $e){
             $request->session()->flash('message', "fail to safe");
             return redirect()->back();
         }
+
+        $list_nama_extra_service = array_filter(explode(',', $_POST['hidden_nama_extra_service']));
+        if(count($list_nama_extra_service) > 0){
+
+            $list_harga_20_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_20_feet_extra_service']));
+            $list_harga_40_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_40_feet_extra_service']));
+            $list_harga_45_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_45_feet_extra_service']));
+
+            for ($i=0; $i < count($list_nama_extra_service); $i++) {
+
+                $data_extra_service[$i]['nama_extra_service'] = $i + 3 . ". " . $list_nama_extra_service[$i];
+
+                echo(empty($list_harga_45_feet_extra_service));
+                if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service))
+                    $data_extra_service[$i]['harga_20_feet'] = "RP. " . $list_harga_20_feet_extra_service[$i];
+                if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service))
+                    $data_extra_service[$i]['harga_40_feet'] = "RP. " . $list_harga_40_feet_extra_service[$i];
+                if(!in_array("undefined",$list_harga_45_feet_extra_service) && !empty($list_harga_45_feet_extra_service))
+                    $data_extra_service[$i]['harga_45_feet'] = "RP. " . $list_harga_45_feet_extra_service[$i];
+            }
+
+            $all_nama_extra_service = array_map(function($data){return $data['nama_extra_service'];}, $data_extra_service);
+            $all_harga_20_feet = array_map(function($data){return $data['harga_20_feet'];}, $data_extra_service);
+            $all_harga_40_feet = array_map(function($data){return $data['harga_40_feet'];}, $data_extra_service);
+
+            $template->setValue('nama_extra_service', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service));
+            $template->setValue('harga_20_feet', implode('<w:br/> &#160;&#160;', $all_harga_20_feet));
+            $template->setValue('harga_40_feet', implode('<w:br/>  &#160;&#160;', $all_harga_40_feet));
+        }
+        else{
+            $template->setValue('nama_extra_service', '');
+            $template->setValue('harga_20_feet', '');
+            $template->setValue('harga_40_feet', '');
+        }
+
+
+        $template->saveAs(public_path("hasil_dokumen/$kode_dokumen.docx"));
 
         $request->session()->flash('message', 'add dokumen berhasil');
         return response()->download(public_path("hasil_dokumen/$kode_dokumen.docx"));

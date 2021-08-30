@@ -82,6 +82,39 @@
                 <span class="error-message">{{ $errors->first('jenis_pekerjaan_radio') }}</span>
             </div>
 
+            <div class="popup">
+                <div class="popup-box">
+                    <span><i class="fas fa-times-circle"></i></span>
+                    <div class="popup-box-header">
+                        <h2>Add Extra Service</h2>
+                    </div>
+                    <div class="popup-box-body">
+                        <div class="input_wrapper">
+                            <label class = "nama_extra_service" for="nama_extra_service" value=""><span>Nama Extra Service : </span></label>
+                            <input type="text" id="nama_extra_service">
+                        </div>
+                        <div class="input_wrapper">
+                            <div class="container_harga_extra_service">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="popup-box-footer">
+                        <button type="button" class="button button-add_extra_service"><span>Add</span></button>
+                        <button type="button" class="button button-cancel"><span>Cancel</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="hidden_nama_extra_service" id="hidden_nama_extra_service">
+            <input type="hidden" name="hidden_harga_20_feet_extra_service" id="hidden_harga_20_feet_extra_service">
+            <input type="hidden" name="hidden_harga_40_feet_extra_service" id="hidden_harga_40_feet_extra_service">
+            <input type="hidden" name="hidden_harga_45_feet_extra_service" id="hidden_harga_45_feet_extra_service">
+            <div class="container_extra_service">
+                <legend>Extra Services</legend>
+            </div>
+            <label class="label_extra_service popupable"><span>Add Extra Service</span></label>
+
             <button type="submit" class="button"><span>Create Document</span></button>
         </form>
     </section>

@@ -10,9 +10,10 @@ class dokumenSpk_model extends Model
     protected $primaryKey  = 'id_dokumen_spk';
     protected $fillable = [
         'id_customer',
+        'judul_dokumen',
         'nama_customer',
         'nama_perusahaan_customer',
         'negara_customer',
-        'status_aktif_customer',
+        'status_aktif_dokumen',
     ];
 }

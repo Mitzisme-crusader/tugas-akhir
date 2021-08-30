@@ -84,7 +84,7 @@ class admin_repository extends base_repository implements admin_repository_inter
 
    public function create_dokumen_spk($dokumen_spk)
    {
-        return dokumenSpk_model::insert($dokumen_spk);
+        return dokumenSpk_model::create($dokumen_spk);
    }
 
    public function get_all_dokumen_SPK()
