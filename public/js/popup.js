@@ -7,7 +7,19 @@ $(document).ready(function () {
         }
     });
 
+    $(".popup_freight").click(function (event) {
+        if (event.target.className == "popup_freight") {
+            $(".container_harga_extra_service").empty();
+            $("#nama_extra_service").val("");
+            close_popup_freight();
+        }
+    });
+
     $(".popup-box > span").click(function () {
+        $(".container_harga_extra_service").empty();
+        $("#nama_extra_service").val("");
+        close_popup();
+
         $(".container_harga_extra_service").empty();
         $("#nama_extra_service").val("");
         close_popup();
@@ -19,15 +31,21 @@ $(document).ready(function () {
         close_popup();
     });
 
+    $(".popup_freight .button-cancel").click(function () {
+        $("#nama_extra_service_freight").val("");
+        $("#harga_extra_service_freight").val("");
+        close_popup_freight();
+    });
+
     $(".popup .button-add_extra_service").click(function () {
         var nama_extra_service = $("#nama_extra_service").val();
         var harga_extra_service_20_feet = $("#harga_extra_service_20_feet").val();
         var harga_extra_service_40_feet = $("#harga_extra_service_40_feet").val();
         var harga_extra_service_45_feet = $("#harga_extra_service_45_feet").val();
         var extra_service = document.createElement("label");
-        extra_service.setAttribute("class", "label_extra_service");
+        extra_service.setAttribute("class", "label_item_extra_service");
         extra_service.setAttribute("id", nama_extra_service);
-        $(".container_extra_service").append(extra_service);
+        $(".container_extra_service_custom_handling").append(extra_service);
         $("#"+nama_extra_service+"").html(nama_extra_service);
 
         if($("#hidden_nama_extra_service").val() == ""){
@@ -48,9 +66,54 @@ $(document).ready(function () {
         close_popup();
     });
 
+    $(".popup_freight .button-add_extra_service_freight").click(function () {
+        var nama_extra_service_freight = $("#nama_extra_service_freight").val();
+        var harga_extra_service_freight = $("#harga_extra_service_freight").val();
+        var extra_service = document.createElement("label");
+        extra_service.setAttribute("class", "label_item_extra_service");
+        extra_service.setAttribute("id", nama_extra_service_freight);
+        if($(".button-add_extra_service_freight").val() == "origin"){
+            $("#container_extra_service_freight_origin").append(extra_service);
+            $("#"+nama_extra_service_freight).html(nama_extra_service_freight);
+
+            if($("#hidden_nama_extra_service_freight_origin").val() == ""){
+                $("#hidden_nama_extra_service_freight_origin").val(nama_extra_service_freight);
+                $("#hidden_harga_extra_service_freight_origin").val(harga_extra_service_freight);
+            }
+            else{
+                $("#hidden_nama_extra_service_freight_origin").val($("#hidden_nama_extra_service_freight_origin").val()+ "," + nama_extra_service_freight);
+                $("#hidden_harga_extra_service_freight_origin").val($("#hidden_harga_extra_service_freight_origin").val()+ "," + harga_extra_service_freight);
+            }
+        }
+        else if($(".button-add_extra_service_freight").val() == "destination"){
+            $("#container_extra_service_freight_destination").append(extra_service);
+            $("#"+nama_extra_service_freight).html(nama_extra_service_freight);
+
+            if($("#hidden_nama_extra_service_freight_destination").val() == ""){
+                $("#hidden_nama_extra_service_freight_destination").val(nama_extra_service_freight);
+                $("#hidden_harga_extra_service_freight_destination").val(harga_extra_service_freight);
+            }
+            else{
+                $("#hidden_nama_extra_service_freight_destination").val($("#hidden_nama_extra_service_freight_destination").val()+ "," + nama_extra_service_freight);
+                $("#hidden_harga_extra_service_freight_destination").val($("#hidden_harga_extra_service_freight_destination").val()+ "," + harga_extra_service_freight);
+            }
+        }
+
+        $("#nama_extra_service_freight").val("");
+        $("#harga_extra_service_freight").val("");
+        close_popup_freight();
+    });
+
     function open_popup() {
         $(".popup").css("transition", "none");
         $(".popup").css("visibility", "visible");
+        $(".popup-box").css("opacity", "1");
+        $(".popup-box").css("transform", "scale(1)");
+    }
+
+    function open_popup_freight() {
+        $(".popup_freight").css("transition", "none");
+        $(".popup_freight").css("visibility", "visible");
         $(".popup-box").css("opacity", "1");
         $(".popup-box").css("transform", "scale(1)");
     }
@@ -62,8 +125,29 @@ $(document).ready(function () {
         $(".popup-box").css("transform", "scale(0.3)");
     }
 
+    function close_popup_freight() {
+        $(".popup_freight").css("transition", "all ease-in-out 300ms");
+        $(".popup_freight").css("visibility", "hidden");
+        $(".popup-box").css("opacity", "0");
+        $(".popup-box").css("transform", "scale(0.3)");
+    }
+
     //attach popup
     $(".popupable").click(function () {
         open_popup();
+    });
+
+    $(".popupable_freight_origin").click(function () {
+        $(".button-add_extra_service_freight").val("origin");
+        open_popup_freight();
+    });
+
+    $(".popupable_freight_destination").click(function () {
+        $(".button-add_extra_service_freight").val("destination");
+        open_popup_freight();
+    });
+
+    $(".popupable_freight").click(function () {
+        open_popup_freight();
     });
 });

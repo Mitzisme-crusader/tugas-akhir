@@ -106,16 +106,59 @@
                 </div>
             </div>
 
+            <div class="popup_freight">
+                <div class="popup-box">
+                    <span><i class="fas fa-times-circle"></i></span>
+                    <div class="popup-box-header">
+                        <h2>Add Extra Service Freight</h2>
+                    </div>
+                    <div class="popup-box-body">
+                        <div class="input_wrapper">
+                            <label for="nama_extra_service_freight" value=""><span>Nama Extra Service : </span></label>
+                            <input type="text" id="nama_extra_service_freight">
+                            <label for="harga_extra_service_freight" value=""><span>Harga Extra Service : </span></label>
+                            <input type="number" id="harga_extra_service_freight">
+                        </div>
+                    </div>
+                    <div class="popup-box-footer">
+                        <button type="button" class="button button-add_extra_service_freight" value=""><span>Add</span></button>
+                        <button type="button" class="button button-cancel"><span>Cancel</span></button>
+                    </div>
+                </div>
+            </div>
+
             <input type="hidden" name="hidden_nama_extra_service" id="hidden_nama_extra_service">
             <input type="hidden" name="hidden_harga_20_feet_extra_service" id="hidden_harga_20_feet_extra_service">
             <input type="hidden" name="hidden_harga_40_feet_extra_service" id="hidden_harga_40_feet_extra_service">
             <input type="hidden" name="hidden_harga_45_feet_extra_service" id="hidden_harga_45_feet_extra_service">
-            <div class="container_extra_service">
+
+            <input type="hidden" name="hidden_nama_extra_service_freight_origin" id="hidden_nama_service_freight_origin">
+            <input type="hidden" name="hidden_harga_extra_service_freight_origin" id="hidden_harga_service_freight_origin">
+            <input type="hidden" name="hidden_nama_extra_service_freight_destination" id="hidden_nama_service_freight_destination">
+            <input type="hidden" name="hidden_harga_extra_service_freight_destination" id="hidden_harga_service_freight_destination">
+
+            <div class="container_extra_service_custom_handling">
                 <legend>Extra Services</legend>
             </div>
-            <label class="label_extra_service popupable"><span>Add Extra Service</span></label>
 
-            <button type="submit" class="button"><span>Create Document</span></button>
+            <div class="container_extra_service_freight" id="container_extra_service_freight_origin">
+                <legend>Extra Services Origin</legend>
+            </div>
+
+            <div class="container_extra_service_freight" id="container_extra_service_freight_destination">
+                <legend>Extra Services Destination
+            </div>
+
+            <label class="label_extra_service  popupable" id="label_extra_service_common"><span>Add Extra Service</span></label>
+
+            <label class="label_extra_service popupable_freight_origin" id="label_extra_service_freight_origin"><span>Add Service for origin</span></label>
+
+            <label class="label_extra_service popupable_freight_destination" id="label_extra_service_freight_destination"><span>Add Services for Destination</span></label>
+
+            <div class = "btn_submit_spk">
+                <button type="submit" class="button"><span>Create Document</span></button>
+            </div>
+
         </form>
     </section>
 </div>

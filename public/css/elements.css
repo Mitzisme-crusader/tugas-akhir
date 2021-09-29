@@ -5,6 +5,9 @@
     background-size: cover;
 }
 
+.form_add{
+    padding: 0 10rem;
+}
 .input-wrapper {
     position: relative;
     width: 100%;
@@ -203,7 +206,7 @@ input[type="radio"] + label:hover {
 
 input[type="radio"]:checked + label {
     background: var(--secondary_color);
-    box-shadow: 0px 0px 0.5rem var(--primary_color);
+    box-shadow: 0px 0px 1rem var(--primary_color);
     color: var(--tertiary_color);
 }
 
@@ -303,6 +306,20 @@ table tbody tr td img {
     table tbody td:nth-last-child(n - 2) {
         text-align: center;
     }
+}
+
+.popup_freight {
+    --popup_header_height: 12%;
+    --popup_footer_height: 12%;
+
+    background: rgba(0, 0, 0, 0.8);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    top: 0;
+    visibility: hidden;
+    z-index: 100;
 }
 
 .popup {

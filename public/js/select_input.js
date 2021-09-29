@@ -4,21 +4,31 @@ $(document).ready(function () {
     });
 
     $( "#select_id_customer" ).change(function() {
-        $(".select_id_customer option[value='']").remove();
+        $("#select_id_customer option[value='']").remove();
     });
 
-    $( "#select_container" ).change(function() {
-        $("#select_container option[value='']").remove();
+    $( "#select_id_container" ).change(function() {
+        $("#select_id_container option[value='']").remove();
     });
 
-    $( "#select_port" ).change(function() {
-        $("#select_port option[value='']").remove();
+    $( "#select_id_port" ).change(function() {
+        $("#select_id_port option[value='']").remove();
     });
 
 
     $( "#select_id_service" ).change(function() {
         $("#select_id_service option[value='']").remove();
+        $("#label_extra_service_freight_origin").css("display", "none");
+        $("#label_extra_service_freight_destination").css("display", "none");
+        $("#label_extra_service_common").css("display", "none");
+        $("#container_extra_service_common").css("display", "none");
+        $("#container_extra_service_freight_origin").css("display", "none");
+        $("#container_extra_service_freight_destination").css("display", "none");
+
         if($('#select_id_service option:selected').val() == 1){
+            $("#label_extra_service_common").css("display", "inline");
+            $(".container_extra_service_custom_handling").css("display", "block");
+
             $('.jenis_pengiriman_radio').empty();
             $('.jenis_pekerjaan_radio').empty();
             add_jenis_pengiriman();
@@ -26,7 +36,15 @@ $(document).ready(function () {
 
         }
         else if($('#select_id_service option:selected').val() == 2){
+            $("#label_extra_service_freight_origin").css("display", "inline");
+            $("#label_extra_service_freight_destination").css("display", "inline");
+            $("#container_extra_service_freight_origin").css("display", "block");
+            $("#container_extra_service_freight_destination").css("display", "block");
 
+            $('.jenis_pengiriman_radio').empty();
+            $('.jenis_pekerjaan_radio').empty();
+            add_jenis_pengiriman();
+            add_jenis_pekerjaan();
         }
         else if($('#select_id_service option:selected').val() == 3){
 
@@ -43,14 +61,16 @@ $(document).ready(function () {
         }
     });
 
-    $(".label_extra_service").click(function(){
+    $("#label_extra_service_common").click(function(){
         if($('#select_id_container option:selected').val() == 1){
             var input_harga_20_feet = document.createElement("input");
             input_harga_20_feet.setAttribute("type", "number");
             input_harga_20_feet.setAttribute("id", "harga_extra_service_20_feet");
+            input_harga_20_feet.style.display = "block";
             var label_harga_20_feet = document.createElement("label");
             label_harga_20_feet.setAttribute("id", "label_harga_20_feet");
             label_harga_20_feet.setAttribute("class", "label_harga_extra_service");
+            label_harga_20_feet.style.display = "block";
             $(".container_harga_extra_service").append(label_harga_20_feet);
             $("#label_harga_20_feet").html("Harga 20 feet : ");
             $("#label_harga_20_feet").append(input_harga_20_feet);
@@ -58,12 +78,15 @@ $(document).ready(function () {
             var input_harga_40_feet = document.createElement("input")
             input_harga_40_feet.setAttribute("type", "number");
             input_harga_40_feet.setAttribute("id", "harga_extra_service_40_feet");
+            input_harga_40_feet.style.display = "block";
             var label_harga_40_feet = document.createElement("label");
             label_harga_40_feet.setAttribute("id", "label_harga_40_feet");
             label_harga_40_feet.setAttribute("class", "label_harga_extra_service");
+            label_harga_40_feet.style.display = "block";
             $("#label_harga_20_feet").after(label_harga_40_feet);
             $("#label_harga_40_feet").html("Harga 40 feet :");
             $("#label_harga_40_feet").append(input_harga_40_feet);
+
         }
 
         if($('#select_id_container option:selected').val() == 2){
@@ -71,37 +94,48 @@ $(document).ready(function () {
             input_harga_20_feet.setAttribute("type", "number");
             input_harga_20_feet.setAttribute("id", "harga_extra_service_20_feet");
             input_harga_20_feet.setAttribute("class", "harga_extra_service");
+            input_harga_20_feet.style.display = "block";
             var label_harga_20_feet = document.createElement("label");
             label_harga_20_feet.setAttribute("id", "label_harga_20_feet");
             label_harga_20_feet.setAttribute("class", "label_harga_extra_service");
+            label_harga_20_feet.style.display = "block";
             $(".container_harga_extra_service").append(label_harga_20_feet);
             $("#label_harga_20_feet").html("Harga 20 feet :");
             $("#label_harga_20_feet").append(input_harga_20_feet);
+
 
             var input_harga_40_feet = document.createElement("input")
             input_harga_40_feet.setAttribute("type", "number");
             input_harga_40_feet.setAttribute("id", "harga_extra_service_40_feet");
             input_harga_40_feet.setAttribute("class", "harga_extra_service");
+            input_harga_40_feet.style.display = "block";
             var label_harga_40_feet = document.createElement("label");
             label_harga_40_feet.setAttribute("id", "label_harga_40_feet");
             label_harga_40_feet.setAttribute("class", "label_harga_extra_service");
+            label_harga_40_feet.style.display = "block";
             $("#label_harga_20_feet").after(label_harga_40_feet);
             $("#label_harga_40_feet").html("Harga 40 feet :");
             $("#label_harga_40_feet").append(input_harga_40_feet);
+
 
             var input_harga_45_feet = document.createElement("input")
             input_harga_45_feet.setAttribute("type", "number");
             input_harga_45_feet.setAttribute("id", "harga_extra_service_45_feet");
             input_harga_45_feet.setAttribute("class", "harga_extra_service");
+            input_harga_45_feet.style.display = "block";
             var label_harga_45_feet = document.createElement("label");
             label_harga_45_feet.setAttribute("id", "label_harga_45_feet");
             label_harga_45_feet.setAttribute("class", "label_harga_extra_service");
+            label_harga_45_feet.style.display = "block";
             $("#label_harga_40_feet").after(label_harga_45_feet);
             $("#label_harga_45_feet").html("Harga 45 feet :");
             $("#label_harga_45_feet").append(input_harga_45_feet);
         }
     });
 
+    $("label_item_extra_service").click(function(){
+
+    });
 });
 
 function add_jenis_pengiriman() {

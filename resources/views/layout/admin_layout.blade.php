@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
     @yield('style')
 
+    {{-- font awesome --}}
+    <link rel="stylesheet" href="{{ asset('font_awesome/css/all.css') }}">
+
     <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
 </head>
 

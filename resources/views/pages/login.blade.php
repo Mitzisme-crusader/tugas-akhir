@@ -27,7 +27,7 @@
                 <label for="password"><span>Password</span></label>
                 <span class="error-message">{{ $errors->first('password') }}</span>
             </div>
-            <button type="submit" class="button"><span>Login</span></button>
+            <button type="submit" class="button btn_submit_login"><span>Login</span></button>
         </form>
     </div>
 </div>

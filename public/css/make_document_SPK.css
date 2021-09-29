@@ -27,8 +27,14 @@
     margin-bottom: 3em;
 }
 
-.container_extra_service{
+.container_extra_service_custom_handling{
     margin-bottom: 1em;
+    display: none;
+}
+
+.container_extra_service_freight{
+    margin-bottom: 1em;
+    display: none;
 }
 
 .label_extra_service{
@@ -41,6 +47,7 @@
     padding: 0.3rem 0.5rem;
     text-transform: capitalize;
     transition: all 100ms ease-in-out;
+    display: none;
 }
 
 .label_extra_service:hover {
@@ -48,6 +55,88 @@
     color: var(--tertiary_color);
 }
 
+.label_item_extra_service{
+    background: var(--primary_color);
+    border: 1px solid var(--primary_color);
+    border-radius: 50px;
+    color: var(--secondary_color);
+    cursor: pointer;
+    margin: 0.3rem 0.5rem;
+    padding: 0.3rem 0.5rem;
+    text-transform: capitalize;
+    transition: all 100ms ease-in-out;
+}
+
+.label_item_extra_service:hover {
+    background: var(--secondary_color);
+    color: var(--tertiary_color);
+    display: inline-block;
+    content: "\00d7";
+}
+
+.label_extra_service_custom_handling{
+    background: var(--primary_color);
+    border: 1px solid var(--primary_color);
+    border-radius: 50px;
+    color: var(--secondary_color);
+    cursor: pointer;
+    margin: 0.3rem 0.5rem;
+    padding: 0.3rem 0.5rem;
+    text-transform: capitalize;
+    transition: all 100ms ease-in-out;
+}
+
+.label_extra_service_custom_handling:hover {
+    background: var(--secondary_color);
+    color: var(--tertiary_color);
+}
+
+.label_extra_service_freight{
+    background: var(--primary_color);
+    border: 1px solid var(--primary_color);
+    border-radius: 50px;
+    color: var(--secondary_color);
+    cursor: pointer;
+    margin: 0.3rem 0.5rem;
+    padding: 0.3rem 0.5rem;
+    text-transform: capitalize;
+    transition: all 100ms ease-in-out;
+}
+
+.label_extra_service_freight:hover {
+    background: var(--secondary_color);
+    color: var(--tertiary_color);
+}
+
+.btn_submit_spk{
+    margin-top: 2em;
+}
+
+input[type="radio"]{
+    display :none;
+}
+
+label::before{
+    content: '\f057';
+    font-family: "Font Awesome 5 Free";
+    position: absolute;
+    display: none;
+    background-color: white;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+label{
+    position: relative;
+}
+
+label:hover::before{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* .container-SPK{
 
 } */

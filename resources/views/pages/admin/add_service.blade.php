@@ -15,7 +15,7 @@
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
-        <form action="{{ url('admin/proses_add_service') }}" method="post">
+        <form action="{{ url('admin/proses_add_service') }}" class = "form_add" method="post">
             @csrf
             <div class="input-wrapper">
                 <input type="nama_service" name="nama_service" id="nama_service"
