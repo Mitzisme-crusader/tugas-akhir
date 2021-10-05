@@ -184,8 +184,11 @@ class admin_controller extends Controller
         }
 
         $list_nama_extra_service = array_filter(explode(',', $_POST['hidden_nama_extra_service']));
-        if(count($list_nama_extra_service) > 0){
+        $list_nama_extra_service_freight = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_origin']));
 
+        dd($list_nama_extra_service_freight);
+
+        if(count($list_nama_extra_service) > 0){
             $list_harga_20_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_20_feet_extra_service']));
             $list_harga_40_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_40_feet_extra_service']));
             $list_harga_45_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_45_feet_extra_service']));
@@ -217,6 +220,9 @@ class admin_controller extends Controller
             $template->setValue('harga_40_feet', '');
         }
 
+        if(count($list_nama_extra_service_freight) > 0){
+
+        }
 
         $template->saveAs(public_path("hasil_dokumen/$kode_dokumen.docx"));
 

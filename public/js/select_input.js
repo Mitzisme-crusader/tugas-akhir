@@ -21,19 +21,28 @@ $(document).ready(function () {
         $("#label_extra_service_freight_origin").css("display", "none");
         $("#label_extra_service_freight_destination").css("display", "none");
         $("#label_extra_service_common").css("display", "none");
-        $("#container_extra_service_common").css("display", "none");
+        $("#container_extra_service_custom_handling").css("display", "none");
         $("#container_extra_service_freight_origin").css("display", "none");
         $("#container_extra_service_freight_destination").css("display", "none");
 
+        $("#hidden_nama_extra_service").val("");
+        $("#hidden_harga_20_feet_extra_service").val("");
+        $("#hidden_harga_40_feet_extra_service").val("");
+        $("#hidden_harga_45_feet_extra_service").val("");
+
+        $("#hidden_nama_service_freight_origin").val("");
+        $("#hidden_harga_service_freight_origin").val("");
+        $("#hidden_nama_service_freight_destination").val("");
+        $("#hidden_harga_service_freight_destination").val("");
+
         if($('#select_id_service option:selected').val() == 1){
             $("#label_extra_service_common").css("display", "inline");
-            $(".container_extra_service_custom_handling").css("display", "block");
+            $("#container_extra_service_custom_handling").css("display", "block");
 
             $('.jenis_pengiriman_radio').empty();
             $('.jenis_pekerjaan_radio').empty();
             add_jenis_pengiriman();
             add_jenis_pekerjaan();
-
         }
         else if($('#select_id_service option:selected').val() == 2){
             $("#label_extra_service_freight_origin").css("display", "inline");
@@ -131,10 +140,6 @@ $(document).ready(function () {
             $("#label_harga_45_feet").html("Harga 45 feet :");
             $("#label_harga_45_feet").append(input_harga_45_feet);
         }
-    });
-
-    $("label_item_extra_service").click(function(){
-
     });
 });
 

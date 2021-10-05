@@ -114,9 +114,9 @@
                     </div>
                     <div class="popup-box-body">
                         <div class="input_wrapper">
-                            <label for="nama_extra_service_freight" value=""><span>Nama Extra Service : </span></label>
+                            <label for="nama_extra_service_freight" value="" style="display:block"><span>Nama Extra Service : </span></label>
                             <input type="text" id="nama_extra_service_freight">
-                            <label for="harga_extra_service_freight" value=""><span>Harga Extra Service : </span></label>
+                            <label for="harga_extra_service_freight" value="" style="display:block"><span>Harga Extra Service : </span></label>
                             <input type="number" id="harga_extra_service_freight">
                         </div>
                     </div>
@@ -137,7 +137,7 @@
             <input type="hidden" name="hidden_nama_extra_service_freight_destination" id="hidden_nama_service_freight_destination">
             <input type="hidden" name="hidden_harga_extra_service_freight_destination" id="hidden_harga_service_freight_destination">
 
-            <div class="container_extra_service_custom_handling">
+            <div class="container_extra_service" id="container_extra_service_custom_handling" style="margin-bottom: 1em">
                 <legend>Extra Services</legend>
             </div>
 
@@ -146,7 +146,7 @@
             </div>
 
             <div class="container_extra_service_freight" id="container_extra_service_freight_destination">
-                <legend>Extra Services Destination
+                <legend>Extra Services Destination</legend>
             </div>
 
             <label class="label_extra_service  popupable" id="label_extra_service_common"><span>Add Extra Service</span></label>

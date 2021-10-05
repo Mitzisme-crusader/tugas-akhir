@@ -116,7 +116,7 @@ input[type="radio"]{
     display :none;
 }
 
-label::before{
+.label_item_extra_service::before{
     content: '\f057';
     font-family: "Font Awesome 5 Free";
     position: absolute;
@@ -128,11 +128,11 @@ label::before{
     right: 0;
 }
 
-label{
+.label_item_extra_service{
     position: relative;
 }
 
-label:hover::before{
+.label_item_extra_service:hover::before{
     display: flex;
     justify-content: center;
     align-items: center;
