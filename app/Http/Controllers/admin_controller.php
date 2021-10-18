@@ -116,6 +116,7 @@ class admin_controller extends Controller
 
        return view("pages.admin.list_dokumen_SPK")->with('list_dokumen_SPK', $list_dokumen_SPK);
    }
+
    public function proses_save_document_SPK(Request $request){
         $request->validate([
             'list_id_customer' => 'required',
@@ -125,8 +126,11 @@ class admin_controller extends Controller
             'jenis_pengiriman_radio' => 'required',
             'jenis_pengangkutan_radio' => 'required|in:export,import',
             'jenis_pekerjaan_radio' => 'required',
+            'origin' =>"required_if:list_id_service,2",
+            'destination' =>"required_if:list_id_service,2"
         ]);
 
+        $jenis_id_service = $_POST['list_id_service'];
         $jenis_service = $_POST['jenis_pekerjaan_radio'];
         $jenis_pengiriman = $_POST['jenis_pengiriman_radio'];
         $jenis_pengangkutan = $_POST['jenis_pengangkutan_radio'];
@@ -156,7 +160,7 @@ class admin_controller extends Controller
         }
         $kode_dokumen = $kode_dokumen . '/' . $returnValue . '/' . Carbon::now()->year;
 
-        $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path("template_dokumen/template_SPK_$jenis_service.docx"));
+        $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path("template_dokumen/template_SPK_$jenis_id_service.docx"));
         $template->setValue('port', $port->nama_port);
         $template->setValue('kode_dokumen', $kode_dokumen);
         $template->setValue('tanggal_pembuatan', Carbon::today()->format('d F y'));
@@ -164,6 +168,9 @@ class admin_controller extends Controller
         $template->setValue('nama_perusahaan_customer', $customer->nama_perusahaan_customer);
         $template->setValue('alamat_customer', $customer->alamat_customer);
         $template->setValue('provinsi_customer', $customer->provinsi_customer);
+        $template->setValue('jenis_pengiriman', $jenis_pengiriman);
+        $template->setValue('origin', $_POST['origin']);
+        $template->setValue('destination', $_POST['destination']);
 
         $kode_dokumen = str_replace('/','-',$kode_dokumen);
 
@@ -184,9 +191,9 @@ class admin_controller extends Controller
         }
 
         $list_nama_extra_service = array_filter(explode(',', $_POST['hidden_nama_extra_service']));
-        $list_nama_extra_service_freight = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_origin']));
 
-        dd($list_nama_extra_service_freight);
+        $list_nama_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_origin']));
+
 
         if(count($list_nama_extra_service) > 0){
             $list_harga_20_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_20_feet_extra_service']));
@@ -197,7 +204,6 @@ class admin_controller extends Controller
 
                 $data_extra_service[$i]['nama_extra_service'] = $i + 3 . ". " . $list_nama_extra_service[$i];
 
-                echo(empty($list_harga_45_feet_extra_service));
                 if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service))
                     $data_extra_service[$i]['harga_20_feet'] = "RP. " . $list_harga_20_feet_extra_service[$i];
                 if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service))
@@ -220,7 +226,29 @@ class admin_controller extends Controller
             $template->setValue('harga_40_feet', '');
         }
 
-        if(count($list_nama_extra_service_freight) > 0){
+        if(count($list_nama_extra_service_freight_origin) > 0){
+            $list_nama_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_destination']));
+            $list_harga_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_harga_extra_service_freight_origin']));
+            $list_harga_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_harga_extra_service_freight_destination']));
+
+            for ($i=0; $i < count($list_nama_extra_service_freight_origin); $i++) {
+                $data_extra_service[$i]['nama_extra_service_origin'] = $i + 1 . ". " . $list_nama_extra_service_freight_origin[$i];
+                $data_extra_service[$i]['harga_extra_service_origin'] = $list_harga_extra_service_freight_origin[$i];
+                $data_extra_service[$i]['nama_extra_service_destination'] = $i + 1 . ". " . $list_nama_extra_service_freight_destination[$i];
+                $data_extra_service[$i]['harga_extra_service_destination'] = $list_harga_extra_service_freight_destination[$i];
+            }
+
+            $all_nama_extra_service_origin = array_map(function($data){return $data['nama_extra_service_origin'];}, $data_extra_service);
+            $all_harga_extra_service_origin = array_map(function($data){return $data['harga_extra_service_origin'];}, $data_extra_service);
+            $all_nama_extra_service_destination = array_map(function($data){return $data['nama_extra_service_destination'];}, $data_extra_service);
+            $all_harga_extra_service_destination = array_map(function($data){return $data['harga_extra_service_destination'];}, $data_extra_service);
+
+            $template->setValue('servis_origin', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_origin));
+            $template->setValue('cost_origin', implode('<w:br/> &#160;&#160;', $all_harga_extra_service_origin));
+            $template->setValue('servis_destination', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_destination));
+            $template->setValue('cost_destination', implode('<w:br/>  &#160;&#160;', $all_harga_extra_service_destination));
+        }
+        else{
 
         }
 

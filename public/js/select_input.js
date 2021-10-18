@@ -24,6 +24,7 @@ $(document).ready(function () {
         $("#container_extra_service_custom_handling").css("display", "none");
         $("#container_extra_service_freight_origin").css("display", "none");
         $("#container_extra_service_freight_destination").css("display", "none");
+        $(".input_freight").css("display","none");
 
         $("#hidden_nama_extra_service").val("");
         $("#hidden_harga_20_feet_extra_service").val("");
@@ -45,6 +46,7 @@ $(document).ready(function () {
             add_jenis_pekerjaan();
         }
         else if($('#select_id_service option:selected').val() == 2){
+            $(".input_freight").css("display","block");
             $("#label_extra_service_freight_origin").css("display", "inline");
             $("#label_extra_service_freight_destination").css("display", "inline");
             $("#container_extra_service_freight_origin").css("display", "block");

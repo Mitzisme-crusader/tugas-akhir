@@ -137,6 +137,11 @@ input[type="radio"]{
     justify-content: center;
     align-items: center;
 }
+
+.input_freight{
+    padding-right: 28em;
+    display: none;
+}
 /* .container-SPK{
 
 } */

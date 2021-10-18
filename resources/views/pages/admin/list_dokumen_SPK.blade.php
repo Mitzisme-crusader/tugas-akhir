@@ -11,7 +11,13 @@
 @section('content')
 <div class="content">
     <section>
-        <h1>List Customer</h1>
+        <h1 style="display:inline-block">List Dokumen SPK</h1>
+        <div class="search-container">
+            <form action="/action_page.php" style="display: inline-block">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
         <div class="table-wrapper">
             <table>
                 <thead>

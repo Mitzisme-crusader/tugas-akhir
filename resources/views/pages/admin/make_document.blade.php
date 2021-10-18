@@ -57,6 +57,19 @@
                 <span class="error-message">{{ $errors->first('list_id_port') }}</span>
             </div>
 
+            <div class="input-wrapper input_freight">
+                <input type="nama_customer" name="origin" id="origin"
+                    placeholder="Origin">
+                <label for="nama_customer"><span>Origin</span></label>
+                <span class="error-message">{{ $errors->first('origin') }}</span>
+            </div>
+            <div class="input-wrapper input_freight">
+                <input type="nama_customer" name="destination" id="destination"
+                    placeholder="destination">
+                <label for="destination"><span>Destination</span></label>
+                <span class="error-message">{{ $errors->first('destination') }}</span>
+            </div>
+
             <div class = "input_radio_wrapper">
                 <legend>conveyance</legend>
                 <div class = "jenis_pengangkutan_radio">
