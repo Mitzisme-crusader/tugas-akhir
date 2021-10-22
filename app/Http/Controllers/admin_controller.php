@@ -117,6 +117,13 @@ class admin_controller extends Controller
        return view("pages.admin.list_dokumen_SPK")->with('list_dokumen_SPK', $list_dokumen_SPK);
    }
 
+   public function search_SPK(Request $request){
+
+       $list_dokumen_SPK = $this->admin_repository->search_dokumen_SPK($_GET["query_search"], $_GET["list_option_table"], $_GET["range_date_search_awal"], $_GET["range_date_search_akhir"]);
+
+       return view("pages.admin.list_dokumen_SPK")->with('list_dokumen_SPK', $list_dokumen_SPK);
+   }
+
    public function proses_save_document_SPK(Request $request){
         $request->validate([
             'list_id_customer' => 'required',

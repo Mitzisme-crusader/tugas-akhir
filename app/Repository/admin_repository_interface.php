@@ -21,6 +21,7 @@ interface admin_repository_interface
    public function get_id_dokumen_terbaru();
    public function create_dokumen_spk($dokumen_spk);
    public function get_all_dokumen_SPK();
+   public function search_dokumen_SPK($query, $attribute, $date_awal, $date_akhir);
    //port
    public function get_port($target_kolom);
    public function find_port($id);

@@ -210,28 +210,26 @@ input[type="radio"]:checked + label {
     color: var(--tertiary_color);
 }
 
-input[type=text] {
+#query_search {
     padding: 6px;
-    margin-top: 8px;
-    font-size: 17px;
     border: none;
+    height: 25px;
 }
 
 .search-container{
-    display : inline;
+    display : block;
     float: right;
-    margin-top: 1.2em;
+    margin-top: 10px;
 }
 
 .search-container button {
     float: right;
     padding: 6px 10px;
-    margin-top: 8px;
-    margin-right: 16px;
     background: #ddd;
     font-size: 17px;
     border: none;
     cursor: pointer;
+    height: 52px;
 }
 
 .search-container button:hover {

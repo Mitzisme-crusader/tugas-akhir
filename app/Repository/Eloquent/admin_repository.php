@@ -7,6 +7,7 @@ use App\modelS\service_model;
 use App\models\dokumenSpk_model;
 use App\models\port_model;
 use App\Repository\admin_repository_interface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PDO;
 
@@ -38,7 +39,7 @@ class admin_repository extends base_repository implements admin_repository_inter
    }
 
    public function delete_customer($id_customer){
-       $this->model->where('id_customer', $id_customer)->update(['status_aktif' => 0]);
+       $this->model->where('id_customer', $id_customer)->update(['status_aktif_customer' => 0]);
    }
 
    public function get_customer($target_kolom){
@@ -90,6 +91,24 @@ class admin_repository extends base_repository implements admin_repository_inter
    public function get_all_dokumen_SPK()
    {
        $list_dokumen_SPK = dokumenSpk_model::all();
+       return $list_dokumen_SPK;
+   }
+
+   public function search_dokumen_SPK($query, $attribute, $date_awal, $date_akhir){
+       if($query != "" && $date_awal != ""){
+           $list_dokumen_SPK = dokumenSpk_model::where($attribute, "LIKE", "%".$query."%")->whereBetween("created_at",[$date_awal,Carbon::parse($date_akhir)->addDays(1)])->get();
+       }
+       else if($date_awal == "" && $query != ""){
+           $list_dokumen_SPK = dokumenSpk_model::where($attribute, "LIKE", "%".$query."%")->get();
+       }
+       else if($date_awal != "" && $query == ""){
+           $list_dokumen_SPK = dokumenSpk_model::whereBetween("created_at",[$date_awal,Carbon::parse($date_akhir)->addDays(1)])->get();
+       }
+       else{
+           $list_dokumen_SPK = dokumenSpk_model::all();
+       }
+
+
        return $list_dokumen_SPK;
    }
    //port
