@@ -99,6 +99,8 @@ class admin_controller extends Controller
    }
 
    //Dokumen
+
+   //Dokumen SPK
    public function pergi_ke_make_document_SPK(Request $request){
         $target_kolom = array('nama_perusahaan_customer', 'id_customer');
         $list_customer = $this->admin_repository->get_customer($target_kolom);
@@ -265,7 +267,201 @@ class admin_controller extends Controller
         return response()->download(public_path("hasil_dokumen/$kode_dokumen.docx"));
    }
 
-    public function proses_logout(Request $request){
-        return view('pages.login');
-    }
+   //Dokumen simpan berjalan
+
+   public function pergi_ke_make_dokumen_simpan_berjalan(Request $request){
+       return view("pages.admin.make_dokumen_simpan_berjalan");
+   }
+
+   public function proses_add_dokumen_simpan_berjalan(Request $request){
+        $request->validate([
+            'nomor_SO' => 'required',
+            'nomor_aju' => 'required',
+            'consignee' => 'required',
+            'notify_party' => 'required',
+            'customer' => 'required',
+            'verification_order' => 'required',
+            'commodity' => 'required',
+            'destination' =>"required_if:list_id_service,2",
+            'option_pengiriman' => 'required',
+            'POL' => 'required',
+            'POD' => 'required',
+            'option_container' => 'required',
+            'party_20' => 'required_if:option_pengiriman,FCL|required_without_all:party_40,party_45',
+            'berat_container' => 'required_if:option_pengiriman,LCL',
+            'nomor_container' => 'required',
+            'nomor_invoice' => 'required',
+            'vessal' => 'required',
+            'nomor_BL' => 'required',
+            'list_surat_penjaluran' => 'required_with:tanggal_nopen',
+            'nomor_surat_penjaluran' => 'required_with:tanggal_nopen',
+            'option_asal_asuransi' => 'required',
+            'nama_asuransi' => 'required',
+            'harga_asuransi' => 'required',
+        ]);
+
+
+        $data_dokumen_simpan_berjalan = [
+            'nomor_SO' => $_POST['nomor_SO'],
+            'nomor_aju' => $_POST['nomor_aju'],
+            'consignee' => $_POST['consignee'],
+            'notify_party' => $_POST['notify_party'],
+            'nama_customer' => $_POST['customer'],
+            'verification_order' => $_POST['verification_order'],
+            'commodity' => $_POST['commodity'],
+            'option_pengiriman' => $_POST['option_pengiriman'],
+            'POL' => $_POST['POL'],
+            'POD' => $_POST['POD'],
+            'option_container' => $_POST['option_container'],
+            'party_20' => $_POST['party_20'],
+            'party_40' => $_POST['party_40'],
+            'party_45' => $_POST['party_45'],
+            'berat_container' => $_POST['berat_container'],
+            'nomor_container' => $_POST['nomor_container'],
+            'nomor_invoice' => $_POST['nomor_invoice'],
+            'vessal' => $_POST['vessal'],
+            'nomor_BL' => $_POST['nomor_BL'],
+            'ETD' => $_POST['ETD'],
+            'ETA' => $_POST['ETA'],
+            'tanggal_terima_dokumen' => $_POST['tanggal_terima_dokumen'],
+            'sending' => $_POST['sending'],
+            'tanggal_nopen' => $_POST['tanggal_nopen'],
+            'opsi_surat_penjaluran' => $_POST['list_surat_penjaluran'],
+            'nomor_surat_penjaluran' => $_POST['nomor_surat_penjaluran'],
+            'jumlah_PIB' => $_POST['jumlah_PIB'],
+            'jumlah_notul' => $_POST['jumlah_notul'],
+            'tanggal_pemeriksaan_barang' => $_POST['tanggal_pemeriksaan_barang'],
+            'tanggal_DNP' => $_POST['DNP'],
+            'tanggal_SPPB' => $_POST['tanggal_SPPB'],
+            'SPPB' => $_POST['SPPB'],
+            'tempat_penimbunan' => $_POST['tempat_penimbunan'],
+            'tanggal_pengiriman' => $_POST['tanggal_kirim'],
+            'alamat_pembongkaran' => $_POST['alamat_pembongkaran'],
+            'pemilik_trucking' => $_POST['pemilik_trucking'],
+            'nopol_supir' => $_POST['nopol_supir'],
+            'balik_depo' => $_POST['balik_depo'],
+            'tanggal_depo_kembali' => $_POST['tanggal_depo_kembali'],
+            'harga_trucking' => $_POST['harga_trucking'],
+            'opsi_asal_asuransi' => $_POST['option_asal_asuransi'],
+            'nama_asuransi' => $_POST['nama_asuransi'],
+            'harga_asuransi' => $_POST['harga_asuransi'],
+        ];
+
+        foreach ($data_dokumen_simpan_berjalan as $element=>$key) {
+            if($key == ""){
+                $data_dokumen_simpan_berjalan[$element] = null;
+            }
+        }
+
+        $dokumen_spk = $this->admin_repository->create_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
+
+        return redirect()->back();
+   }
+
+   public function proses_update_dokumen_simpan_berjalan(Request $request){
+        $request->validate([
+            'nomor_SO' => 'required',
+            'nomor_aju' => 'required',
+            'consignee' => 'required',
+            'notify_party' => 'required',
+            'customer' => 'required',
+            'verification_order' => 'required',
+            'commodity' => 'required',
+            'destination' =>"required_if:list_id_service,2",
+            'option_pengiriman' => 'required',
+            'POL' => 'required',
+            'POD' => 'required',
+            'option_container' => 'required',
+            'party_20' => 'required_if:option_pengiriman,FCL|required_without_all:party_40,party_45',
+            'berat_container' => 'required_if:option_pengiriman,LCL',
+            'nomor_container' => 'required',
+            'nomor_invoice' => 'required',
+            'vessal' => 'required',
+            'nomor_BL' => 'required',
+            'list_surat_penjaluran' => 'required_with:tanggal_nopen',
+            'nomor_surat_penjaluran' => 'required_with:tanggal_nopen',
+            'option_asal_asuransi' => 'required',
+            'nama_asuransi' => 'required',
+            'harga_asuransi' => 'required',
+        ]);
+
+        $data_dokumen_simpan_berjalan = [
+            'id_dokumen_simpan_berjalan' => $_POST['id_dokumen'],
+            'nomor_SO' => $_POST['nomor_SO'],
+            'nomor_aju' => $_POST['nomor_aju'],
+            'consignee' => $_POST['consignee'],
+            'notify_party' => $_POST['notify_party'],
+            'nama_customer' => $_POST['customer'],
+            'verification_order' => $_POST['verification_order'],
+            'commodity' => $_POST['commodity'],
+            'option_pengiriman' => $_POST['option_pengiriman'],
+            'POL' => $_POST['POL'],
+            'POD' => $_POST['POD'],
+            'option_container' => $_POST['option_container'],
+            'party_20' => $_POST['party_20'],
+            'party_40' => $_POST['party_40'],
+            'party_45' => $_POST['party_45'],
+            'berat_container' => $_POST['berat_container'],
+            'nomor_container' => $_POST['nomor_container'],
+            'nomor_invoice' => $_POST['nomor_invoice'],
+            'vessal' => $_POST['vessal'],
+            'nomor_BL' => $_POST['nomor_BL'],
+            'ETD' => $_POST['ETD'],
+            'ETA' => $_POST['ETA'],
+            'tanggal_terima_dokumen' => $_POST['tanggal_terima_dokumen'],
+            'sending' => $_POST['sending'],
+            'tanggal_nopen' => $_POST['tanggal_nopen'],
+            'opsi_surat_penjaluran' => $_POST['list_surat_penjaluran'],
+            'nomor_surat_penjaluran' => $_POST['nomor_surat_penjaluran'],
+            'jumlah_PIB' => $_POST['jumlah_PIB'],
+            'jumlah_notul' => $_POST['jumlah_notul'],
+            'tanggal_pemeriksaan_barang' => $_POST['tanggal_pemeriksaan_barang'],
+            'tanggal_DNP' => $_POST['DNP'],
+            'tanggal_SPPB' => $_POST['tanggal_SPPB'],
+            'SPPB' => $_POST['SPPB'],
+            'tempat_penimbunan' => $_POST['tempat_penimbunan'],
+            'tanggal_pengiriman' => $_POST['tanggal_kirim'],
+            'alamat_pembongkaran' => $_POST['alamat_pembongkaran'],
+            'pemilik_trucking' => $_POST['pemilik_trucking'],
+            'nopol_supir' => $_POST['nopol_supir'],
+            'balik_depo' => $_POST['balik_depo'],
+            'tanggal_depo_kembali' => $_POST['tanggal_depo_kembali'],
+            'harga_trucking' => $_POST['harga_trucking'],
+            'opsi_asal_asuransi' => $_POST['option_asal_asuransi'],
+            'nama_asuransi' => $_POST['nama_asuransi'],
+            'harga_asuransi' => $_POST['harga_asuransi'],
+        ];
+
+        foreach ($data_dokumen_simpan_berjalan as $element=>$key) {
+            if($key == ""){
+                $data_dokumen_simpan_berjalan[$element] = null;
+            }
+        }
+
+        $dokumen_spk = $this->admin_repository->update_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
+
+        return redirect()->back();
+   }
+
+   public function pergi_ke_list_dokumen_simpan_berjalan(Request $request){
+       $list_dokumen_simpan_berjalan = $this->admin_repository->get_all_dokumen_simpan_berjalan();
+
+       return view("pages.admin.list_dokumen_simpan_berjalan")->with('list_dokumen_simpan_berjalan', $list_dokumen_simpan_berjalan)->with('range_month',"");
+   }
+
+   public function search_dokumen_simpan_berjalan(Request $request){
+        $list_dokumen_simpan_berjalan = $this->admin_repository->search_dokumen_simpan_berjalan($_GET['query_search'], $_GET['list_option_table'],$_GET['range_month']);
+
+        return view("pages.admin.list_dokumen_simpan_berjalan")->with('list_dokumen_simpan_berjalan', $list_dokumen_simpan_berjalan)->with('range_month', $_GET['range_month']);
+   }
+
+   public function pergi_ke_detail_dokumen_simpan_berjalan(Request $request){
+       $dokumen_simpan_berjalan = $this->admin_repository->find_dokumen_simpan_berjalan($_GET['id_dokumen']);
+
+       return view("pages.admin.edit_dokumen_simpan_berjalan")->with('dokumen_simpan_berjalan', $dokumen_simpan_berjalan);
+   }
+
+   public function proses_logout(Request $request){
+       return view('pages.login');
+   }
 }

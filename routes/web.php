@@ -39,17 +39,38 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('logout', 'App\Http\Controllers\admin_controller@proses_logout');
 
     //Document
-    Route::get('/make_document_SPK', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SPK');
+    //Dokumen SPK
 
-    Route::get('/make_document_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SO');
+    Route::get('/make_document_SPK', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SPK');
 
     Route::get('/list_SPK', 'App\Http\Controllers\admin_controller@pergi_ke_list_SPK');
 
     Route::get('/search_SPK', 'App\Http\Controllers\admin_controller@search_SPK');
 
+    Route::post('/proses_save_document', 'App\Http\Controllers\admin_controller@proses_save_document_SPK');
+
+    //Dokumen SO
+
+    Route::get('/make_document_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SO');
+
     Route::get('/list_SO', 'App\Http\Controllers\admin_controller@pergi_ke_list_SO');
 
-    Route::post('/proses_save_document', 'App\Http\Controllers\admin_controller@proses_save_document_SPK');
+
+
+    //Dokumen Simpan Berjalan
+
+    Route::get('/make_dokumen_simpan_berjalan', 'App\Http\Controllers\admin_controller@pergi_ke_make_dokumen_simpan_berjalan');
+
+    Route::post('/proses_add_dokumen_simpan_berjalan', 'App\Http\Controllers\admin_controller@proses_add_dokumen_simpan_berjalan');
+
+    Route::post('/proses_save_dokumen_simpan_berjalan', 'App\Http\Controllers\admin_controller@proses_update_dokumen_simpan_berjalan');
+
+    Route::get('/list_dokumen_simpan_berjalan', 'App\Http\Controllers\admin_controller@pergi_ke_list_dokumen_simpan_berjalan');
+
+    Route::get('/search_dokumen_simpan_berjalan', 'App\Http\Controllers\admin_controller@search_dokumen_simpan_berjalan');
+
+    Route::get('/detail_dokumen_simpan_berjalan', 'App\Http\Controllers\admin_controller@pergi_ke_detail_dokumen_simpan_berjalan');
+
 });
 
 Route::group(['prefix' => 'user'], function () {

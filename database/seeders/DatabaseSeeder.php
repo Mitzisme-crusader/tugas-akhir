@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             customer_seeder::class,
             // vendor_seerder::class,
             service_seeder::class,
-            port_seeder::class
+            port_seeder::class,
+            dokumen_simpan_berjalan_seeder::class,
         ]);
     }
 }

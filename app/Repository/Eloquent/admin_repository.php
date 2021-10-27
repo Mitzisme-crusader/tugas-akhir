@@ -6,7 +6,9 @@ use App\models\customer_model;
 use App\modelS\service_model;
 use App\models\dokumenSpk_model;
 use App\models\port_model;
+use App\models\dokumen_simpan_berjalan_model;
 use App\Repository\admin_repository_interface;
+use Database\Seeders\dokumen_simpan_berjalan_seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PDO;
@@ -110,6 +112,55 @@ class admin_repository extends base_repository implements admin_repository_inter
 
 
        return $list_dokumen_SPK;
+   }
+
+   //Dokumen Simpan Berjalan
+   public function create_dokumen_simpan_berjalan($dokumen_simpan_berjalan)
+   {
+       return dokumen_simpan_berjalan_model::create($dokumen_simpan_berjalan);
+   }
+
+   public function update_dokumen_simpan_berjalan($dokumen_simpan_berjalan)
+   {
+       return dokumen_simpan_berjalan_model::where("id_dokumen_simpan_berjalan",$dokumen_simpan_berjalan['id_dokumen_simpan_berjalan'])->update($dokumen_simpan_berjalan);
+   }
+   public function get_all_dokumen_simpan_berjalan()
+   {
+       $lastmonth = now()->subMonth()->month;
+       $month = now()->month;
+       $year = now()->year;
+       $date = 25;
+       $lastdate = 26;
+       dd($year.$lastmonth.$lastdate);
+       return dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.$lastmonth.$lastdate , $year.$month.$date])->get();
+   }
+
+   public function find_dokumen_simpan_berjalan($id_dokumen)
+   {
+       return dokumen_simpan_berjalan_model::find($id_dokumen);
+   }
+
+   public function search_dokumen_simpan_berjalan($query,$attribute,$month){
+        $lastmonth = Carbon::parse($month)->month-1;
+        $year = now()->year;
+        $date = 25;
+        $lastdate = 26;
+
+        if($query != "" && $month != ""){
+            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::where($attribute, "LIKE", "%".$query."%")->whereBetween('ETA',[$year.$lastmonth.$lastdate,$year.$month.$date])->get();
+        }
+        else if($month == "" && $query != ""){
+            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::where($attribute, "LIKE", "%".$query."%")->get();
+        }
+        else if($month != "" && $query == ""){
+            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.$lastmonth.$lastdate,$year.Carbon::parse($month)->month.$date])->get();
+        }
+        else{
+            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::all();
+        }
+
+
+        return $list_dokumen_simpan_berjalan;
    }
    //port
    public function get_port($target_kolom){
