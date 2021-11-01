@@ -195,6 +195,7 @@
 
             <div>
                 <select name="list_surat_penjaluran">
+                    <option value="">Pilih Opsi Surat Penjaluran</option>
                     <option value="SPJM" @if($dokumen_simpan_berjalan->opsi_surat_penjaluran == "SPJM") selected="selected"@endif>SPJM</option>
                     <option value="SPJK" @if($dokumen_simpan_berjalan->opsi_surat_penjaluran == "SPJK") selected="selected"@endif>SPJK</option>
                     <option value="SPJH" @if($dokumen_simpan_berjalan->opsi_surat_penjaluran == "SPJH") selected="selected"@endif>SPJH</option>

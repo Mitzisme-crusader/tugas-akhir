@@ -193,7 +193,8 @@
             <label ><span style="background-color: var(--primary_color) ;color:white"> Nomor Pendaftaran</span></label>
 
             <div>
-                <select name="list_surat_penjaluran">
+                <select name="list_surat_penjaluran" id="list_surat_penjaluran">
+                    <option value="">Pilih Opsi Surat Penjaluran</option>
                     <option value="SPJM">SPJM</option>
                     <option value="SPJK">SPJK</option>
                     <option value="SPJH">SPJH</option>
@@ -330,4 +331,12 @@
         </form>
     </section>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $( "#list_surat_penjaluran" ).change(function() {
+            $("#list_surat_penjaluran option[value='']").remove();
+        });
+    });
+</script>
 @endsection

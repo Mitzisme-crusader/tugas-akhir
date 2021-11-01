@@ -22,12 +22,16 @@ interface admin_repository_interface
    public function create_dokumen_spk($dokumen_spk);
    public function get_all_dokumen_SPK();
    public function search_dokumen_SPK($query, $attribute, $date_awal, $date_akhir);
+   public function get_dokumen_SPK($judul_dokumen);
+   public function create_relasi_dokumenspk_extra_service($data_relasi);
    //Dokumen Simpan Berjalan
    public function create_dokumen_simpan_berjalan($dokumen_simpan_berjalan);
    public function update_dokumen_simpan_berjalan($dokumen_simpan_berjalan);
    public function find_dokumen_simpan_berjalan($id_dokumen);
    public function search_dokumen_simpan_berjalan($query,$attribute,$month);
    public function get_all_dokumen_simpan_berjalan();
+   //Dokumen SO
+   public function get_id_dokumenSO_terbaru();
    //port
    public function get_port($target_kolom);
    public function find_port($id);

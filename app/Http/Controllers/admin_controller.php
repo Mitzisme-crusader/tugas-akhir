@@ -203,7 +203,6 @@ class admin_controller extends Controller
 
         $list_nama_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_origin']));
 
-
         if(count($list_nama_extra_service) > 0){
             $list_harga_20_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_20_feet_extra_service']));
             $list_harga_40_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_40_feet_extra_service']));
@@ -211,14 +210,31 @@ class admin_controller extends Controller
 
             for ($i=0; $i < count($list_nama_extra_service); $i++) {
 
+                $harga_extra_service = "";
+
                 $data_extra_service[$i]['nama_extra_service'] = $i + 3 . ". " . $list_nama_extra_service[$i];
 
-                if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service))
-                    $data_extra_service[$i]['harga_20_feet'] = "RP. " . $list_harga_20_feet_extra_service[$i];
-                if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service))
-                    $data_extra_service[$i]['harga_40_feet'] = "RP. " . $list_harga_40_feet_extra_service[$i];
-                if(!in_array("undefined",$list_harga_45_feet_extra_service) && !empty($list_harga_45_feet_extra_service))
-                    $data_extra_service[$i]['harga_45_feet'] = "RP. " . $list_harga_45_feet_extra_service[$i];
+                if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service)){
+                    $data_extra_service[$i]['harga_20_feet'] = "Rp. " . $list_harga_20_feet_extra_service[$i];
+                    $harga_extra_service = $harga_extra_service . "Rp.".$list_harga_20_feet_extra_service[$i].'/20" ';
+                }
+                if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service)){
+                    $data_extra_service[$i]['harga_40_feet'] = "Rp. " . $list_harga_40_feet_extra_service[$i];
+                    $harga_extra_service = $harga_extra_service . ", Rp.".$list_harga_40_feet_extra_service[$i].'/40" ';
+                }
+                if(!in_array("undefined",$list_harga_45_feet_extra_service) && !empty($list_harga_45_feet_extra_service)){
+                    $data_extra_service[$i]['harga_45_feet'] = "Rp. " . $list_harga_45_feet_extra_service[$i];
+                    $harga_extra_service = $harga_extra_service . ", Rp.".$list_harga_45_feet_extra_service[$i].'/45" ';
+                }
+
+                $data_relasi = [
+                    'id_dokumen_spk' => $dokumen->id_dokumen_spk,
+                    'nama_extra_service' => $list_nama_extra_service[$i],
+                    'harga_extra_service' => $harga_extra_service,
+                ];
+
+                $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
+
             }
 
             $all_nama_extra_service = array_map(function($data){return $data['nama_extra_service'];}, $data_extra_service);
@@ -459,6 +475,29 @@ class admin_controller extends Controller
        $dokumen_simpan_berjalan = $this->admin_repository->find_dokumen_simpan_berjalan($_GET['id_dokumen']);
 
        return view("pages.admin.edit_dokumen_simpan_berjalan")->with('dokumen_simpan_berjalan', $dokumen_simpan_berjalan);
+   }
+
+   //Dokumen SO
+   public function pergi_ke_make_dokumen_SO(Request $request){
+       $list_dokumen_SPK = $this->admin_repository->get_all_dokumen_SPK();
+
+       $year = Carbon::now()->format('y');
+       $month = Carbon::now()->format('m');
+       $nomor_urut = $this->admin_repository->get_id_dokumenSO_terbaru();
+
+       $nomor_dokumen_SO = "SO" . $year . $month . $nomor_urut;
+
+       return view('pages.admin.make_dokumen_SO')->with('list_dokumen_SPK', $list_dokumen_SPK)->with('nomor_dokumen_so', $nomor_dokumen_SO);
+   }
+
+   public function get_data_customer(Request $request){
+       $judul_dokumen = $request->get('judul_dokumen');
+
+       $dokumen_spk = $this->admin_repository->get_dokumen_SPK($judul_dokumen);
+
+       $customer = $this->admin_repository->find_customer($dokumen_spk->id_customer);
+
+       return response()->json(array('nama' => $customer->nama_customer, 'alamat'=> $customer->alamat_customer,'provinsi'=>$customer->provinsi_customer, 'negara'=>$customer->negara_customer));
    }
 
    public function proses_logout(Request $request){

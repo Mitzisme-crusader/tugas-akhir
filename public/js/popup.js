@@ -79,9 +79,10 @@ $(document).ready(function () {
         extra_service.onclick = remove_label_extra_service;
         extra_service.style.display = "inline";
         if($(".button-add_extra_service_freight").val() == "origin"){
+            extra_service.setAttribute("id", nama_extra_service_freight+"origin");
             extra_service.setAttribute("service", "origin");
             $("#container_extra_service_freight_origin").append(extra_service);
-            $("#"+nama_extra_service_freight).html(nama_extra_service_freight);
+            $("#"+nama_extra_service_freight+"origin").html(nama_extra_service_freight);
 
             if($("#hidden_nama_service_freight_origin").val() == ""){
                 $("#hidden_nama_service_freight_origin").val(nama_extra_service_freight);
@@ -93,9 +94,10 @@ $(document).ready(function () {
             }
         }
         else if($(".button-add_extra_service_freight").val() == "destination"){
+            extra_service.setAttribute("id", nama_extra_service_freight+"destination");
             extra_service.setAttribute("service", "destination");
             $("#container_extra_service_freight_destination").append(extra_service);
-            $("#"+nama_extra_service_freight).html(nama_extra_service_freight);
+            $("#"+nama_extra_service_freight+"destination").html(nama_extra_service_freight);
 
             if($("#hidden_nama_service_freight_destination").val() == ""){
                 $("#hidden_nama_service_freight_destination").val(nama_extra_service_freight);

@@ -38,7 +38,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('logout', 'App\Http\Controllers\admin_controller@proses_logout');
 
-    //Document
+    //Dokumen
     //Dokumen SPK
 
     Route::get('/make_document_SPK', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SPK');
@@ -51,10 +51,11 @@ Route::group(['prefix' => 'admin'], function () {
 
     //Dokumen SO
 
-    Route::get('/make_document_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_document_SO');
+    Route::get('/make_dokumen_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_dokumen_SO');
 
     Route::get('/list_SO', 'App\Http\Controllers\admin_controller@pergi_ke_list_SO');
 
+    Route::get('/get_data_customer', 'App\Http\Controllers\admin_controller@get_data_customer');
 
 
     //Dokumen Simpan Berjalan

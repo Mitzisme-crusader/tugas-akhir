@@ -23,7 +23,6 @@
                             <option value="id_dokumen_simpan_berjalan">ID dokumen simpan berjalan</option>
                             <option value="nomor_SO">Nomor SO</option>
                             <option value="nama_customer">Nama Customer</option>
-                            <option value="negara_customer">Negara Customer</option>
                         </select>
                     </div>
                     <div style="display: block">
@@ -63,7 +62,7 @@
                         @if ($dokumen_simpan_berjalan->ETA == null)
                             <td>N\A</td>
                         @else
-                            <td>{{$dokumen_simpan_berjalan->ETA}}
+                            <td>{{date('d-m-Y',strtotime($dokumen_simpan_berjalan->ETA))}}
                                 @if ($dokumen_simpan_berjalan->sending == null)
                                     <span><i class="fas fa-exclamation-circle"></i></span>
                                 @endif
@@ -75,6 +74,12 @@
                             <td style="background-color: grey"><span><i class="fas fa-people-carry"></i></span></td>'
                         @elseif ($dokumen_simpan_berjalan->option_container == "LCL")
                             <td style="background-color: greenyellow"><span><i class="fas fa-people-carry"></i></span></td>
+                        @elseif ($dokumen_simpan_berjalan->opsi_surat_penjaluran == "SPJM")
+                            <td style="background-color: red"><span><i class="fas fa-people-carry"></i></span></td>
+                        @elseif ($dokumen_simpan_berjalan->opsi_surat_penjaluran == "SPJK")
+                            <td style="background-color: yellow"><span><i class="fas fa-people-carry"></i></span></td>
+                        @elseif ($dokumen_simpan_berjalan->opsi_surat_penjaluran == "SPJH")
+                            <td style="background-color: green"><span><i class="fas fa-people-carry"></i></span></td>
                         @else
                             <td style=""><span><i class="fas fa-people-carry"></i></span></td>
                         @endif
