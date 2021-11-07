@@ -10,8 +10,8 @@
 @endsection
 
 @section('content')
-<div class="content">
-    <section>
+<div class="content" style="width: 75%">
+    <section >
         <h1 style="display:inline-block">List Dokumen Simpan Berjalan</h1>
         <div class="search-container">
             <form action="{{url('admin/search_dokumen_simpan_berjalan')}}" method="GET" style="display: inline-block">

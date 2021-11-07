@@ -8,6 +8,10 @@
 .form_add{
     padding: 0 10rem;
 }
+
+.title_document{
+    margin-left: 10rem;
+}
 .input-wrapper {
     position: relative;
     width: 100%;
@@ -25,15 +29,15 @@ input {
 
 .input-wrapper input {
     background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--primary_color);
-    border-radius: 0;
+    border: 1px solid var(--primary_color);
+    border-radius: 5px;
     caret-color: var(--primary_color);
     color: var(--primary_color);
     margin: 1rem 0 0 0;
     outline: none;
-    padding: 0.2rem 0;
+    padding-left: 2rem;
     width: 100%;
+    height: 40px;
 }
 
 .input-wrapper input[type="file"] {
@@ -78,11 +82,12 @@ input {
 
 .input-wrapper input + label span {
     color: var(--primary_color);
-    font-size: 0.85rem;
-    left: 0.2rem;
+    /* font-size: 0.85rem; */
+    font-weight: bold;
+    left: 2rem;
     position: absolute;
     text-align: left;
-    top: 1.2rem;
+    top: 1.7rem;
     transition: all 150ms ease-in-out;
 }
 
@@ -188,10 +193,10 @@ input[type="checkbox"]:checked + label {
 }
 
 input[type="radio"] + label {
-    background: var(--primary_color);
-    border: 1px solid var(--primary_color);
+    background: var(--secondary_color);
+    border: 1px solid var(--tertiary_color);
     border-radius: 50px;
-    color: var(--secondary_color);
+    color: var(--primary_color);
     cursor: pointer;
     margin: 0.3rem 0.5rem;
     padding: 0.3rem 0.5rem;
@@ -200,14 +205,13 @@ input[type="radio"] + label {
 }
 
 input[type="radio"] + label:hover {
-    background: var(--secondary_color);
-    color: var(--tertiary_color);
+    background: var(--primary_color);
+    color: var(--secondary_color);
 }
 
 input[type="radio"]:checked + label {
-    background: var(--secondary_color);
-    box-shadow: 0px 0px 1rem var(--primary_color);
-    color: var(--tertiary_color);
+    background: var(--primary_color);
+    color: var(--secondary_color);
 }
 
 #query_search {

@@ -32,6 +32,9 @@ interface admin_repository_interface
    public function get_all_dokumen_simpan_berjalan();
    //Dokumen SO
    public function get_id_dokumenSO_terbaru();
+   public function get_relasi_dokumen_spk_extra_service($id_dokumen_spk);
+   public function add_dokumen_SO($data_dokumen_SO);
+   public function add_relasi_dokumen_so_extra_service($data_relasi);
    //port
    public function get_port($target_kolom);
    public function find_port($id);

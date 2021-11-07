@@ -20,3 +20,8 @@
     background-color: rgb(102, 187, 102);
     color: white;
 }
+
+.label_info{
+    background-color: var(--primary_color) ;
+    color:white;
+}

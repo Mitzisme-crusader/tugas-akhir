@@ -42,13 +42,16 @@ $(document).ready(function () {
         var harga_extra_service_20_feet = $("#harga_extra_service_20_feet").val();
         var harga_extra_service_40_feet = $("#harga_extra_service_40_feet").val();
         var harga_extra_service_45_feet = $("#harga_extra_service_45_feet").val();
+
         var extra_service = document.createElement("label");
         extra_service.setAttribute("class", "label_item_extra_service");
         extra_service.setAttribute("id", nama_extra_service);
         extra_service.setAttribute("service" , "normal");
         extra_service.onclick = remove_label_extra_service;
         extra_service.style.display = "inline";
+
         $("#container_extra_service_custom_handling").append(extra_service);
+
         $("#"+nama_extra_service+"").html(nama_extra_service);
 
         if($("#hidden_nama_extra_service").val() == ""){

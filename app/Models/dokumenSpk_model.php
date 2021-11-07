@@ -11,6 +11,7 @@ class dokumenSpk_model extends Model
     protected $fillable = [
         'id_customer',
         'judul_dokumen',
+        'id_service',
         'nama_customer',
         'nama_perusahaan_customer',
         'negara_customer',

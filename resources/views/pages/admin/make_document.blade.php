@@ -99,14 +99,14 @@
                 <div class="popup-box">
                     <span><i class="fas fa-times-circle"></i></span>
                     <div class="popup-box-header">
-                        <h2>Add Extra Service</h2>
+                        <h2 style="padding-left: 6rem">Add Extra Service</h2>
                     </div>
                     <div class="popup-box-body">
-                        <div class="input_wrapper">
-                            <label class = "nama_extra_service" for="nama_extra_service" value=""><span>Nama Extra Service : </span></label>
-                            <input type="text" id="nama_extra_service">
+                        <div class="input_wrapper" style="padding-left: 6rem;padding-top: 3rem">
+                            <label class = "nama_extra_service" for="nama_extra_service" value="" style="display: block;margin-bottom: 15px"><span>Nama Extra Service : </span></label>
+                            <input type="text" id="nama_extra_service" style="margin-bottom: 5px">
                         </div>
-                        <div class="input_wrapper">
+                        <div class="input_wrapper" style="padding-left: 6rem">
                             <div class="container_harga_extra_service">
 
                             </div>
@@ -123,14 +123,14 @@
                 <div class="popup-box">
                     <span><i class="fas fa-times-circle"></i></span>
                     <div class="popup-box-header">
-                        <h2>Add Extra Service Freight</h2>
+                        <h2 style="padding-left: 6rem">Add Extra Service Freight</h2>
                     </div>
                     <div class="popup-box-body">
-                        <div class="input_wrapper">
-                            <label for="nama_extra_service_freight" value="" style="display:block"><span>Nama Extra Service : </span></label>
-                            <input type="text" id="nama_extra_service_freight">
-                            <label for="harga_extra_service_freight" value="" style="display:block"><span>Harga Extra Service : </span></label>
-                            <input type="number" id="harga_extra_service_freight">
+                        <div class="input_wrapper" style="padding-left:6rem;padding-top:3rem">
+                            <label for="nama_extra_service_freight" value="" style="display:block;font-weight: bold;width:100%;margin-bottom: 15px" ><span style="width:100%">Nama Extra Service : </span></label>
+                            <input style="margin-bottom: 5px" type="text" id="nama_extra_service_freight">
+                            <label for="harga_extra_service_freight" value=""style="display:block;font-weight: bold;width:100%;margin-bottom: 15px"><span style="width:100%">Harga Extra Service : </span></label>
+                            <input style="margin-bottom: 5px" type="number" id="harga_extra_service_freight">
                         </div>
                     </div>
                     <div class="popup-box-footer">

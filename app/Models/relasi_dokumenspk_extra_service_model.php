@@ -12,5 +12,6 @@ class relasi_dokumenspk_extra_service_model extends Model
         'id_dokumen_spk',
         'nama_extra_service',
         'harga_extra_service',
+        'container'
     ];
 }

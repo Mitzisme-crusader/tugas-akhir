@@ -11,7 +11,7 @@
 @section('content')
 <div class="content">
     <section>
-        <h1>Add New Dokumen Simpan Berjalan</h1>
+        <h1 class="title_document">Add New Dokumen Simpan Berjalan</h1>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
@@ -61,7 +61,7 @@
                 <span class="error-message">{{ $errors->first('commodity') }}</span>
             </div>
 
-            <label ><span style="background-color: var(--primary_color) ;color:white;"> EXIM</span></label>
+            <label class="label_info">EXIM</label>
 
             <div>
                 <select name="option_pengiriman">

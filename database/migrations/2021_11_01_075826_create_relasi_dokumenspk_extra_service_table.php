@@ -17,6 +17,7 @@ class CreateRelasiDokumenspkExtraServiceTable extends Migration
             $table->bigIncrements('id_relasi_dokumenspk_extra_service');
             $table->unsignedBigInteger('id_dokumen_spk');
             $table->foreign('id_dokumen_spk')->references('id_dokumen_spk')->on('dokumen_spk');
+            $table->string('container')->nullable();
             $table->string('nama_extra_service');
             $table->string('harga_extra_service');
             $table->timestamps();

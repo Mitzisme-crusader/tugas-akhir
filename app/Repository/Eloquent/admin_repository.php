@@ -9,6 +9,7 @@ use App\models\port_model;
 use App\models\dokumen_simpan_berjalan_model;
 use App\Models\relasi_dokumenspk_extra_service_model;
 use App\models\dokumen_so_model;
+use App\models\relasi_dokumen_so_extra_service_model;
 use App\Repository\admin_repository_interface;
 use Database\Seeders\dokumen_simpan_berjalan_seeder;
 use Illuminate\Support\Carbon;
@@ -80,11 +81,10 @@ class admin_repository extends base_repository implements admin_repository_inter
    //dokumenSPK
    public function get_id_dokumen_terbaru()
    {
-       $id_dokumen = dokumenSpk_model::max('id_dokumen_so');
+       $id_dokumen = dokumenSpk_model::max('id_dokumen_spk');
        if (is_null($id_dokumen)){
             $id_dokumen = 0;
        }
-       dd($id_dokumen);
        return $id_dokumen + 1;
    }
 
@@ -182,6 +182,20 @@ class admin_repository extends base_repository implements admin_repository_inter
        }
 
        return $id_dokumen + 1;
+   }
+
+   public function get_relasi_dokumen_spk_extra_service($id_dokumen_spk)
+   {
+       return relasi_dokumenspk_extra_service_model::where("id_dokumen_spk", $id_dokumen_spk)->get();
+   }
+
+   public function add_dokumen_SO($data_dokumen_SO){
+       return dokumen_so_model::create($data_dokumen_SO);
+   }
+
+   public function add_relasi_dokumen_so_extra_service($data_relasi)
+   {
+       relasi_dokumen_so_extra_service_model::create($data_relasi);
    }
    //port
    public function get_port($target_kolom){

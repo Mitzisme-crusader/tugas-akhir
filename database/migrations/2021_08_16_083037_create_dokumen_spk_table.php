@@ -16,6 +16,8 @@ class CreateDokumenSpkTable extends Migration
         Schema::create('dokumen_spk', function (Blueprint $table) {
             $table->bigIncrements('id_dokumen_spk');
             $table->string('judul_dokumen');
+            $table->unsignedBigInteger('id_service');
+            $table->foreign('id_service')->references('id_service')->on('service');
             $table->unsignedBigInteger('id_customer');
             $table->foreign('id_customer')->references('id_customer')->on('customer');
             $table->string('nama_customer');

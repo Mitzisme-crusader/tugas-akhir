@@ -55,6 +55,8 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/list_SO', 'App\Http\Controllers\admin_controller@pergi_ke_list_SO');
 
+    Route::post('/proses_add_dokumen_so', 'App\Http\Controllers\admin_controller@proses_add_dokumen_so');
+
     Route::get('/get_data_customer', 'App\Http\Controllers\admin_controller@get_data_customer');
 
 

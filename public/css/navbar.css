@@ -86,12 +86,35 @@ nav ul li:hover ul {
 }
 
 nav ul li ul li {
-    background: var(--primary_color);
+    background: var(--secondary_color);
     width: 100%;
 }
 
+nav ul li ul li a span::before {
+    background: var(--primary_color);
+    bottom: 0;
+    content: "";
+    height: 0.1rem;
+    left: 0;
+    position: absolute;
+    transition: transform 250ms ease-in-out;
+    width: 100%;
+}
+
+nav ul li ul li a span::before {
+    transform: translateY(0%);
+}
+
+nav ul li ul li a span::before {
+    transform: translateY(200%);
+}
+
+nav ul li ul li a span::before {
+    transform: translateY(0%);
+}
+
 nav ul li ul li a span {
-    color: var(--secondary_color);
+    color: var(--primary_color);
     display: block;
     font-size: 0.7rem;
     margin: 1em;

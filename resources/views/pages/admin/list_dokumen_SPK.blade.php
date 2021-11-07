@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<div class="content">
+<div class="content" style="width: 75%">
     <section>
         <h1 style="display:inline-block">List Dokumen SPK</h1>
         <div class="search-container">
