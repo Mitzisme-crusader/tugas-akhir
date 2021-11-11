@@ -19,7 +19,7 @@
         <form action="{{ url('admin/proses_save_document') }}" method="post">
             @csrf
             <div class="input-wrapper">
-                <select name="list_id_customer" class = "select_id" id="select_id_customer">
+                <select name="list_id_customer" class = "select_id" id="select_id_customer" placeholder="Select Customer's company">
                     <option value="">Select Customer's company</option>
                     @for ($i = 0; $i<count($list_customer['nama_perusahaan_customer']); ++$i)
                         <option value ="{{$list_customer['id_customer'][$i]->id_customer}}"> {{$list_customer['nama_perusahaan_customer'][$i]->nama_perusahaan_customer}} </option>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="input-wrapper">
-                <select name="list_container" class="select_container" id="select_id_container">
+                <select name="list_container" class="select_id" id="select_id_container">
                     <option value="">Select Container</option>
                     <option value="1">1x20'' && 1x40''</option>
                     <option value="2">1x20'' && 1x40'' && 1x45''</option>
@@ -175,4 +175,9 @@
         </form>
     </section>
 </div>
+<script>
+    $(function() {
+        $('select').selectize(options);
+    });
+</script>
 @endsection

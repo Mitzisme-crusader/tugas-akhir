@@ -22,7 +22,7 @@ class admin_controller extends Controller
    public function proses_add_customer(Request $request){
        $request->validate([
            'nama_customer' => 'required',
-           'email_customer' => 'required|unique:customer,email_customer',
+           'email_customer' => 'required|unique:customer,email_customer|email',
            'nama_perusahaan_customer' => 'required',
            'alamat_customer' => 'required',
            'provinsi_customer' => 'required',
@@ -217,10 +217,10 @@ class admin_controller extends Controller
                 if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service)){
                     $data_extra_service[$i]['harga_20_feet'] = "Rp. " . $list_harga_20_feet_extra_service[$i];
                     $data_relasi = [
-                        'id_dokumen_spk' => $dokumen->id_dokumen_spk,
+                        'judul_dokumen' => $dokumen->judul_dokumen,
                         'nama_extra_service' => $list_nama_extra_service[$i],
                         'harga_extra_service' => $list_harga_20_feet_extra_service[$i],
-                        'container' => '20"',
+                        'container' => '20',
                     ];
 
                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
@@ -228,10 +228,10 @@ class admin_controller extends Controller
                 if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service)){
                     $data_extra_service[$i]['harga_40_feet'] = "Rp. " . $list_harga_40_feet_extra_service[$i];
                     $data_relasi = [
-                        'id_dokumen_spk' => $dokumen->id_dokumen_spk,
+                        'judul_dokumen' => $dokumen->judul_dokumen,
                         'nama_extra_service' => $list_nama_extra_service[$i],
                         'harga_extra_service' => $list_harga_40_feet_extra_service[$i],
-                        'container' => '40"',
+                        'container' => '40',
                     ];
 
                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
@@ -239,10 +239,10 @@ class admin_controller extends Controller
                 if(!in_array("undefined",$list_harga_45_feet_extra_service) && !empty($list_harga_45_feet_extra_service)){
                     $data_extra_service[$i]['harga_45_feet'] = "Rp. " . $list_harga_45_feet_extra_service[$i];
                     $data_relasi = [
-                        'id_dokumen_spk' => $dokumen->id_dokumen_spk,
+                        'judul_dokumen' => $dokumen->judul_dokumen,
                         'nama_extra_service' => $list_nama_extra_service[$i],
                         'harga_extra_service' => $list_harga_45_feet_extra_service[$i],
-                        'container' => '45"',
+                        'container' => '45',
                     ];
 
                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
@@ -508,7 +508,7 @@ class admin_controller extends Controller
 
        $dokumen_spk = $this->admin_repository->get_dokumen_SPK($judul_dokumen);
 
-       $list_extra_service = $this->admin_repository->get_relasi_dokumen_spk_extra_service($dokumen_spk->id_dokumen_spk);
+       $list_extra_service = $this->admin_repository->get_relasi_dokumen_spk_extra_service($dokumen_spk->judul_dokumen);
 
        $customer = $this->admin_repository->find_customer($dokumen_spk->id_customer);
 
@@ -516,7 +516,13 @@ class admin_controller extends Controller
    }
 
    public function proses_add_dokumen_so(Request $request){
-    //    dd($_POST);
+       $request->validate([
+            'input_nama_service.*' => 'required',
+            'input_quantity_service.*' => 'required',
+            'input_container_service.*' => 'required',
+            'input_harga_service.*' => 'required',
+            'input_total.*' => 'required|numeric|min:10000',
+       ]);
        $list_service_dokumen_so = array();
 
        foreach ($_POST['checkbox_status_service'] as $key) {
@@ -544,6 +550,7 @@ class admin_controller extends Controller
             $data_relasi_dokumen_so_extra_service = [
                 'nomor_so' => $dokumen_SO->nomor_so,
                 'nama_service' => $service_dokumen_so['nama_service'],
+                'judul_dokumen_spk' => $_POST['option_dokumen_SPK'],
                 'quantity_service' => $service_dokumen_so['quantity_service'],
                 'container_service' => $service_dokumen_so['container_service'],
                 'harga_service' => $service_dokumen_so['harga_service'],
@@ -554,7 +561,7 @@ class admin_controller extends Controller
 
             foreach ($data_relasi_dokumen_so_extra_service as $element=>$key) {
                 if($key == ""){
-                    $data_relasi_dokumen_so_extra_service[$element] = null;
+                    $data_relasi_dokumen_so_extra_service[$element] = 0;
                 }
             }
 
@@ -563,6 +570,94 @@ class admin_controller extends Controller
 
        $request->session()->flash('message', 'add dokumen berhasil');
        return redirect()->back();
+   }
+
+   public function pergi_ke_list_dokumen_SO(Request $request){
+       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+
+       return view('pages.admin.list_dokumen_so')->with('list_dokumen_SO', $list_dokumen_SO);
+   }
+
+   public function pergi_ke_edit_so(Request $request){
+       $id_dokumen_so = $_GET['id_dokumen_so'];
+
+       $dokumen_so = $this->admin_repository->find_dokumen_SO($id_dokumen_so);
+
+       $list_relasi_dokumen_so_extra_service = $this->admin_repository->get_relasi_dokumen_so_extra_service($dokumen_so->nomor_so);
+
+       $list_relasi_dokumen_spk_extra_service = $this->admin_repository->get_relasi_dokumen_spk_extra_service($dokumen_so->judul_dokumen_spk);
+
+       $list_service_uncheked = array();
+
+       foreach($list_relasi_dokumen_spk_extra_service as $relasi_dokumen_spk_extra_service){
+           $boolean_in_dokumen_so = false;
+           foreach($list_relasi_dokumen_so_extra_service as $relasi_dokumen_so_extra_service){
+               if($relasi_dokumen_spk_extra_service->container !=null){
+                    if($relasi_dokumen_spk_extra_service->nama_extra_service == $relasi_dokumen_so_extra_service->nama_service && $relasi_dokumen_spk_extra_service->container == $relasi_dokumen_so_extra_service->container_service){
+                        $boolean_in_dokumen_so = true;
+                    }
+               }
+               else{
+                    if($relasi_dokumen_spk_extra_service->nama_extra_service == $relasi_dokumen_so_extra_service->nama_service){
+                        $boolean_in_dokumen_so = true;
+                    }
+               }
+           }
+
+           if($boolean_in_dokumen_so == false){
+               array_push($list_service_uncheked, $relasi_dokumen_spk_extra_service);
+           }
+       }
+
+       return view('pages.admin.edit_dokumen_SO')->with('dokumen_so', $dokumen_so)->with('list_relasi', $list_relasi_dokumen_so_extra_service)->with('list_service_unchecked', $list_service_uncheked);
+   }
+
+   public function proses_edit_dokumen_so(Request $request){
+       $request->validate([
+           'input_nama_service.*' => 'required',
+           'input_quantity_service.*' => 'required',
+           'input_container_service.*' => 'required',
+           'input_harga_service.*' => 'required',
+           'input_total.*' => 'required|numeric|min:10000',
+       ]);
+       $list_service_dokumen_so = array();
+
+       foreach ($_POST['checkbox_status_service'] as $key) {
+           $list_service_dokumen_so[$key]['nama_service'] = $_POST['input_nama_service'][$key];
+           $list_service_dokumen_so[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
+           $list_service_dokumen_so[$key]['container_service'] = $_POST['input_container_service'][$key];
+           $list_service_dokumen_so[$key]['harga_service'] = $_POST['input_harga_service'][$key];
+           $list_service_dokumen_so[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
+           $list_service_dokumen_so[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
+           $list_service_dokumen_so[$key]['total'] = $_POST['input_total'][$key];
+       }
+
+       $this->admin_repository->delete_relasi_dokumen_so_extra_service($_POST['Id_dokumen']);
+
+       foreach ($list_service_dokumen_so as $service_dokumen_so) {
+            $data_relasi_dokumen_so_extra_service = [
+               'nomor_so' => $_POST['Id_dokumen'],
+               'nama_service' => $service_dokumen_so['nama_service'],
+               'judul_dokumen_spk' => $_POST['option_dokumen_SPK'],
+               'quantity_service' => $service_dokumen_so['quantity_service'],
+               'container_service' => $service_dokumen_so['container_service'],
+               'harga_service' => $service_dokumen_so['harga_service'],
+               'diskon_service' => $service_dokumen_so['diskon_service'],
+               'pajak_service' => $service_dokumen_so['pajak_service'],
+               'total_service' => $service_dokumen_so['total'],
+            ];
+
+            foreach ($data_relasi_dokumen_so_extra_service as $element=>$key) {
+                if($key == ""){
+                    $data_relasi_dokumen_so_extra_service[$element] = 0;
+                }
+            }
+
+            $relasi = $this->admin_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service);
+        }
+
+    $request->session()->flash('message', 'Edit dokumen berhasil');
+    return redirect()->back();
    }
 
    public function proses_logout(Request $request){

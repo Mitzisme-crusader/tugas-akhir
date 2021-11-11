@@ -125,6 +125,11 @@ class admin_repository extends base_repository implements admin_repository_inter
    {
        return relasi_dokumenspk_extra_service_model::create($data_relasi);
    }
+
+   public function get_relasi_dokumen_spk_extra_service($judul_dokumen)
+   {
+       return relasi_dokumenspk_extra_service_model::where("judul_dokumen", $judul_dokumen)->get();
+   }
    //Dokumen Simpan Berjalan
    public function create_dokumen_simpan_berjalan($dokumen_simpan_berjalan)
    {
@@ -184,19 +189,33 @@ class admin_repository extends base_repository implements admin_repository_inter
        return $id_dokumen + 1;
    }
 
-   public function get_relasi_dokumen_spk_extra_service($id_dokumen_spk)
-   {
-       return relasi_dokumenspk_extra_service_model::where("id_dokumen_spk", $id_dokumen_spk)->get();
-   }
-
    public function add_dokumen_SO($data_dokumen_SO){
        return dokumen_so_model::create($data_dokumen_SO);
    }
 
    public function add_relasi_dokumen_so_extra_service($data_relasi)
    {
-       relasi_dokumen_so_extra_service_model::create($data_relasi);
+       return relasi_dokumen_so_extra_service_model::create($data_relasi);
    }
+
+   public function get_relasi_dokumen_so_extra_service($nomor_so)
+   {
+       return relasi_dokumen_so_extra_service_model::where('nomor_so', $nomor_so)->get();
+   }
+
+   public function delete_relasi_dokumen_so_extra_service($id_dokumen_SO)
+   {
+       return relasi_dokumen_so_extra_service_model::where('nomor_so', $id_dokumen_SO)->delete();
+   }
+
+   public function get_all_dokumen_SO(){
+       return dokumen_so_model::all();
+   }
+
+   public function find_dokumen_SO($id_dokumen_SO){
+       return dokumen_so_model::find($id_dokumen_SO);
+   }
+
    //port
    public function get_port($target_kolom){
         $hasil = [];

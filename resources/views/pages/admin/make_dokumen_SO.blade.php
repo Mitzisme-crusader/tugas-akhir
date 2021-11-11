@@ -12,13 +12,17 @@
 @section('content')
 <div class="content">
     <section>
-        <h1>Create Dokumen SO</h1>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
+
+        @if($errors->any())
+            <h4 class="message">terdapat field kosong</h4>
+        @endif
+
+        <h1>Create Dokumen SO</h1>
         <form action="{{ url('admin/proses_add_dokumen_so') }}" method="post">
             @csrf
-
             <h5 >Pelanggan</h5>
             <div style="display:inline-block;border:1px solid;width : 48%;height: 200px;">
                 <select name="option_dokumen_SPK" id="option_dokumen_SPK" style="display:inline; width:100%">
@@ -74,8 +78,6 @@
             <div class = "btn_submit_spk" style="display: inline-block">
                 <button type="submit" class="button"><span>Create Document</span></button>
             </div>
-
-
         </form>
 
         <div class = "btn_submit_spk" style="position: relative;bottom:69px;left:200px">
@@ -84,24 +86,26 @@
     </section>
     <script>
         $(document).ready(function () {
+            $("select").select2();
+
             $("#button_add_service").click(function(){
                 $("#tbody_dokumen_SO").append(`
                     <tr>
                         <td>${nomor_urut_dokumen + 1}</td>
                         <td>
-                            <input type="text" style = "width:200px;" name="input_nama_service[]"
+                            <input type="text" style = "width:200px;" name="input_nama_service[]">
                         </td>
                         <td>
-                            <input type="text" style = "width:40px;" name="input_quantity_service[]">
+                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value="1">
                         </td>
                         <td>
-                            <input type="text" style = "width:40px;" name="input_container_service[]"
+                            <input type="text" style = "width:40px;" name="input_container_service[]" value = "20">
                         </td>
                         <td>
-                            <input type="text" style = "width:80px;" name="input_harga_service[]"
+                            <input type="text" style = "width:80px;" name="input_harga_service[]">
                         </td>
-                        <td><input type="text" style = "width:40px" name="input_diskon_service[]"></td>
-                        <td><input type="text" style = "width:40px" name="input_pajak_service[]"></td>
+                        <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
+                        <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
                         <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
                         <td>
                             <label>
@@ -152,7 +156,7 @@
                                             <input type="text" style = "width:200px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service[]">
+                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
                                         </td>
                                         <td>
                                             <input type="text" style = "width:40px;" readonly name="input_container_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container']}">
@@ -161,10 +165,10 @@
                                             <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" name="input_diskon_service[]">
+                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" name="input_pajak_service[]">
+                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]">
                                         </td>
                                         <td>
                                             <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">

@@ -53,12 +53,15 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/make_dokumen_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_dokumen_SO');
 
-    Route::get('/list_SO', 'App\Http\Controllers\admin_controller@pergi_ke_list_SO');
+    Route::get('/list_SO', 'App\Http\Controllers\admin_controller@pergi_ke_list_dokumen_SO');
 
     Route::post('/proses_add_dokumen_so', 'App\Http\Controllers\admin_controller@proses_add_dokumen_so');
 
     Route::get('/get_data_customer', 'App\Http\Controllers\admin_controller@get_data_customer');
 
+    Route::get('/edit_dokumen_so', 'App\Http\Controllers\admin_controller@pergi_ke_edit_so');
+
+    Route::post('/proses_edit_dokumen_so', 'App\Http\Controllers\admin_controller@proses_edit_dokumen_so');
 
     //Dokumen Simpan Berjalan
 

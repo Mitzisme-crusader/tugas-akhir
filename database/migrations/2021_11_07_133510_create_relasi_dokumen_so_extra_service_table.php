@@ -17,6 +17,7 @@ class CreateRelasiDokumenSoExtraServiceTable extends Migration
             $table->bigIncrements('id_relasi_dokumen_so_extra_service');
             $table->string('nomor_so');
             $table->string('nama_service');
+            $table->string('judul_dokumen_spk');
             $table->integer('quantity_service')->nullable();
             $table->string('container_service')->nullable();
             $table->integer('harga_service')->nullable();

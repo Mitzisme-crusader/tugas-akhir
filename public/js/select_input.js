@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $("select").select2();
+
     $(this).click(function(){
         $('.error-message').empty();
     });
@@ -44,6 +46,8 @@ $(document).ready(function () {
             $('.jenis_pekerjaan_radio').empty();
             add_jenis_pengiriman();
             add_jenis_pekerjaan();
+
+            $('#select_id_container').prop("disabled", false);
         }
         else if($('#select_id_service option:selected').val() == 2){
             $(".input_freight").css("display","block");
@@ -56,6 +60,8 @@ $(document).ready(function () {
             $('.jenis_pekerjaan_radio').empty();
             add_jenis_pengiriman();
             add_jenis_pekerjaan();
+
+            $('#select_id_container').prop("disabled", true);
         }
         else if($('#select_id_service option:selected').val() == 3){
 
