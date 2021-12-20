@@ -39,6 +39,10 @@ interface admin_repository_interface
    public function delete_relasi_dokumen_so_extra_service($id_dokumen_SO);
    public function get_all_dokumen_SO();
    public function find_dokumen_SO($id_dokumen_SO);
+   //Tagihan
+   //input tagihan vendor
+   public function add_tagihan_vendor($data_tagihan_vendor);
+   public function get_all_dokumen_SO_with_total_hutang();
    //port
    public function get_port($target_kolom);
    public function find_port($id);

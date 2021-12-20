@@ -10,6 +10,7 @@ use App\models\dokumen_simpan_berjalan_model;
 use App\Models\relasi_dokumenspk_extra_service_model;
 use App\models\dokumen_so_model;
 use App\models\relasi_dokumen_so_extra_service_model;
+use App\models\tagihan_vendor_model;
 use App\Repository\admin_repository_interface;
 use Database\Seeders\dokumen_simpan_berjalan_seeder;
 use Illuminate\Support\Carbon;
@@ -216,6 +217,29 @@ class admin_repository extends base_repository implements admin_repository_inter
        return dokumen_so_model::find($id_dokumen_SO);
    }
 
+   //Tagihan
+   //Tagihan Vendor
+
+   public function add_tagihan_vendor($data_tagihan_vendor){
+       return tagihan_vendor_model::create($data_tagihan_vendor);
+   }
+
+   public function get_all_dokumen_SO_with_total_hutang(){
+       $list_dokumen_so = dokumen_so_model::join('relasi_dokumen_so_extra_service', 'relasi_dokumen_so_extra_service.nomor_so', '=', 'dokumen_so.nomor_so')
+       ->groupBy('dokumen_so.nomor_so')
+       ->groupBy('dokumen_so.tanggal_so')
+       ->selectRaw('dokumen_so.nomor_so, dokumen_so.tanggal_so, sum(total_service) as Total');
+
+
+       $list_dokumen_so_with_total_hutang = tagihan_vendor_model::joinSub($list_dokumen_so, 'list_dokumen_so', function($join){
+            $join->on('tagihan_vendor.nomor_so', '=', 'list_dokumen_so.nomor_so');
+       })->groupBy('tagihan_vendor.nomor_so')
+       ->groupBy('list_dokumen_so.Total')
+       ->groupBy('list_dokumen_so.tanggal_so')
+       ->selectRaw('tagihan_vendor.nomor_so, list_dokumen_so.Total, list_dokumen_so.tanggal_so, sum(tagihan_vendor.hutang)as hutang')->get();
+
+       return $list_dokumen_so_with_total_hutang;
+   }
    //port
    public function get_port($target_kolom){
         $hasil = [];

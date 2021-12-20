@@ -12,6 +12,7 @@
 @section('content')
 <div class="content">
     <section>
+        <?php $jenis_id_service_spk = 0 ?>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
@@ -90,35 +91,61 @@
 
             $("#button_add_service").click(function(){
                 $("#tbody_dokumen_SO").append(`
-                    <tr>
-                        <td>${nomor_urut_dokumen + 1}</td>
-                        <td>
-                            <input type="text" style = "width:200px;" name="input_nama_service[]">
-                        </td>
-                        <td>
-                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value="1">
-                        </td>
-                        <td>
-                            <input type="text" style = "width:40px;" name="input_container_service[]" value = "20">
-                        </td>
-                        <td>
-                            <input type="text" style = "width:80px;" name="input_harga_service[]">
-                        </td>
-                        <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
-                        <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
-                        <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
-                            </label>
-                        </td>
-                    </tr>
-                    ${++nomor_urut_dokumen}
+                    @if ('${id_jenis_service_spk == 1}')
+                        <tr>
+                            <td>${nomor_urut_dokumen + 1}</td>
+                            <td>
+                                <input type="text" style = "width:200px;" name="input_nama_service[]">
+                            </td>
+                            <td>
+                                <input type="text" style = "width:40px;" name="input_quantity_service[]" value="1">
+                            </td>
+                            <td>
+                                <input type="text" style = "width:40px;" name="input_container_service[]" value = "20">
+                            </td>
+                            <td>
+                                <input type="text" style = "width:80px;" name="input_harga_service[]">
+                            </td>
+                            <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
+                            <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
+                                </label>
+                            </td>
+                        </tr>
+                        ${++nomor_urut_dokumen}
+                    @elseif (${id_jenis_service_spk == 2})
+                        <tr>
+                            <td>${nomor_urut_dokumen + 1}</td>
+                            <td>
+                                <input type="text" style = "width:200px;" name="input_nama_service[]">
+                            </td>
+                            <td>
+                                <input type="text" style = "width:40px;" name="input_quantity_service[]" value="1">
+                            </td
+                            <td>
+                                <input type="text" style = "width:80px;" name="input_harga_service[]">
+                            </td>
+                            <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
+                            <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
+                                </label>
+                            </td>
+                        </tr>
+                        ${++nomor_urut_dokumen}
+                    @endif
                 `);
             });
 
             $("#option_dokumen_SPK").change(function() {
                 $("#option_dokumen_SPK option[value='']").remove();
+                $("#tbody_dokumen_SO").empty();
+                $("#thead_dokumen_SO").empty();
                 let judul_dokumen = $('#option_dokumen_SPK option:selected').val();
 
                 $.ajax({
@@ -129,11 +156,12 @@
                         console.log(data);
                         console.log(data['list_extra_service'].length);
                         var banyak_extra_service = data['list_extra_service'].length;
+
                         $("#input_nama_customer").val(data['customer']['nama_customer']);
                         $("#input_alamat_customer").val(data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
                         $("#input_data_customer").html(data['customer']['nama_customer'] +'- '+ data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
-                        $("#tbody_dokumen_SO").empty();
-                        $("#thead_dokumen_SO").empty();
+                        id_jenis_service_spk = data['dokumen_spk']['id_service'];
+
                         if(data['dokumen_spk']['id_service'] == 1){
                             $("#thead_dokumen_SO").append(`
                                 <th>Item</th>
@@ -183,10 +211,49 @@
                             }
                         }
                         else{
+                            $("#thead_dokumen_SO").append(`
+                                <th>Item</th>
+                                <th>Description</th>
+                                <th>QTY</th>
+                                <th>Unit Price</th>
+                                <th>Disc%</th>
+                                <th>Tax</th>
+                                <th>Amount</th>
+                                <th>Active</th>
+                            `);
 
+
+                            for(nomor_urut_dokumen = 0; nomor_urut_dokumen < data['list_extra_service'].length; ++nomor_urut_dokumen){
+                                $("#tbody_dokumen_SO").append(`
+                                    <tr>
+                                        <td>${nomor_urut_dokumen + 1}</td>
+                                        <td>
+                                            <input type="text" style = "width:200px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_extra_service']}">
+                                        </td>
+                                        <td>
+                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                        </td>
+                                        <td>
+                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                        </td>
+                                        <td>
+                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]">
+                                        </td>
+                                        <td>
+                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]">
+                                        </td>
+                                        <td>
+                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                        </td>
+                                        <td>
+                                            <label>
+                                                <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                `);
+                            }
                         }
-
-
                     }
                 });
             });

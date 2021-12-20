@@ -7,6 +7,7 @@ use App\Repository\Eloquent\admin_repository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use PDO;
+use Psy\CodeCleaner\EmptyArrayDimFetchPass;
 use Throwable;
 
 class admin_controller extends Controller
@@ -132,7 +133,7 @@ class admin_controller extends Controller
             'list_id_customer' => 'required',
             'list_id_service' => 'required',
             'list_id_port' => 'required',
-            'list_container' => 'required',
+            'list_container' => 'required_if:list_id_service,1',
             'jenis_pengiriman_radio' => 'required',
             'jenis_pengangkutan_radio' => 'required|in:export,import',
             'jenis_pekerjaan_radio' => 'required',
@@ -205,6 +206,9 @@ class admin_controller extends Controller
 
         $list_nama_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_origin']));
 
+        $list_nama_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_destination']));
+
+        //INPUT DATA EXTRA SERVICE PPJK
         if(count($list_nama_extra_service) > 0){
             $list_harga_20_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_20_feet_extra_service']));
             $list_harga_40_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_40_feet_extra_service']));
@@ -264,30 +268,65 @@ class admin_controller extends Controller
             $template->setValue('harga_40_feet', '');
         }
 
-        if(count($list_nama_extra_service_freight_origin) > 0){
-            $list_nama_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_destination']));
+        //INPUT DATA EXTRA SERVICE FREIGHT
+        if(count($list_nama_extra_service_freight_origin) > 0 || count($list_nama_extra_service_freight_destination) > 0){
             $list_harga_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_harga_extra_service_freight_origin']));
             $list_harga_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_harga_extra_service_freight_destination']));
 
             for ($i=0; $i < count($list_nama_extra_service_freight_origin); $i++) {
-                $data_extra_service[$i]['nama_extra_service_origin'] = $i + 1 . ". " . $list_nama_extra_service_freight_origin[$i];
-                $data_extra_service[$i]['harga_extra_service_origin'] = $list_harga_extra_service_freight_origin[$i];
-                $data_extra_service[$i]['nama_extra_service_destination'] = $i + 1 . ". " . $list_nama_extra_service_freight_destination[$i];
-                $data_extra_service[$i]['harga_extra_service_destination'] = $list_harga_extra_service_freight_destination[$i];
+                $data_extra_service['nama_extra_service_origin'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_origin[$i];
+                $data_extra_service['harga_extra_service_origin'][$i] = $list_harga_extra_service_freight_origin[$i];
+
+                $data_relasi = [
+                    'judul_dokumen' => $dokumen->judul_dokumen,
+                    'nama_extra_service' => $list_nama_extra_service_freight_origin[$i],
+                    'harga_extra_service' => $list_harga_extra_service_freight_origin[$i],
+                ];
+
+                $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
             }
 
-            $all_nama_extra_service_origin = array_map(function($data){return $data['nama_extra_service_origin'];}, $data_extra_service);
-            $all_harga_extra_service_origin = array_map(function($data){return $data['harga_extra_service_origin'];}, $data_extra_service);
-            $all_nama_extra_service_destination = array_map(function($data){return $data['nama_extra_service_destination'];}, $data_extra_service);
-            $all_harga_extra_service_destination = array_map(function($data){return $data['harga_extra_service_destination'];}, $data_extra_service);
+            for ($i=0; $i < count($list_nama_extra_service_freight_destination); $i++) {
+                $data_extra_service['nama_extra_service_destination'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_destination[$i];
+                $data_extra_service['harga_extra_service_destination'][$i] = $list_harga_extra_service_freight_destination[$i];
 
-            $template->setValue('servis_origin', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_origin));
-            $template->setValue('cost_origin', implode('<w:br/> &#160;&#160;', $all_harga_extra_service_origin));
-            $template->setValue('servis_destination', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_destination));
-            $template->setValue('cost_destination', implode('<w:br/>  &#160;&#160;', $all_harga_extra_service_destination));
+                $data_relasi = [
+                    'judul_dokumen' => $dokumen->judul_dokumen,
+                    'nama_extra_service' => $list_nama_extra_service_freight_destination[$i],
+                    'harga_extra_service' => $list_harga_extra_service_freight_destination[$i],
+                ];
+
+                $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
+            }
+
+            if(!empty($list_nama_extra_service_freight_origin)){
+                $all_nama_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_origin']);
+                $all_harga_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_origin']);
+                $template->setValue('servis_origin', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_origin));
+                $template->setValue('cost_origin', implode('<w:br/>&#160;&#160;', $all_harga_extra_service_origin));
+            }
+            else{
+                $template->setValue('servis_origin', 'N/A');
+                $template->setValue('cost_origin', 'N/A');
+            }
+
+            if(!empty($list_nama_extra_service_freight_destination)){
+                $all_nama_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_destination']);
+                $all_harga_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_destination']);
+                $template->setValue('servis_destination', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_destination));
+                $template->setValue('cost_destination', implode('<w:br/>&#160;&#160;', $all_harga_extra_service_destination));
+            }
+            else{
+                $template->setValue('servis_destination', 'N/A');
+                $template->setValue('cost_destination', 'N/A');
+            }
+
         }
         else{
-
+            $template->setValue('servis_origin', 'N/A');
+            $template->setValue('cost_origin', 'N/A');
+            $template->setValue('servis_destination', 'N/A');
+            $template->setValue('cost_destination', 'N/A');
         }
 
         $template->saveAs(public_path("hasil_dokumen/$kode_dokumen.docx"));
@@ -519,7 +558,6 @@ class admin_controller extends Controller
        $request->validate([
             'input_nama_service.*' => 'required',
             'input_quantity_service.*' => 'required',
-            'input_container_service.*' => 'required',
             'input_harga_service.*' => 'required',
             'input_total.*' => 'required|numeric|min:10000',
        ]);
@@ -528,7 +566,11 @@ class admin_controller extends Controller
        foreach ($_POST['checkbox_status_service'] as $key) {
            $list_service_dokumen_so[$key]['nama_service'] = $_POST['input_nama_service'][$key];
            $list_service_dokumen_so[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
-           $list_service_dokumen_so[$key]['container_service'] = $_POST['input_container_service'][$key];
+
+           if(isset($_POST['input_container_service'])){
+               $list_service_dokumen_so[$key]['container_service'] = $_POST['input_container_service'][$key];
+           }
+
            $list_service_dokumen_so[$key]['harga_service'] = $_POST['input_harga_service'][$key];
            $list_service_dokumen_so[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
            $list_service_dokumen_so[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
@@ -552,12 +594,15 @@ class admin_controller extends Controller
                 'nama_service' => $service_dokumen_so['nama_service'],
                 'judul_dokumen_spk' => $_POST['option_dokumen_SPK'],
                 'quantity_service' => $service_dokumen_so['quantity_service'],
-                'container_service' => $service_dokumen_so['container_service'],
                 'harga_service' => $service_dokumen_so['harga_service'],
                 'diskon_service' => $service_dokumen_so['diskon_service'],
                 'pajak_service' => $service_dokumen_so['pajak_service'],
                 'total_service' => $service_dokumen_so['total'],
             ];
+
+            if(isset($_POST['input_container_service'])){
+                $data_relasi_dokumen_so_extra_service['container_service'] =  $service_dokumen_so['container_service'];
+            }
 
             foreach ($data_relasi_dokumen_so_extra_service as $element=>$key) {
                 if($key == ""){
@@ -616,7 +661,6 @@ class admin_controller extends Controller
        $request->validate([
            'input_nama_service.*' => 'required',
            'input_quantity_service.*' => 'required',
-           'input_container_service.*' => 'required',
            'input_harga_service.*' => 'required',
            'input_total.*' => 'required|numeric|min:10000',
        ]);
@@ -662,5 +706,86 @@ class admin_controller extends Controller
 
    public function proses_logout(Request $request){
        return view('pages.login');
+   }
+
+   //Tagihan
+
+   //Input Tagihan Vendor
+
+   public function pergi_ke_input_tagihan_vendor(Request $request){
+       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+
+       return view('pages.admin.input_tagihan_vendor')->with('list_dokumen_SO', $list_dokumen_SO);
+   }
+
+   public function proses_input_tagihan_vendor(Request $request){
+       $request->validate([
+           'input_vendor_service.*' => 'required',
+           'input_total.*' => 'required|numeric|min:10000',
+       ]);
+       $list_tagihan_dokumen_SO = array();
+
+       foreach ($_POST['checkbox_status_service'] as $key) {
+            $list_tagihan_dokumen_SO[$key]['vendor_service'] = $_POST['input_vendor_service'][$key];
+            $list_tagihan_dokumen_SO[$key]['nama_service'] = $_POST['input_nama_service'][$key];
+            $list_tagihan_dokumen_SO[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
+
+            if(isset($_POST['input_container_service'])){
+                $list_tagihan_dokumen_SO[$key]['container_service'] = $_POST['input_container_service'][$key];
+            }
+
+            $list_tagihan_dokumen_SO[$key]['harga_service'] = $_POST['input_harga_service'][$key];
+            $list_tagihan_dokumen_SO[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
+            $list_tagihan_dokumen_SO[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
+            $list_tagihan_dokumen_SO[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
+            $list_tagihan_dokumen_SO[$key]['total'] = $_POST['input_total'][$key];
+       }
+
+       foreach ($list_tagihan_dokumen_SO as $tagihan_dokumen_SO) {
+            $data_tagihan_dokumen_SO= [
+                'nomor_so' => $_POST['option_dokumen_SO'],
+                'keterangan_tagihan' =>$tagihan_dokumen_SO['keterangan_tagihan'],
+                'vendor_service' => $tagihan_dokumen_SO['vendor_service'],
+                'nama_service' => $tagihan_dokumen_SO['nama_service'],
+                'quantity_service' => $tagihan_dokumen_SO['quantity_service'],
+                'harga_service' => $tagihan_dokumen_SO['harga_service'],
+                'diskon_service' => $tagihan_dokumen_SO['diskon_service'],
+                'pajak_service' => $tagihan_dokumen_SO['pajak_service'],
+                'total_service' => $tagihan_dokumen_SO['total'],
+                'hutang' =>$tagihan_dokumen_SO['total'],
+            ];
+
+            if(isset($_POST['input_container_service'])){
+                $data_tagihan_dokumen_SO['container_service'] =  $tagihan_dokumen_SO['container_service'];
+            }
+
+            foreach ($data_tagihan_dokumen_SO as $element=>$key) {
+                if($key == ""){
+                    $data_tagihan_dokumen_SO[$element] = null;
+                }
+            }
+
+            $tagihan_dokumen_SO = $this->admin_repository->add_tagihan_vendor($data_tagihan_dokumen_SO);
+        }
+
+        return redirect()->back();
+
+   }
+
+   public function pergi_ke_list_dokumen_SO_untuk_tagihan(Request $request){
+       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO_with_total_hutang();
+
+       return view('pages.admin.list_dokumen_SO_untuk_tagihan')->with('list_dokumen_SO', $list_dokumen_SO);
+   }
+
+   public function pergi_ke_detail_tagihan_vendor(Request $request){
+       dd($_GET);
+   }
+   public function get_data_extra_service_SO(Request $request){
+        $nomor_SO = $request->get('nomor_so');
+
+        $list_relasi_extra_service_SO = $this->admin_repository->get_relasi_dokumen_so_extra_service($nomor_SO);
+
+        return response()->json(array('list_extra_service' => $list_relasi_extra_service_SO));
    }
 }

@@ -41,7 +41,8 @@
         <li>
             <a href="{{ url('/admin/input_tagihan_vendor') }}"><span>Tagihan</span></a>
             <ul>
-
+                <li><a href="{{ url('/admin/input_tagihan_vendor') }}"><span>Input Tagihan</span></a></li>
+                <li><a href="{{ url('/admin/list_dokumen_SO_untuk_tagihan') }}"><span>List Tagihan</span></a></li>
             </ul>
         </li>
         <li style="margin-left: auto"><a href="{{ url('/admin/logout') }}"><span>Logout</span></a></li>
