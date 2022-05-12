@@ -34,7 +34,7 @@
             <a href="{{ url('/admin/make_document_SPK') }}"><span>Make Document</span></a>
             <ul>
                 <li><a href="{{ url('/admin/make_document_SPK') }}"><span>SPK</span></a></li>
-                <li><a href="{{ url('/admin/make_dokumen_simpan_berjalan') }}"><span>Dokumen Simpan_Berjalan</span></a></li>
+                <li><a href="{{ url('/admin/make_dokumen_simpan_berjalan') }}"><span>Dokumen Simpan Berjalan</span></a></li>
                 <li><a href="{{ url('/admin/make_dokumen_SO') }}"><span>SO</span></a></li>
             </ul>
         </li>

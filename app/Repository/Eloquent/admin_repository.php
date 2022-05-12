@@ -16,6 +16,7 @@ use Database\Seeders\dokumen_simpan_berjalan_seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PDO;
+use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Month;
 
 class admin_repository extends base_repository implements admin_repository_interface
 {
@@ -158,9 +159,10 @@ class admin_repository extends base_repository implements admin_repository_inter
 
    public function search_dokumen_simpan_berjalan($query,$attribute,$month){
         $lastmonth = Carbon::parse($month)->month-1;
-        $year = now()->year;
+        $year = Carbon::parse($month)->year;
         $date = 25;
         $lastdate = 26;
+
 
         if($query != "" && $month != ""){
             $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::where($attribute, "LIKE", "%".$query."%")->whereBetween('ETA',[$year.$lastmonth.$lastdate,$year.Carbon::parse($month)->month.$date])->get();
@@ -169,12 +171,11 @@ class admin_repository extends base_repository implements admin_repository_inter
             $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::where($attribute, "LIKE", "%".$query."%")->get();
         }
         else if($month != "" && $query == ""){
-            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.$lastmonth.$lastdate,$year.Carbon::parse($month)->month.$date])->get();
+            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.$lastmonth.$lastdate, $year.Carbon::parse($month)->month.$date])->get();
         }
         else{
             $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::all();
         }
-
 
         return $list_dokumen_simpan_berjalan;
    }

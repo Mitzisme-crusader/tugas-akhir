@@ -7,6 +7,7 @@ use App\Repository\Eloquent\admin_repository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use PDO;
+use PhpOffice\PhpSpreadsheet\Calculation\TextData\Replace;
 use Psy\CodeCleaner\EmptyArrayDimFetchPass;
 use Throwable;
 
@@ -210,16 +211,16 @@ class admin_controller extends Controller
 
         //INPUT DATA EXTRA SERVICE PPJK
         if(count($list_nama_extra_service) > 0){
-            $list_harga_20_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_20_feet_extra_service']));
-            $list_harga_40_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_40_feet_extra_service']));
-            $list_harga_45_feet_extra_service = array_filter(explode(',', $_POST['hidden_harga_45_feet_extra_service']));
+            $list_harga_20_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_20_feet_extra_service']));
+            $list_harga_40_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_40_feet_extra_service']));
+            $list_harga_45_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_45_feet_extra_service']));
 
             for ($i=0; $i < count($list_nama_extra_service); $i++) {
 
                 $data_extra_service[$i]['nama_extra_service'] = $i + 3 . ". " . $list_nama_extra_service[$i];
 
                 if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service)){
-                    $data_extra_service[$i]['harga_20_feet'] = "Rp. " . $list_harga_20_feet_extra_service[$i];
+                    $data_extra_service[$i]['harga_20_feet'] = "Rp. " . number_format((float)$list_harga_20_feet_extra_service[$i], 0, ',', '.');
                     $data_relasi = [
                         'judul_dokumen' => $dokumen->judul_dokumen,
                         'nama_extra_service' => $list_nama_extra_service[$i],
@@ -230,7 +231,7 @@ class admin_controller extends Controller
                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
                 }
                 if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service)){
-                    $data_extra_service[$i]['harga_40_feet'] = "Rp. " . $list_harga_40_feet_extra_service[$i];
+                    $data_extra_service[$i]['harga_40_feet'] = "Rp. " . number_format((float)$list_harga_40_feet_extra_service[$i], 0, ',', '.');
                     $data_relasi = [
                         'judul_dokumen' => $dokumen->judul_dokumen,
                         'nama_extra_service' => $list_nama_extra_service[$i],
@@ -241,7 +242,7 @@ class admin_controller extends Controller
                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
                 }
                 if(!in_array("undefined",$list_harga_45_feet_extra_service) && !empty($list_harga_45_feet_extra_service)){
-                    $data_extra_service[$i]['harga_45_feet'] = "Rp. " . $list_harga_45_feet_extra_service[$i];
+                    $data_extra_service[$i]['harga_45_feet'] = "Rp. " . number_format((float)$list_harga_45_feet_extra_service[$i], 0, ',', '.');
                     $data_relasi = [
                         'judul_dokumen' => $dokumen->judul_dokumen,
                         'nama_extra_service' => $list_nama_extra_service[$i],
@@ -259,8 +260,8 @@ class admin_controller extends Controller
             $all_harga_40_feet = array_map(function($data){return $data['harga_40_feet'];}, $data_extra_service);
 
             $template->setValue('nama_extra_service', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service));
-            $template->setValue('harga_20_feet', implode('<w:br/> &#160;&#160;', $all_harga_20_feet));
-            $template->setValue('harga_40_feet', implode('<w:br/>  &#160;&#160;', $all_harga_40_feet));
+            $template->setValue('harga_20_feet',  implode('<w:br/> &#160;&#160;', $all_harga_20_feet));
+            $template->setValue('harga_40_feet',  implode('<w:br/>  &#160;&#160;', $all_harga_40_feet));
         }
         else{
             $template->setValue('nama_extra_service', '');
@@ -270,12 +271,12 @@ class admin_controller extends Controller
 
         //INPUT DATA EXTRA SERVICE FREIGHT
         if(count($list_nama_extra_service_freight_origin) > 0 || count($list_nama_extra_service_freight_destination) > 0){
-            $list_harga_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_harga_extra_service_freight_origin']));
-            $list_harga_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_harga_extra_service_freight_destination']));
+            $list_harga_extra_service_freight_origin = array_filter(explode(',',$_POST['hidden_harga_extra_service_freight_origin']));
+            $list_harga_extra_service_freight_destination = array_filter(explode(',',$_POST['hidden_harga_extra_service_freight_destination']));
 
             for ($i=0; $i < count($list_nama_extra_service_freight_origin); $i++) {
                 $data_extra_service['nama_extra_service_origin'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_origin[$i];
-                $data_extra_service['harga_extra_service_origin'][$i] = $list_harga_extra_service_freight_origin[$i];
+                $data_extra_service['harga_extra_service_origin'][$i] = number_format((float)$list_harga_extra_service_freight_origin[$i], 0, ',', '.');
 
                 $data_relasi = [
                     'judul_dokumen' => $dokumen->judul_dokumen,
@@ -288,7 +289,7 @@ class admin_controller extends Controller
 
             for ($i=0; $i < count($list_nama_extra_service_freight_destination); $i++) {
                 $data_extra_service['nama_extra_service_destination'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_destination[$i];
-                $data_extra_service['harga_extra_service_destination'][$i] = $list_harga_extra_service_freight_destination[$i];
+                $data_extra_service['harga_extra_service_destination'][$i] = number_format((float)$list_harga_extra_service_freight_destination[$i], 0, ',', '.');
 
                 $data_relasi = [
                     'judul_dokumen' => $dokumen->judul_dokumen,
@@ -303,7 +304,8 @@ class admin_controller extends Controller
                 $all_nama_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_origin']);
                 $all_harga_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_origin']);
                 $template->setValue('servis_origin', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_origin));
-                $template->setValue('cost_origin', implode('<w:br/>&#160;&#160;', $all_harga_extra_service_origin));
+                $template->setValue('cost_origin', "Rp ." . implode('<w:br/>&#160;&#160;', $all_harga_extra_service_origin));
+                // number_format($all_harga_extra_service_origin, 0, ',', '.');
             }
             else{
                 $template->setValue('servis_origin', 'N/A');
@@ -314,7 +316,7 @@ class admin_controller extends Controller
                 $all_nama_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_destination']);
                 $all_harga_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_destination']);
                 $template->setValue('servis_destination', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_destination));
-                $template->setValue('cost_destination', implode('<w:br/>&#160;&#160;', $all_harga_extra_service_destination));
+                $template->setValue('cost_destination', "Rp ." . implode('<w:br/>&#160;&#160;', $all_harga_extra_service_destination));
             }
             else{
                 $template->setValue('servis_destination', 'N/A');
@@ -561,6 +563,7 @@ class admin_controller extends Controller
             'input_harga_service.*' => 'required',
             'input_total.*' => 'required|numeric|min:10000',
        ]);
+
        $list_service_dokumen_so = array();
 
        foreach ($_POST['checkbox_status_service'] as $key) {
