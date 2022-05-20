@@ -784,6 +784,13 @@ class admin_controller extends Controller
    public function pergi_ke_detail_tagihan_vendor(Request $request){
        dd($_GET);
    }
+
+   //input Tagihan customer
+   public function pergi_ke_input_tagihan_customer(Request $request){
+       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+
+       return view('pages.admin.input_tagihan_customer')->with('list_dokumen_SO', $list_dokumen_SO);
+   }
    public function get_data_extra_service_SO(Request $request){
         $nomor_SO = $request->get('nomor_so');
 

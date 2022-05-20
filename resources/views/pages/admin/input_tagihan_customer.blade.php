@@ -10,9 +10,9 @@
 @endsection
 
 @section('content')
-<div class="content">
+<div class="content" style="width: 75%">
     <section>
-        <?php $id_jenis_service_spk = 0 ?>
+        <?php $jenis_id_service_spk = 0 ?>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
@@ -21,39 +21,17 @@
             <h4 class="message">terdapat field kosong</h4>
         @endif
 
-        <h1>Create Dokumen SO</h1>
-        <form action="{{ url('admin/proses_add_dokumen_so') }}" method="post">
+        <h1>Input Tagihan Customer</h1>
+        <form action="{{ url('admin/proses_input_tagihan_customer') }}" method="post">
             @csrf
-            <h5 >Pelanggan</h5>
-            <div style="display:inline-block;border:1px solid;width : 48%;height: 200px;">
-                <select name="option_dokumen_SPK" id="option_dokumen_SPK" style="display:inline; width:100%">
-                    <option value=""> Select Judul Dokumen</option>
-                    @foreach ($list_dokumen_SPK as $dokumen_SPK)
-                        <option>{{$dokumen_SPK->judul_dokumen}}</option>
+            <h5 >Data Tagihan</h5>
+            <div style="display:block;border:1px solid;width : 100%;height: 30px;">
+                <select name="option_dokumen_SO" id="option_dokumen_SO" style="display:inline; width:100%">
+                    <option value=""> Select Judul Dokumen SO</option>
+                    @foreach ($list_dokumen_SO as $dokumen_SO)
+                        <option>{{$dokumen_SO->nomor_so}}</option>
                     @endforeach
                 </select>
-                <input type="hidden" value="" name="input_nama_customer" id="input_nama_customer">
-                <input type="hidden" value="" name="input_alamat_customer" id="input_alamat_customer">
-                <div>
-                    <textarea rows="3" cols="55" name="data_customer" id="input_data_customer" placeholder="Data Customer" readonly style="width: 100%">
-                    </textarea>
-                </div>
-            </div>
-
-            <h5 style="display: inline;position: absolute;top:84px">Data SO</h5>
-            <div style="display:inline;right:0px;border:1px solid;position: absolute;width:50%;height:200px;padding-left:30px;padding-top: 30px;right:18px">
-                <div class="input-wrapper" style="width: 75%;margin-bottom:10px;">
-                    <input type="Id_dokumen" name="Id_dokumen" id="Id_dokumen"
-                        value= {{$nomor_dokumen_so}}>
-                    <label for="Id_dokumen" ><span> ID Dokumen SO</span></label>
-                    <span class="error-message">{{ $errors->first('Id_dokumen') }}</span>
-                </div>
-
-                <div class="input-wrapper" style="width: 75%;margin-bottom:0px;">
-                    <input type="date" name="tanggal_SO" id="tanggal_SO" placeholder="SO Date"
-                        value="<?php echo date('Y-m-d'); ?>">
-                    <span class="error-message">{{ $errors->first('tanggal_SO') }}</span>
-                </div>
             </div>
 
             <div class="table-wrapper"  style="width: 100%;margin-top: 15px">
@@ -65,6 +43,7 @@
                         <th>Unit Price</th>
                         <th>Disc%</th>
                         <th>Tax</th>
+                        <th>Vendor</th>
                         <th>Amount</th>
                         <th>Active</th>
                     </thead>
@@ -77,13 +56,14 @@
             </div>
 
             <div class = "btn_submit_spk" style="display: inline-block">
-                <button type="submit" class="button"><span>Create Document</span></button>
+                <button type="submit" class="button"><span>Create Tagihan</span></button>
             </div>
         </form>
 
         <div class = "btn_submit_spk" style="position: relative;bottom:69px;left:200px">
             <button  class="button" id="button_add_service"><span>Add New Service</span></button>
         </div>
+
     </section>
     <script>
         $(document).ready(function () {
@@ -146,29 +126,22 @@
                 }
             });
 
-            $("#option_dokumen_SPK").change(function() {
-                $("#option_dokumen_SPK option[value='']").remove();
+            $("#option_dokumen_SO").change(function() {
+                $("#option_dokumen_SO option[value='']").remove();
                 $("#tbody_dokumen_SO").empty();
                 $("#thead_dokumen_SO").empty();
-                let judul_dokumen = $('#option_dokumen_SPK option:selected').val();
+                let nomor_so = $('#option_dokumen_SO option:selected').val();
 
                 $.ajax({
                     type : 'GET',
-                    url: "{{ url('admin/get_data_customer') }}"+'/?judul_dokumen='+judul_dokumen,
+                    url: "{{ url('admin/get_data_extra_service_SO') }}"+'/?nomor_so='+nomor_so,
                     data: '',
                     success: function(data){
                         console.log(data);
                         console.log(data['list_extra_service'].length);
                         var banyak_extra_service = data['list_extra_service'].length;
 
-                        $("#input_nama_customer").val(data['customer']['nama_customer']);
-                        $("#input_alamat_customer").val(data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
-                        $("#input_data_customer").html(data['customer']['nama_customer'] +'- '+ data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
-
-                        $id_jenis_service_spk = data['dokumen_spk']['id_service'];
-                        console.log($id_jenis_service_spk);
-
-                        if(data['dokumen_spk']['id_service'] == 1){
+                        if(data['list_extra_service'][0]['container_service'] != null){
                             $("#thead_dokumen_SO").append(`
                                 <th>Item</th>
                                 <th>Description</th>
@@ -177,6 +150,8 @@
                                 <th>Unit Price</th>
                                 <th>Disc%</th>
                                 <th>Tax</th>
+                                <th>Vendor</th>
+                                <th>Keterangan</th>
                                 <th>Amount</th>
                                 <th>Active</th>
                             `);
@@ -187,25 +162,31 @@
                                     <tr>
                                         <td>${nomor_urut_dokumen + 1}</td>
                                         <td>
-                                            <input type="text" style = "width:200px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_extra_service']}">
+                                            <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
                                         </td>
                                         <td>
                                             <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" readonly name="input_container_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container']}">
+                                            <input type="text" style = "width:40px;" readonly name="input_container_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]">
+                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]">
+                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:150px" value="" name="input_vendor_service[]">
+                                        </td>
+                                        <td>
+                                            <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                                        </td>
+                                        <td>
+                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
                                         </td>
                                         <td>
                                             <label>
@@ -224,6 +205,8 @@
                                 <th>Unit Price</th>
                                 <th>Disc%</th>
                                 <th>Tax</th>
+                                <th>Vendor</th>
+                                <th>Keterangan</th>
                                 <th>Amount</th>
                                 <th>Active</th>
                             `);
@@ -234,22 +217,28 @@
                                     <tr>
                                         <td>${nomor_urut_dokumen + 1}</td>
                                         <td>
-                                            <input type="text" style = "width:200px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_extra_service']}">
+                                            <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['quantity_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]">
+                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]">
+                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:150px" value="" name="input_vendor_service[]">
+                                        </td>
+                                        <td>
+                                            <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                                        </td>
+                                        <td>
+                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
                                         </td>
                                         <td>
                                             <label>
