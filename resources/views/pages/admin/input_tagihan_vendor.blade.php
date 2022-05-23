@@ -12,6 +12,7 @@
 @section('content')
 <div class="content" style="width: 75%">
     <section>
+        <?php $id_jenis_service_spk = 0 ?>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif

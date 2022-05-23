@@ -17,6 +17,7 @@ class relasi_dokumen_so_extra_service_model extends Model
         'harga_service',
         'diskon_service',
         'pajak_service',
+        'freight_location',
         'total_service'
     ];
 }

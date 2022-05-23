@@ -22,6 +22,7 @@ class CreateDokumenSpkTable extends Migration
             $table->foreign('id_customer')->references('id_customer')->on('customer');
             $table->string('nama_customer');
             $table->string('nama_perusahaan_customer');
+            $table->string('metode_pengiriman')->nullable();
             $table->string('negara_customer');
             $table->integer("status_aktif_dokumen");
             $table->timestamps();

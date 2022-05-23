@@ -48,10 +48,10 @@
             </div>
 
             <div class="input-wrapper">
-                <select name="list_shipment_method" class="select_id" id="select_shipment_method">
+                <select name="list_metode_pengangkutan" class="select_id" id="select_shipment_method">
                     <option value="">Select Method of shipment</option>
-                    <option value="1">By Air</option>
-                    <option value="2">By Sea</option>
+                    <option value="air">By Air</option>
+                    <option value="sea">By Sea</option>
                 </select>
                 <span class="error-message">{{ $errors->first('list_shipment_method') }}</span>
             </div>

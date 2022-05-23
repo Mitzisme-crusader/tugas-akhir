@@ -151,7 +151,7 @@
                     value="{{old('vessal')}}">
                 <label for="vessal"><span> Vessal</span></label>
                 <span class="error-message">{{ $errors->first('vessal') }}</span>
-            </div>c xc
+            </div>
 
 
             <div class="input-wrapper">

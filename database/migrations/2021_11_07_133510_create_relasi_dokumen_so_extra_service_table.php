@@ -23,6 +23,7 @@ class CreateRelasiDokumenSoExtraServiceTable extends Migration
             $table->integer('harga_service')->nullable();
             $table->integer('diskon_service')->nullable();
             $table->integer('pajak_service')->nullable();
+            $table->integer('freight_location')->nullable();
             $table->integer('total_service');
             $table->timestamps();
         });

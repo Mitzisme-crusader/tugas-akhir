@@ -14,6 +14,7 @@ class dokumenSpk_model extends Model
         'id_service',
         'nama_customer',
         'nama_perusahaan_customer',
+        'metode_pengiriman',
         'negara_customer',
         'status_aktif_dokumen',
     ];

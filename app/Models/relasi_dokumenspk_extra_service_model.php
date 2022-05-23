@@ -11,6 +11,7 @@ class relasi_dokumenspk_extra_service_model extends Model
     protected $fillable = [
         'judul_dokumen',
         'nama_extra_service',
+        'freight_location',
         'harga_extra_service',
         'container'
     ];

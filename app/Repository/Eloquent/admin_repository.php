@@ -133,6 +133,15 @@ class admin_repository extends base_repository implements admin_repository_inter
    {
        return relasi_dokumenspk_extra_service_model::where("judul_dokumen", $judul_dokumen)->get();
    }
+   public function get_relasi_dokumen_spk_extra_service_freight_origin($judul_dokumen)
+   {
+       return relasi_dokumenspk_extra_service_model::where("judul_dokumen", $judul_dokumen)->where("freight_location","1")->get();
+   }
+   public function get_relasi_dokumen_spk_extra_service_freight_destination($judul_dokumen)
+   {
+       return relasi_dokumenspk_extra_service_model::where("judul_dokumen", $judul_dokumen)->where("freight_location","2")->get();
+   }
+
    //Dokumen Simpan Berjalan
    public function create_dokumen_simpan_berjalan($dokumen_simpan_berjalan)
    {
@@ -143,6 +152,11 @@ class admin_repository extends base_repository implements admin_repository_inter
    {
        return dokumen_simpan_berjalan_model::where("id_dokumen_simpan_berjalan",$dokumen_simpan_berjalan['id_dokumen_simpan_berjalan'])->update($dokumen_simpan_berjalan);
    }
+
+   public function get_dokumen_simpan_berjalan_by_SO($nomor_so){
+       return dokumen_simpan_berjalan_model::where('nomor_so', $nomor_so)->first();
+   }
+
    public function get_all_dokumen_simpan_berjalan()
    {
        $lastmonth = now()->subMonth()->month;
@@ -210,6 +224,11 @@ class admin_repository extends base_repository implements admin_repository_inter
        return relasi_dokumen_so_extra_service_model::where('nomor_so', $id_dokumen_SO)->delete();
    }
 
+   public function get_dokumen_so_by_nomor_so($nomor_so)
+   {
+       return dokumen_so_model::where('nomor_so', $nomor_so)->first();
+   }
+
    public function get_all_dokumen_SO(){
        return dokumen_so_model::all();
    }
@@ -255,6 +274,7 @@ class admin_repository extends base_repository implements admin_repository_inter
    public function get_all_tagihan_customer(){
        return tagihan_customer_model::all();
    }
+
    //port
    public function get_port($target_kolom){
         $hasil = [];

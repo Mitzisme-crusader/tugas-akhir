@@ -25,11 +25,14 @@ interface admin_repository_interface
    public function get_dokumen_SPK($judul_dokumen);
    public function create_relasi_dokumenspk_extra_service($data_relasi);
    public function get_relasi_dokumen_spk_extra_service($judul_dokumen);
+   public function get_relasi_dokumen_spk_extra_service_freight_origin($judul_dokumen);
+   public function get_relasi_dokumen_spk_extra_service_freight_destination($judul_dokumen);
    //Dokumen Simpan Berjalan
    public function create_dokumen_simpan_berjalan($dokumen_simpan_berjalan);
    public function update_dokumen_simpan_berjalan($dokumen_simpan_berjalan);
    public function find_dokumen_simpan_berjalan($id_dokumen);
    public function search_dokumen_simpan_berjalan($query,$attribute,$month);
+   public function get_dokumen_simpan_berjalan_by_SO($nomor_so);
    public function get_all_dokumen_simpan_berjalan();
    //Dokumen SO
    public function get_id_dokumenSO_terbaru();
@@ -37,6 +40,7 @@ interface admin_repository_interface
    public function add_relasi_dokumen_so_extra_service($data_relasi);
    public function get_relasi_dokumen_so_extra_service($nomor_so);
    public function delete_relasi_dokumen_so_extra_service($id_dokumen_SO);
+   public function get_dokumen_so_by_nomor_so($nomor_so);
    public function get_all_dokumen_SO();
    public function find_dokumen_SO($id_dokumen_SO);
    //Tagihan

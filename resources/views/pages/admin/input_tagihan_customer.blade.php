@@ -43,7 +43,6 @@
                         <th>Unit Price</th>
                         <th>Disc%</th>
                         <th>Tax</th>
-                        <th>Vendor</th>
                         <th>Amount</th>
                         <th>Active</th>
                     </thead>
@@ -70,12 +69,13 @@
             $("select").select2();
 
             $("#button_add_service").click(function(){
+                console.log($id_jenis_service_spk);
                 if($id_jenis_service_spk == 1){
                     $("#tbody_dokumen_SO").append(`
                         <tr>
                             <td>${nomor_urut_dokumen + 1}</td>
                             <td>
-                                <input type="text" style = "width:200px;" name="input_nama_service[]">
+                                <input type="text" style = "width:150px;" name="input_nama_service[]">
                             </td>
                             <td>
                                 <input type="text" style = "width:40px;" name="input_quantity_service[]" value="1">
@@ -88,6 +88,9 @@
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
                             <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td>
+                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                            </td>
                             <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
@@ -103,7 +106,7 @@
                         <tr>
                             <td>${nomor_urut_dokumen + 1}</td>
                             <td>
-                                <input type="text" style = "width:200px;" name="input_nama_service[]">
+                                <input type="text" style = "width:150px;" name="input_nama_service[]">
                             </td>
                             <td>
                                 <input type="text" style = "width:40px;" name="input_quantity_service[]" value="1">
@@ -113,6 +116,9 @@
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
                             <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td>
+                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                            </td>
                             <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
@@ -139,6 +145,8 @@
                         console.log(data);
                         console.log(data['list_extra_service'].length);
                         var banyak_extra_service = data['list_extra_service'].length;
+
+                        $id_jenis_service_spk = data['dokumen_so']['id_service'];
 
                         if(data['list_extra_service'][0]['container_service'] != null){
                             $("#thead_dokumen_SO").append(`
@@ -177,9 +185,6 @@
                                         </td>
                                         <td>
                                             <input type="text" style = "width:40px" value="0" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:150px" value="" name="input_vendor_service[]">
                                         </td>
                                         <td>
                                             <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
@@ -229,9 +234,6 @@
                                         </td>
                                         <td>
                                             <input type="text" style = "width:40px" value="0" name="input_pajak_service[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:150px" value="" name="input_vendor_service[]">
                                         </td>
                                         <td>
                                             <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
