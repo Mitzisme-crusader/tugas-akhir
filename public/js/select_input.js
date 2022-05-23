@@ -17,9 +17,15 @@ $(document).ready(function () {
         $("#select_id_port option[value='']").remove();
     });
 
+    $( "#select_shipment_method" ).change(function() {
+        $("#select_shipment_method option[value='']").remove();
+    });
+
+
 
     $( "#select_id_service" ).change(function() {
         $("#select_id_service option[value='']").remove();
+
         $("#label_extra_service_freight_origin").css("display", "none");
         $("#label_extra_service_freight_destination").css("display", "none");
         $("#label_extra_service_common").css("display", "none");
@@ -48,6 +54,7 @@ $(document).ready(function () {
             add_jenis_pekerjaan();
 
             $('#select_id_container').prop("disabled", false);
+            $('#select_shipment_method').prop("disabled", true);
         }
         else if($('#select_id_service option:selected').val() == 2){
             $(".input_freight").css("display","block");
@@ -62,6 +69,7 @@ $(document).ready(function () {
             add_jenis_pekerjaan();
 
             $('#select_id_container').prop("disabled", true);
+            $('#select_shipment_method').prop("disabled", false);
         }
         else if($('#select_id_service option:selected').val() == 3){
 

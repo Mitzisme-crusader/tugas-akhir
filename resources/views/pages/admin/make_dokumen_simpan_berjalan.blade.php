@@ -17,12 +17,17 @@
         @endif
         <form action="{{ url('admin/proses_add_dokumen_simpan_berjalan') }}" class = "form_add" method="post">
             @csrf
+
             <div class="input-wrapper">
-                <input type="nomor_SO" name="nomor_SO" id="nomor_SO"
-                    value="{{old('nomor_SO')}}">
-                <label for="nomor_SO"><span>Nomor SO</span></label>
+                <select style="width: 100%" name="nomor_SO" class = "nomor_SO" id="nomor_SO" placeholder="Select nomor SO">
+                    <option value="">Select Nomor SO</option>
+                    @for ($i = 0; $i<count($list_dokumen_SO); ++$i)
+                        <option value ="{{$list_dokumen_SO[$i]->nomor_so}}"> {{$list_dokumen_SO[$i]->nomor_so}} </option>
+                    @endfor
+                </select>
                 <span class="error-message">{{ $errors->first('nomor_SO') }}</span>
             </div>
+
             <div class="input-wrapper">
                 <input type="nomor_aju" name="nomor_aju" id="nomor_aju"
                     value="{{old('nomor_aju')}}">
@@ -146,7 +151,8 @@
                     value="{{old('vessal')}}">
                 <label for="vessal"><span> Vessal</span></label>
                 <span class="error-message">{{ $errors->first('vessal') }}</span>
-            </div>
+            </div>c xc
+
 
             <div class="input-wrapper">
                 <input type="nomor_BL" name="nomor_BL" id="nomor_BL"
@@ -187,13 +193,13 @@
             <div class="input-wrapper">
                 <input type="date" name="tanggal_nopen" id="tanggal_nopen"
                     value="{{old('tanggal_nopen')}}">
-                <span class="error-message">{{ $errors->first('tanggal_nopen') }}</span>
+                <span class="error-message">{{ $errors->first('list_surat_penjaluran') }}</span>
             </div>
 
             <label ><span style="background-color: var(--primary_color) ;color:white"> Nomor Pendaftaran</span></label>
 
             <div>
-                <select name="list_surat_penjaluran" id="list_surat_penjaluran">
+                <select style="width:40%" name="list_surat_penjaluran" id="list_surat_penjaluran">
                     <option value="">Pilih Opsi Surat Penjaluran</option>
                     <option value="SPJM">SPJM</option>
                     <option value="SPJK">SPJK</option>
@@ -336,6 +342,10 @@
     $(document).ready(function () {
         $( "#list_surat_penjaluran" ).change(function() {
             $("#list_surat_penjaluran option[value='']").remove();
+        });
+
+        $( "#nomor_SO" ).change(function() {
+            $("#nomor_SO option[value='']").remove();
         });
     });
 </script>

@@ -78,17 +78,25 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/detail_dokumen_simpan_berjalan', 'App\Http\Controllers\admin_controller@pergi_ke_detail_dokumen_simpan_berjalan');
 
     //Tagihan
+    //Vendor
     Route::get('/input_tagihan_vendor', 'App\Http\Controllers\admin_controller@pergi_ke_input_tagihan_vendor');
 
     Route::post('/proses_input_tagihan_vendor', 'App\Http\Controllers\admin_controller@proses_input_tagihan_vendor');
 
-    Route::get('/list_dokumen_SO_untuk_tagihan', 'App\Http\Controllers\admin_controller@pergi_ke_list_dokumen_SO_untuk_tagihan');
+    Route::get('/detail_tagihan_vendor', 'App\Http\Controllers\admin_controller@pergi_ke_detail_tagihan_vendor');
 
+    Route::get('/list_tagihan_vendor', 'App\Http\Controllers\admin_controller@pergi_ke_list_tagihan_vendor');
+
+    //Customer
     Route::get('/input_tagihan_customer', 'App\Http\Controllers\admin_controller@pergi_ke_input_tagihan_customer');
+
+    Route::post('/proses_input_tagihan_customer', 'App\Http\Controllers\admin_controller@proses_input_tagihan_customer');
+
+    Route::get('/list_tagihan_customer', 'App\Http\Controllers\admin_controller@pergi_ke_list_tagihan_customer');
 
     Route::get('/get_data_extra_service_SO', 'App\Http\Controllers\admin_controller@get_data_extra_service_SO');
 
-    Route::get('/detail_tagihan_vendor', 'App\Http\Controllers\admin_controller@pergi_ke_detail_tagihan_vendor');
+
 });
 
 Route::group(['prefix' => 'user'], function () {

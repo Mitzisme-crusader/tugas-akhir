@@ -43,6 +43,10 @@ interface admin_repository_interface
    //input tagihan vendor
    public function add_tagihan_vendor($data_tagihan_vendor);
    public function get_all_dokumen_SO_with_total_hutang();
+   //input tagihan customer
+   public function add_tagihan_customer($data_tagihan_customer);
+   public function add_service_tagihan_customer($data_service_tagihan_customer);
+   public function get_all_tagihan_customer();
    //port
    public function get_port($target_kolom);
    public function find_port($id);

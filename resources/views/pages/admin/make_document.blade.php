@@ -48,6 +48,15 @@
             </div>
 
             <div class="input-wrapper">
+                <select name="list_shipment_method" class="select_id" id="select_shipment_method">
+                    <option value="">Select Method of shipment</option>
+                    <option value="1">By Air</option>
+                    <option value="2">By Sea</option>
+                </select>
+                <span class="error-message">{{ $errors->first('list_shipment_method') }}</span>
+            </div>
+
+            <div class="input-wrapper">
                 <select name="list_id_port" class="select_id" id="select_id_port">
                     <option value="">Select port</option>
                     @for ($i = 0; $i<count($list_port['nama_port']); ++$i)

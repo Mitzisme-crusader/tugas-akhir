@@ -29,8 +29,8 @@
                 <input type="hidden" value="{{$dokumen_so->alamat_customer}}" name="input_alamat_customer" id="input_alamat_customer">
                 <div>
                     <textarea rows="3" cols="55" name="data_customer" id="input_data_customer" placeholder="Data Customer" readonly style="width: 100%">
-{{$dokumen_so->nama_customer}}
-{{$dokumen_so->alamat_customer}}
+                        {{$dokumen_so->nama_customer}}
+                        {{$dokumen_so->alamat_customer}}
                     </textarea>
                 </div>
             </div>

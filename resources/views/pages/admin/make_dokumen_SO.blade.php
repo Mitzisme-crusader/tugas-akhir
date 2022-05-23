@@ -34,6 +34,7 @@
                 </select>
                 <input type="hidden" value="" name="input_nama_customer" id="input_nama_customer">
                 <input type="hidden" value="" name="input_alamat_customer" id="input_alamat_customer">
+                <input type="hidden" value="" name="input_id_service" id="input_id_service">
                 <div>
                     <textarea rows="3" cols="55" name="data_customer" id="input_data_customer" placeholder="Data Customer" readonly style="width: 100%">
                     </textarea>
@@ -109,7 +110,7 @@
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
                             <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
-                            <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
+                            <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
                                     <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
@@ -134,7 +135,7 @@
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
                             <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
-                            <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
+                            <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
                                     <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
@@ -164,9 +165,9 @@
                         $("#input_nama_customer").val(data['customer']['nama_customer']);
                         $("#input_alamat_customer").val(data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
                         $("#input_data_customer").html(data['customer']['nama_customer'] +'- '+ data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
+                        $("#input_id_service").val(data['dokumen_spk']['id_service']);
 
                         $id_jenis_service_spk = data['dokumen_spk']['id_service'];
-                        console.log($id_jenis_service_spk);
 
                         if(data['dokumen_spk']['id_service'] == 1){
                             $("#thead_dokumen_SO").append(`
@@ -190,22 +191,22 @@
                                             <input type="text" style = "width:200px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" value = "1">
                                         </td>
                                         <td>
                                             <input type="text" style = "width:40px;" readonly name="input_container_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:80px;" readonly nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]">
+                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)"  name="input_diskon_service[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]">
+                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_pajak_service[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input  type="text" style = "width:80px" name="input_total[]" id="input_total_${nomor_urut_dokumen}" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
                                             <label>
@@ -237,19 +238,19 @@
                                             <input type="text" style = "width:200px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" value = "1">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:80px;" readonly nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]">
+                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_diskon_service[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]">
+                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_pajak_service[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input  type="text" style = "width:80px" name="input_total[]" id="input_total_${nomor_urut_dokumen}" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
                                             <label>
@@ -263,7 +264,20 @@
                     }
                 });
             });
+
+            function ubah_total(input_yang_berubah){
+                console.log("waow");
+                let nomor_urut = input_yang_berubah.nomor_urut;
+                console.log(nomor_urut);
+            }
         });
+    </script>
+    <script type="text/javascript">
+        function ubah_total(input_yang_berubah){
+            console.log("waow");
+            let nomor_urut = input_yang_berubah.nomor_urut;
+            console.log(nomor_urut);
+        }
     </script>
 </div>
 @endsection

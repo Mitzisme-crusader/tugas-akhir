@@ -340,7 +340,9 @@ class admin_controller extends Controller
    //Dokumen simpan berjalan
 
    public function pergi_ke_make_dokumen_simpan_berjalan(Request $request){
-       return view("pages.admin.make_dokumen_simpan_berjalan");
+       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+
+       return view("pages.admin.make_dokumen_simpan_berjalan")->with('list_dokumen_SO', $list_dokumen_SO);
    }
 
    public function proses_add_dokumen_simpan_berjalan(Request $request){
@@ -357,8 +359,8 @@ class admin_controller extends Controller
             'POL' => 'required',
             'POD' => 'required',
             'option_container' => 'required',
-            'party_20' => 'required_if:option_pengiriman,FCL|required_without_all:party_40,party_45',
-            'berat_container' => 'required_if:option_pengiriman,LCL',
+            'party_20' => 'required_if:option_container,FCL',
+            'berat_container' => 'required_if:option_container,LCL',
             'nomor_container' => 'required',
             'nomor_invoice' => 'required',
             'vessal' => 'required',
@@ -425,6 +427,7 @@ class admin_controller extends Controller
 
         $dokumen_spk = $this->admin_repository->create_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
 
+        $request->session()->flash('message', 'add dokumen berhasil');
         return redirect()->back();
    }
 
@@ -508,8 +511,9 @@ class admin_controller extends Controller
             }
         }
 
-        $dokumen_spk = $this->admin_repository->update_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
+        $dokumen_simpan_berjalan = $this->admin_repository->update_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
 
+        $request->session()->flash('message', 'Dokumen berhasil diubah');
         return redirect()->back();
    }
 
@@ -586,6 +590,7 @@ class admin_controller extends Controller
            'judul_dokumen_spk' => $_POST['option_dokumen_SPK'],
            'nama_customer' => $_POST['input_nama_customer'],
            'alamat_customer' => $_POST['input_alamat_customer'],
+           'id_service' => $_POST['input_id_service'],
            'status_aktif_dokumen' => 1
        ];
 
@@ -672,7 +677,9 @@ class admin_controller extends Controller
        foreach ($_POST['checkbox_status_service'] as $key) {
            $list_service_dokumen_so[$key]['nama_service'] = $_POST['input_nama_service'][$key];
            $list_service_dokumen_so[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
-           $list_service_dokumen_so[$key]['container_service'] = $_POST['input_container_service'][$key];
+           if(isset($_POST['input_container_service'])){
+               $list_service_dokumen_so[$key]['container_service'] = $_POST['input_container_service'][$key];
+           }
            $list_service_dokumen_so[$key]['harga_service'] = $_POST['input_harga_service'][$key];
            $list_service_dokumen_so[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
            $list_service_dokumen_so[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
@@ -682,17 +689,33 @@ class admin_controller extends Controller
        $this->admin_repository->delete_relasi_dokumen_so_extra_service($_POST['Id_dokumen']);
 
        foreach ($list_service_dokumen_so as $service_dokumen_so) {
-            $data_relasi_dokumen_so_extra_service = [
-               'nomor_so' => $_POST['Id_dokumen'],
-               'nama_service' => $service_dokumen_so['nama_service'],
-               'judul_dokumen_spk' => $_POST['option_dokumen_SPK'],
-               'quantity_service' => $service_dokumen_so['quantity_service'],
-               'container_service' => $service_dokumen_so['container_service'],
-               'harga_service' => $service_dokumen_so['harga_service'],
-               'diskon_service' => $service_dokumen_so['diskon_service'],
-               'pajak_service' => $service_dokumen_so['pajak_service'],
-               'total_service' => $service_dokumen_so['total'],
-            ];
+           $data_relasi_dokumen_so_extra_service = [];
+
+           if(isset($_POST['input_container_service'])){
+                $data_relasi_dokumen_so_extra_service = [
+                'nomor_so' => $_POST['Id_dokumen'],
+                'nama_service' => $service_dokumen_so['nama_service'],
+                'judul_dokumen_spk' => $_POST['option_dokumen_SPK'],
+                'quantity_service' => $service_dokumen_so['quantity_service'],
+                'container_service' => $service_dokumen_so['container_service'],
+                'harga_service' => $service_dokumen_so['harga_service'],
+                'diskon_service' => $service_dokumen_so['diskon_service'],
+                'pajak_service' => $service_dokumen_so['pajak_service'],
+                'total_service' => $service_dokumen_so['total'],
+                ];
+            }
+            else{
+                $data_relasi_dokumen_so_extra_service = [
+                    'nomor_so' => $_POST['Id_dokumen'],
+                    'nama_service' => $service_dokumen_so['nama_service'],
+                    'judul_dokumen_spk' => $_POST['option_dokumen_SPK'],
+                    'quantity_service' => $service_dokumen_so['quantity_service'],
+                    'harga_service' => $service_dokumen_so['harga_service'],
+                    'diskon_service' => $service_dokumen_so['diskon_service'],
+                    'pajak_service' => $service_dokumen_so['pajak_service'],
+                    'total_service' => $service_dokumen_so['total'],
+                ];
+            }
 
             foreach ($data_relasi_dokumen_so_extra_service as $element=>$key) {
                 if($key == ""){
@@ -703,8 +726,8 @@ class admin_controller extends Controller
             $relasi = $this->admin_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service);
         }
 
-    $request->session()->flash('message', 'Edit dokumen berhasil');
-    return redirect()->back();
+        $request->session()->flash('message', 'Edit dokumen berhasil');
+        return redirect()->back();
    }
 
    public function proses_logout(Request $request){
@@ -726,56 +749,58 @@ class admin_controller extends Controller
            'input_vendor_service.*' => 'required',
            'input_total.*' => 'required|numeric|min:10000',
        ]);
-       $list_tagihan_dokumen_SO = array();
+       $list_tagihan_vendor = array();
 
        foreach ($_POST['checkbox_status_service'] as $key) {
-            $list_tagihan_dokumen_SO[$key]['vendor_service'] = $_POST['input_vendor_service'][$key];
-            $list_tagihan_dokumen_SO[$key]['nama_service'] = $_POST['input_nama_service'][$key];
-            $list_tagihan_dokumen_SO[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
+            $list_tagihan_vendor[$key]['vendor_service'] = $_POST['input_vendor_service'][$key];
+            $list_tagihan_vendor[$key]['nama_service'] = $_POST['input_nama_service'][$key];
+            $list_tagihan_vendor[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
 
             if(isset($_POST['input_container_service'])){
-                $list_tagihan_dokumen_SO[$key]['container_service'] = $_POST['input_container_service'][$key];
+                $list_tagihan_vendor[$key]['container_service'] = $_POST['input_container_service'][$key];
             }
 
-            $list_tagihan_dokumen_SO[$key]['harga_service'] = $_POST['input_harga_service'][$key];
-            $list_tagihan_dokumen_SO[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
-            $list_tagihan_dokumen_SO[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
-            $list_tagihan_dokumen_SO[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
-            $list_tagihan_dokumen_SO[$key]['total'] = $_POST['input_total'][$key];
+            $list_tagihan_vendor[$key]['harga_service'] = $_POST['input_harga_service'][$key];
+            $list_tagihan_vendor[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
+            $list_tagihan_vendor[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
+            $list_tagihan_vendor[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
+            $list_tagihan_vendor[$key]['total'] = $_POST['input_total'][$key];
        }
 
-       foreach ($list_tagihan_dokumen_SO as $tagihan_dokumen_SO) {
-            $data_tagihan_dokumen_SO= [
+       foreach ($list_tagihan_vendor as $tagihan_vendor) {
+            $data_tagihan_vendor= [
                 'nomor_so' => $_POST['option_dokumen_SO'],
-                'keterangan_tagihan' =>$tagihan_dokumen_SO['keterangan_tagihan'],
-                'vendor_service' => $tagihan_dokumen_SO['vendor_service'],
-                'nama_service' => $tagihan_dokumen_SO['nama_service'],
-                'quantity_service' => $tagihan_dokumen_SO['quantity_service'],
-                'harga_service' => $tagihan_dokumen_SO['harga_service'],
-                'diskon_service' => $tagihan_dokumen_SO['diskon_service'],
-                'pajak_service' => $tagihan_dokumen_SO['pajak_service'],
-                'total_service' => $tagihan_dokumen_SO['total'],
-                'hutang' =>$tagihan_dokumen_SO['total'],
+                'keterangan_tagihan' =>$tagihan_vendor['keterangan_tagihan'],
+                'vendor_service' => $tagihan_vendor['vendor_service'],
+                'nama_service' => $tagihan_vendor['nama_service'],
+                'quantity_service' => $tagihan_vendor['quantity_service'],
+                'harga_service' => $tagihan_vendor['harga_service'],
+                'diskon_service' => $tagihan_vendor['diskon_service'],
+                'pajak_service' => $tagihan_vendor['pajak_service'],
+                'total_service' => $tagihan_vendor['total'],
+                'hutang' =>$tagihan_vendor['total'],
             ];
 
             if(isset($_POST['input_container_service'])){
-                $data_tagihan_dokumen_SO['container_service'] =  $tagihan_dokumen_SO['container_service'];
+                $data_tagihan_vendor['container_service'] =  $tagihan_vendor['container_service'];
             }
 
-            foreach ($data_tagihan_dokumen_SO as $element=>$key) {
+            foreach ($data_tagihan_vendor as $element=>$key) {
                 if($key == ""){
-                    $data_tagihan_dokumen_SO[$element] = null;
+                    $data_tagihan_vendor[$element] = null;
                 }
             }
 
-            $tagihan_dokumen_SO = $this->admin_repository->add_tagihan_vendor($data_tagihan_dokumen_SO);
+            $tagihan_vendor = $this->admin_repository->add_tagihan_vendor($data_tagihan_vendor);
         }
+
+        $request->session()->flash('message', 'Input tagihan vendor berhasil');
 
         return redirect()->back();
 
    }
 
-   public function pergi_ke_list_dokumen_SO_untuk_tagihan(Request $request){
+   public function pergi_ke_list_tagihan_vendor(Request $request){
        $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO_with_total_hutang();
 
        return view('pages.admin.list_dokumen_SO_untuk_tagihan')->with('list_dokumen_SO', $list_dokumen_SO);
@@ -791,6 +816,79 @@ class admin_controller extends Controller
 
        return view('pages.admin.input_tagihan_customer')->with('list_dokumen_SO', $list_dokumen_SO);
    }
+
+   public function proses_input_tagihan_customer(Request $request){
+       $request->validate([
+           'input_vendor_service.*' => 'required',
+           'input_total.*' => 'required|numeric|min:10000',
+       ]);
+
+       $total_tagihan = 0;
+
+       $list_tagihan_customer = array();
+
+       foreach ($_POST['checkbox_status_service'] as $key) {
+           $list_service_tagihan_customer[$key]['vendor_service'] = $_POST['input_vendor_service'][$key];
+           $list_service_tagihan_customer[$key]['nama_service'] = $_POST['input_nama_service'][$key];
+           $list_service_tagihan_customer[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
+
+           if(isset($_POST['input_container_service'])){
+               $list_service_tagihan_customer[$key]['container_service'] = $_POST['input_container_service'][$key];
+           }
+           $list_service_tagihan_customer[$key]['harga_service'] = $_POST['input_harga_service'][$key];
+           $list_service_tagihan_customer[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
+           $list_service_tagihan_customer[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
+           $list_service_tagihan_customer[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
+           $list_service_tagihan_customer[$key]['total'] = $_POST['input_total'][$key];
+
+           $total_tagihan = $total_tagihan + $list_service_tagihan_customer[$key]['total'];
+        }
+
+        $data_tagihan_customer = [
+            'nomor_so' => $_POST['option_dokumen_SO'],
+            'bank_pelunasan' => '',
+            'total_service' => $total_tagihan,
+        ];
+
+        $tagihan_customer = $this->admin_repository->add_tagihan_customer($data_tagihan_customer);
+
+        foreach ($list_service_tagihan_customer as $service_tagihan_customer) {
+            $data_service_tagihan_customer= [
+                'id_tagihan_customer' => $tagihan_customer->id_tagihan_customer,
+                'keterangan_tagihan' =>$service_tagihan_customer['keterangan_tagihan'],
+                'vendor_service' => $service_tagihan_customer['vendor_service'],
+                'nama_service' => $service_tagihan_customer['nama_service'],
+                'quantity_service' => $service_tagihan_customer['quantity_service'],
+                'harga_service' => $service_tagihan_customer['harga_service'],
+                'diskon_service' => $service_tagihan_customer['diskon_service'],
+                'pajak_service' => $service_tagihan_customer['pajak_service'],
+                'total_service' => $service_tagihan_customer['total'],
+                'hutang' =>$service_tagihan_customer['total'],
+            ];
+
+            if(isset($_POST['input_container_service'])){
+                $data_tagihan_customer['container_service'] =  $service_tagihan_customer['container_service'];
+            }
+
+            foreach ($data_service_tagihan_customer as $element=>$key) {
+                if($key == ""){
+                    $data_service_tagihan_customer[$element] = null;
+                }
+            }
+
+            $tagihan_customer = $this->admin_repository->add_service_tagihan_customer($data_service_tagihan_customer);
+        }
+
+        $request->session()->flash('message', 'Input Tagihan customer berhasil');
+        return redirect()->back();
+   }
+
+   public function pergi_ke_list_tagihan_customer(Request $request){
+       $list_tagihan_customer = $this->admin_repository->get_all_tagihan_customer();
+
+       return view('pages.admin.list_tagihan_customer')->with('list_tagihan_customer', $list_tagihan_customer);
+   }
+
    public function get_data_extra_service_SO(Request $request){
         $nomor_SO = $request->get('nomor_so');
 

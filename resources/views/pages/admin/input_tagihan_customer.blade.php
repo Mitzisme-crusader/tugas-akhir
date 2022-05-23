@@ -12,7 +12,7 @@
 @section('content')
 <div class="content" style="width: 75%">
     <section>
-        <?php $jenis_id_service_spk = 0 ?>
+        <?php $id_jenis_service_spk = 0 ?>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
@@ -55,7 +55,7 @@
                 </table>
             </div>
 
-            <div class = "btn_submit_spk" style="display: inline-block">
+            <div class = "btn_submit_tagihan_customer" style="display: inline-block">
                 <button type="submit" class="button"><span>Create Tagihan</span></button>
             </div>
         </form>
@@ -70,7 +70,6 @@
             $("select").select2();
 
             $("#button_add_service").click(function(){
-                console.log($id_jenis_service_spk);
                 if($id_jenis_service_spk == 1){
                     $("#tbody_dokumen_SO").append(`
                         <tr>

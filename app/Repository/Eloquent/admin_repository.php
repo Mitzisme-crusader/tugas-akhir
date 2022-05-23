@@ -10,9 +10,10 @@ use App\models\dokumen_simpan_berjalan_model;
 use App\Models\relasi_dokumenspk_extra_service_model;
 use App\models\dokumen_so_model;
 use App\models\relasi_dokumen_so_extra_service_model;
+use App\models\tagihan_customer_model;
+use App\models\relasi_tagihan_customer_extra_service_model;
 use App\models\tagihan_vendor_model;
 use App\Repository\admin_repository_interface;
-use Database\Seeders\dokumen_simpan_berjalan_seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PDO;
@@ -149,7 +150,7 @@ class admin_repository extends base_repository implements admin_repository_inter
        $year = now()->year;
        $date = 25;
        $lastdate = 26;
-       return dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.$lastmonth.$lastdate , $year.$month.$date])->get();
+       return dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.'-'.$lastmonth.'-'.$lastdate , $year.'-'.$month.'-'.$date])->get();
    }
 
    public function find_dokumen_simpan_berjalan($id_dokumen)
@@ -163,15 +164,14 @@ class admin_repository extends base_repository implements admin_repository_inter
         $date = 25;
         $lastdate = 26;
 
-
         if($query != "" && $month != ""){
-            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::where($attribute, "LIKE", "%".$query."%")->whereBetween('ETA',[$year.$lastmonth.$lastdate,$year.Carbon::parse($month)->month.$date])->get();
+            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::where($attribute, "LIKE", "%".$query."%")->whereBetween('ETA',[$year.'-'.$lastmonth.'-'.$year.'-'.Carbon::parse($month)->month.'-'.$date])->get();
         }
         else if($month == "" && $query != ""){
             $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::where($attribute, "LIKE", "%".$query."%")->get();
         }
         else if($month != "" && $query == ""){
-            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.$lastmonth.$lastdate, $year.Carbon::parse($month)->month.$date])->get();
+            $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.'-'.$lastmonth.'-'.$lastdate, $year.'-'.Carbon::parse($month)->month.'-'.$date])->get();
         }
         else{
             $list_dokumen_simpan_berjalan = dokumen_simpan_berjalan_model::all();
@@ -240,6 +240,20 @@ class admin_repository extends base_repository implements admin_repository_inter
        ->selectRaw('tagihan_vendor.nomor_so, list_dokumen_so.Total, list_dokumen_so.tanggal_so, sum(tagihan_vendor.hutang)as hutang')->get();
 
        return $list_dokumen_so_with_total_hutang;
+   }
+
+   //Tagihan customer
+
+   public function add_tagihan_customer($data_tagihan_customer){
+       return tagihan_customer_model::create($data_tagihan_customer);
+   }
+
+   public function add_service_tagihan_customer($data_service_tagihan_customer){
+       return relasi_tagihan_customer_extra_service_model::create($data_service_tagihan_customer);
+   }
+
+   public function get_all_tagihan_customer(){
+       return tagihan_customer_model::all();
    }
    //port
    public function get_port($target_kolom){

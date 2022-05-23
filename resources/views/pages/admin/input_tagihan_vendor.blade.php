@@ -12,7 +12,6 @@
 @section('content')
 <div class="content" style="width: 75%">
     <section>
-        <?php $jenis_id_service_spk = 0 ?>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
@@ -21,6 +20,7 @@
             <h4 class="message">terdapat field kosong</h4>
         @endif
 
+        <?php $id_jenis_service_spk = 2?>
         <h1>Input Tagihan Vendor</h1>
         <form action="{{ url('admin/proses_input_tagihan_vendor') }}" method="post">
             @csrf
@@ -70,7 +70,6 @@
             $("select").select2();
 
             $("#button_add_service").click(function(){
-                console.log($id_jenis_service_spk);
                 if($id_jenis_service_spk == 1){
                     $("#tbody_dokumen_SO").append(`
                         <tr>

@@ -20,6 +20,8 @@ class CreateDokumenSoTable extends Migration
             $table->string('judul_dokumen_spk');
             $table->string('nama_customer');
             $table->string('alamat_customer');
+            $table->unsignedBigInteger('id_service');
+            $table->foreign('id_service')->references('id_service')->on('service');
             $table->integer("status_aktif_dokumen");
             $table->timestamps();
         });

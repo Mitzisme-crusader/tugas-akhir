@@ -15,6 +15,7 @@ class dokumen_so_model extends Model
         'judul_dokumen_spk',
         'nama_customer',
         'alamat_customer',
+        'id_service',
         'status_aktif_dokumen',
     ];
 }

@@ -38,7 +38,7 @@ class dokumen_simpan_berjalan_seeder extends Seeder
             'vessal' => "Sea Cruise",
             'nomor_BL' => 1212,
             'ETD' => null,
-            'ETA' => '2021-8-1',
+            'ETA' => '2022-5-10',
             'tanggal_terima_dokumen' => null,
             'sending' => null,
             'tanggal_nopen' => null,

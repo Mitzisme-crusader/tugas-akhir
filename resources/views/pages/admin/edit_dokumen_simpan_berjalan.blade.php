@@ -96,7 +96,7 @@
                 </select>
             </div>
 
-            <div id = "input_FCL">
+            <div id = "input_FCL" @if($dokumen_simpan_berjalan->option_container != "FCL") style="display :none"@endif>
                 <div class="input-wrapper">
                     <input type="party_20" name="party_20" id="party_20"
                         value="{{$dokumen_simpan_berjalan->party_20}}">
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div id = "input_LCL" style="display: none">
+            <div id = "input_LCL" @if($dokumen_simpan_berjalan->option_container != "LCL") style="display :none" @endif>
                 <div class="input-wrapper">
                     <input type="berat_container" name="berat_container" id="berat_container"
                         value="{{$dokumen_simpan_berjalan->berat_container}}">
