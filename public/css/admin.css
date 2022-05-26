@@ -16,6 +16,10 @@
     width: 60%;
 }
 
+.content.tagihan_vendor{
+    width: 80%;
+}
+
 .message {
     background-color: rgb(102, 187, 102);
     color: white;

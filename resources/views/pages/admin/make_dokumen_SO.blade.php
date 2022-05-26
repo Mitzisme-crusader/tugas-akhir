@@ -57,6 +57,7 @@
                 </div>
             </div>
 
+            <h5 style="background-color: var(--primary_color); color: var(--secondary_color)">Tabel Service PPJK</h5>
             <div class="table-wrapper"  style="width: 100%;margin-top: 15px">
                 <table style="width: 100%">
                     <thead id="thead_dokumen_SO_PPJK">
@@ -64,7 +65,7 @@
                         <th>Description</th>
                         <th>QTY</th>
                         <th>Unit Price</th>
-                        <th>Disc%</th>
+                        <th>Disc</th>
                         <th>Tax</th>
                         <th>Amount</th>
                         <th>Active</th>
@@ -77,6 +78,7 @@
                 </table>
             </div>
 
+            <h5 style="background-color: var(--primary_color);color:var(--secondary_color);display : none" id="tag_tabel_freight">Tabel Service Freight</h5>
             <div class="table-wrapper"  style="width: 100%;margin-top: 15px">
                 <table id="table_service_freight" style="width: 100%;display:none">
                     <thead id="thead_dokumen_SO_freight">
@@ -129,10 +131,12 @@
                                 <input type="text" style = "width:40px;" name="input_container_service_PPJK[]" value = "20">
                             </td>
                             <td>
-                                <input type="text" style = "width:80px;" name="input_harga_service_PPJK[]">
+                                <input type="text" style = "width:80px;" name="input_harga_service_PPJK[]" >
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service_PPJK[]" value = "0"></td>
-                            <td><input type="text" style = "width:40px" name="input_pajak_service_PPJK[]" value = "0"></td>
+                            <td>
+                                <input type="hidden" name="input_pajak_service_PPJK[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
+                            </td>
                             <td><input type="text" style = "width:80px" id="input_total_PPJK_${nomor_urut_dokumen}" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
@@ -157,7 +161,9 @@
                                 <input type="text" style = "width:80px;" name="input_harga_service_PPJK[]">
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service_PPJK[]" value = "0"></td>
-                            <td><input type="text" style = "width:40px" name="input_pajak_service_PPJK[]" value = "0"></td>
+                            <td>
+                                <input type="hidden" name="input_pajak_service_PPJK[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
+                            </td?
                             <td><input type="text" style = "width:80px" id="input_total_PPJK_${nomor_urut_dokumen}" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
@@ -184,7 +190,9 @@
                             <input type="text" style = "width:80px;" name="input_harga_service_freight[]">
                         </td>
                         <td><input type="text" style = "width:40px" name="input_diskon_service_freight[]" value = "0"></td>
-                        <td><input type="text" style = "width:40px" name="input_pajak_service_freight[]" value = "0"></td>
+                        <td>
+                            <input type="hidden" name="input_pajak_service_freight[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1.1-this.previousSibling.value">
+                        </td>
                         <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total_freight[]" value = "0"></td>
                         <td>
                             <label>
@@ -203,6 +211,7 @@
                 $("#tbody_dokumen_SO_freight").empty();
                 $("#thead_dokumen_SO_freight").empty();
                 $("#table_service_freight").css("display","none");
+                $("#tag_tabel_freight").css("display","none");
 
                 let judul_dokumen = $('#option_dokumen_SPK option:selected').val();
 
@@ -227,7 +236,7 @@
                                 <th>QTY</th>
                                 <th>Container</th>
                                 <th>Unit Price</th>
-                                <th>Disc%</th>
+                                <th>Disc</th>
                                 <th>Tax</th>
                                 <th>Amount</th>
                                 <th>Active</th>
@@ -241,22 +250,22 @@
                                             <input type="text" style = "width:200px;"  readonly name="input_nama_service_PPJK[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service_PPJK[]" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" value = "1">
+                                            <input type="text" style = "width:40px;" id="input_quantity_PPJK_${nomor_urut_dokumen}" onkeyup=(ubah_total_PPJK(${nomor_urut_dokumen})) name="input_quantity_service_PPJK[]" nomor_urut= "${nomor_urut_dokumen}" value = "1">
                                         </td>
                                         <td>
                                             <input type="text" style = "width:40px;" readonly name="input_container_service_PPJK[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px;" readonly nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_harga_service_PPJK[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:80px;" id="input_harga_unit_PPJK_${nomor_urut_dokumen}" onkeyup= (ubah_total_PPJK(${nomor_urut_dokumen})) nomor_urut= "${nomor_urut_dokumen}" name="input_harga_service_PPJK[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)"  name="input_diskon_service_PPJK[]">
+                                            <input type="text" style = "width:40px" id="input_diskon_PPJK_${nomor_urut_dokumen}" onkeyup= ("ubah_total_PPJK(${nomor_urut_dokumen})) value="0" nomor_urut= "${nomor_urut_dokumen}" name="input_diskon_service_PPJK[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_pajak_service_PPJK[]">
+                                            <input type="hidden" name="input_pajak_service_PPJK[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onclick="this.previousSibling.value=11-this.previousSibling.value">
                                         </td>
                                         <td>
-                                            <input  type="text" style = "width:80px" name="input_total_PPJK[]" id="input_total_${nomor_urut_dokumen}" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input  type="text" style = "width:80px" readonly name="input_total_PPJK[]" id="input_total_${nomor_urut_dokumen}" value = "${data['list_extra_service'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
                                             <label>
@@ -269,13 +278,14 @@
                         }
                         else{
                             $("#table_service_freight").css("display","table");
+                            $("#tag_tabel_freight").css("display","block");
 
                             $("#thead_dokumen_SO_PPJK").append(`
                                 <th>Item</th>
                                 <th>Description</th>
                                 <th>QTY</th>
                                 <th>Unit Price</th>
-                                <th>Disc%</th>
+                                <th>Disc</th>
                                 <th>Tax</th>
                                 <th>Amount</th>
                                 <th>Active</th>
@@ -286,7 +296,7 @@
                                 <th>Description</th>
                                 <th>QTY</th>
                                 <th>Unit Price</th>
-                                <th>Disc%</th>
+                                <th>Disc</th>
                                 <th>Tax</th>
                                 <th>Amount</th>
                                 <th>Active</th>
@@ -300,19 +310,19 @@
                                             <input type="text" style = "width:200px;"  readonly name="input_nama_service_PPJK[]" value="${data['list_relasi_extra_service_freight_origin'][nomor_urut_dokumen]['nama_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service_PPJK[]" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" value = "1">
+                                            <input type="text" style = "width:40px;" id="input_quantity_PPJK_${nomor_urut_dokumen}" onkeyup= (ubah_total_PPJK(${nomor_urut_dokumen})) name="input_quantity_service_PPJK[]" nomor_urut= "${nomor_urut_dokumen}" value = "1">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px;" readonly nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_harga_service_PPJK[]" value="${data['list_relasi_extra_service_freight_origin'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:80px;" id="input_harga_unit_PPJK_${nomor_urut_dokumen}" onkeyup= (ubah_total_PPJK(${nomor_urut_dokumen})) name="input_harga_service_PPJK[]" value="${data['list_relasi_extra_service_freight_origin'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_diskon_service_PPJK[]">
+                                            <input type="text" style = "width:80px" id="input_diskon_PPJK_${nomor_urut_dokumen}" onkeyup= (ubah_total_PPJK(${nomor_urut_dokumen})) value="0" name="input_diskon_service_PPJK[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_pajak_service_PPJK[]">
+                                            <input type="hidden" name="input_pajak_service_PPJK[]" value="0"><input type="checkbox" style = "width:40px" onclick="this.previousSibling.value=11-this.previousSibling.value">
                                         </td>
                                         <td>
-                                            <input  type="text" style = "width:80px" name="input_total_PPJK[]" id="input_total_${nomor_urut_dokumen}" value = "${data['list_relasi_extra_service_freight_origin'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input  type="text" style = "width:80px" readonly name="input_total_PPJK[]" id="input_total_PPJK_${nomor_urut_dokumen}" value = "${data['list_relasi_extra_service_freight_origin'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
                                             <label>
@@ -331,19 +341,19 @@
                                             <input type="text" style = "width:200px;"  readonly name="input_nama_service_freight[]" value="${data['list_relasi_extra_service_freight_destination'][nomor_urut_dokumen]['nama_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service_freight[]" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" value = "1">
+                                            <input type="text" style = "width:40px;" id="input_quantity_freight_${nomor_urut_dokumen}" onkeyup= (ubah_total_freight(${nomor_urut_dokumen})) name="input_quantity_service_freight[]" nomor_urut= "${nomor_urut_dokumen}" value = "1">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:80px;" readonly nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_harga_service_freight[]" value="${data['list_relasi_extra_service_freight_destination'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input type="text" style = "width:80px;" id="input_harga_unit_freight_${nomor_urut_dokumen}" onkeyup= (ubah_total_freight(${nomor_urut_dokumen})) nomor_urut= "${nomor_urut_dokumen}" name="input_harga_service_freight[]" value="${data['list_relasi_extra_service_freight_destination'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_diskon_service_freight[]">
+                                            <input type="text" style = "width:80px" id="input_diskon_freight_${nomor_urut_dokumen}" onkeyup= (ubah_total_freight(${nomor_urut_dokumen})) value="0" nomor_urut= "${nomor_urut_dokumen}" name="input_diskon_service_freight[]">
                                         </td>
                                         <td>
-                                            <input type="text" style = "width:40px" value="0" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" name="input_pajak_service_freight[]">
+                                            <input type="hidden" name="input_pajak_service_freight[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onclick="this.previousSibling.value=1.1-this.previousSibling.value">
                                         </td>
                                         <td>
-                                            <input  type="text" style = "width:80px" name="input_total_freight[]" id="input_total_${nomor_urut_dokumen}" value = "${data['list_relasi_extra_service_freight_destination'][nomor_urut_dokumen]['harga_extra_service']}">
+                                            <input  type="text" style = "width:80px" readonly name="input_total_freight[]" id="input_total_freight_${nomor_urut_dokumen}" value = "${data['list_relasi_extra_service_freight_destination'][nomor_urut_dokumen]['harga_extra_service']}">
                                         </td>
                                         <td>
                                             <label>
@@ -358,19 +368,20 @@
                     }
                 });
             });
-
-            function ubah_total(input_yang_berubah){
-                console.log("waow");
-                let nomor_urut = input_yang_berubah.nomor_urut;
-                console.log(nomor_urut);
-            }
         });
     </script>
     <script type="text/javascript">
-        function ubah_total(input_yang_berubah){
-            console.log("waow");
-            let nomor_urut = input_yang_berubah.nomor_urut;
-            console.log(nomor_urut);
+        function ubah_total_PPJK(nomor_urut_dokumen){
+            $harga_unit = $("#input_harga_unit_PPJK_"+nomor_urut_dokumen).val();
+            $quantity_unit = $("#input_quantity_PPJK_"+nomor_urut_dokumen).val();
+            $diskon_unit = $("#input_diskon_PPJK_"+nomor_urut_dokumen).val();
+            $("#input_total_PPJK_"+nomor_urut_dokumen).val($harga_unit * $quantity_unit - $diskon_unit);
+        }
+        function ubah_total_freight(nomor_urut_dokumen){
+            $harga_unit = $("#input_harga_unit_freight_"+nomor_urut_dokumen).val();
+            $quantity_unit = $("#input_quantity_freight_"+nomor_urut_dokumen).val();
+            $diskon_unit = $("#input_diskon_freight_"+nomor_urut_dokumen).val();
+            $("#input_total_freight_"+nomor_urut_dokumen).val($harga_unit * $quantity_unit - $diskon_unit);
         }
     </script>
 </div>

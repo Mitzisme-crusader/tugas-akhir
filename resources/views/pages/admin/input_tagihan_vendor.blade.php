@@ -22,6 +22,7 @@
         @endif
 
         <?php $id_jenis_service_spk = 2?>
+
         <h1>Input Tagihan Vendor</h1>
         <form action="{{ url('admin/proses_input_tagihan_vendor') }}" method="post">
             @csrf
@@ -88,7 +89,13 @@
                                 <input type="text" style = "width:80px;" name="input_harga_service[]">
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
-                            <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td>
+                                <input type="hidden" name="input_pajak_service[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
+                            </td>
+                            <td><input type="text" style = "width:100px" name="input_vendor_service[]" value = "0"></td>
+                            <td>
+                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                            </td>
                             <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
@@ -113,7 +120,13 @@
                                 <input type="text" style = "width:80px;" name="input_harga_service[]">
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
-                            <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td>
+                                <input type="hidden" name="input_pajak_service[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                            </td>
+                            <td><input type="text" style = "width:200px" name="input_vendor_service[]" value = ""></td>
+                            <td>
+                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                            </td>
                             <td><input type="text" style = "width:80px" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
@@ -126,6 +139,58 @@
                 }
             });
         });
+
+        $("#option_dokumen_SO").change(function() {
+                $("#option_dokumen_SO option[value='']").remove();
+                $("#tbody_dokumen_SO").empty();
+                $("#thead_dokumen_SO").empty();
+                let nomor_so = $('#option_dokumen_SO option:selected').val();
+
+                $.ajax({
+                    type : 'GET',
+                    url: "{{ url('admin/get_data_extra_service_SO') }}"+'/?nomor_so='+nomor_so,
+                    data: '',
+                    success: function(data){
+                        console.log(data);
+                        console.log(data['list_extra_service'].length);
+                        var banyak_extra_service = data['list_extra_service'].length;
+
+                        $id_jenis_service_spk = data['dokumen_so']['id_service'];
+
+                        nomor_urut_dokumen = 0;
+
+                        if(data['list_extra_service'][0]['container_service'] != null){
+                            $("#thead_dokumen_SO").append(`
+                                <th>Item</th>
+                                <th>Description</th>
+                                <th>QTY</th>
+                                <th>Container</th>
+                                <th>Unit Price</th>
+                                <th>Disc%</th>
+                                <th>Tax</th>
+                                <th>Vendor</th>
+                                <th>Keterangan</th>
+                                <th>Amount</th>
+                                <th>Active</th>
+                            `);
+                        }
+                        else{
+                            $("#thead_dokumen_SO").append(`
+                                <th>Item</th>
+                                <th>Description</th>
+                                <th>QTY</th>
+                                <th>Unit Price</th>
+                                <th>Disc%</th>
+                                <th>Tax</th>
+                                <th>Vendor</th>
+                                <th>Keterangan</th>
+                                <th>Amount</th>
+                                <th>Active</th>
+                            `);
+                        }
+                    }
+                });
+            });
     </script>
 </div>
 @endsection

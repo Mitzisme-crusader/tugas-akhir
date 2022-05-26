@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $( "#option_container" ).change(function() {
         if($('#option_container option:selected').val() == "FCL"){
             $("#input_LCL").css("display", "none");

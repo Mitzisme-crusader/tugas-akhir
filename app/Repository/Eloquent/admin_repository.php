@@ -12,6 +12,7 @@ use App\models\dokumen_so_model;
 use App\models\relasi_dokumen_so_extra_service_model;
 use App\models\tagihan_customer_model;
 use App\models\relasi_tagihan_customer_extra_service_model;
+use App\models\relasi_tagihan_vendor_extra_service;
 use App\models\tagihan_vendor_model;
 use App\Repository\admin_repository_interface;
 use Illuminate\Support\Carbon;
@@ -214,9 +215,17 @@ class admin_repository extends base_repository implements admin_repository_inter
        return relasi_dokumen_so_extra_service_model::create($data_relasi);
    }
 
-   public function get_relasi_dokumen_so_extra_service($nomor_so)
+   public function get_relasi_dokumen_so_extra_service($nomor_so, $freight_location)
    {
-       return relasi_dokumen_so_extra_service_model::where('nomor_so', $nomor_so)->get();
+       if($freight_location == "1"){
+           return relasi_dokumen_so_extra_service_model::where('nomor_so', $nomor_so)->where('freight_location', "1")->get();
+       }
+       elseif($freight_location == "2"){
+           return relasi_dokumen_so_extra_service_model::where('nomor_so', $nomor_so)->where('freight_location', "2")->get();
+       }
+       else{
+           return relasi_dokumen_so_extra_service_model::where('nomor_so', $nomor_so)->get();
+       }
    }
 
    public function delete_relasi_dokumen_so_extra_service($id_dokumen_SO)
@@ -244,21 +253,18 @@ class admin_repository extends base_repository implements admin_repository_inter
        return tagihan_vendor_model::create($data_tagihan_vendor);
    }
 
-   public function get_all_dokumen_SO_with_total_hutang(){
-       $list_dokumen_so = dokumen_so_model::join('relasi_dokumen_so_extra_service', 'relasi_dokumen_so_extra_service.nomor_so', '=', 'dokumen_so.nomor_so')
-       ->groupBy('dokumen_so.nomor_so')
-       ->groupBy('dokumen_so.tanggal_so')
-       ->selectRaw('dokumen_so.nomor_so, dokumen_so.tanggal_so, sum(total_service) as Total');
+   public function get_tagihan_vendor($id_tagihan_vendor){
+       return tagihan_vendor_model::where('id_tagihan_vendor', $id_tagihan_vendor)->first();
+   }
+   public function add_service_tagihan_vendor($data_service_tagihan_vendor){
+       return relasi_tagihan_vendor_extra_service::create($data_service_tagihan_vendor);
+   }
+   public function get_all_tagihan_vendor(){
+       return tagihan_vendor_model::all();
+   }
 
-
-       $list_dokumen_so_with_total_hutang = tagihan_vendor_model::joinSub($list_dokumen_so, 'list_dokumen_so', function($join){
-            $join->on('tagihan_vendor.nomor_so', '=', 'list_dokumen_so.nomor_so');
-       })->groupBy('tagihan_vendor.nomor_so')
-       ->groupBy('list_dokumen_so.Total')
-       ->groupBy('list_dokumen_so.tanggal_so')
-       ->selectRaw('tagihan_vendor.nomor_so, list_dokumen_so.Total, list_dokumen_so.tanggal_so, sum(tagihan_vendor.hutang)as hutang')->get();
-
-       return $list_dokumen_so_with_total_hutang;
+   public function get_service_tagihan_vendor($id_tagihan_vendor){
+       return relasi_tagihan_vendor_extra_service::where('id_tagihan_vendor', $id_tagihan_vendor)->get();
    }
 
    //Tagihan customer

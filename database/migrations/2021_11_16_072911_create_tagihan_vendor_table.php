@@ -16,15 +16,6 @@ class CreateTagihanVendorTable extends Migration
         Schema::create('tagihan_vendor', function (Blueprint $table) {
             $table->bigIncrements('id_tagihan_vendor');
             $table->string('nomor_so');
-            $table->string('bank_pelunasan')->nullable();
-            $table->string('vendor_service');
-            $table->string('nama_service');
-            $table->integer('quantity_service')->nullable();
-            $table->string('container_service')->nullable();
-            $table->integer('harga_service')->nullable();
-            $table->integer('diskon_service')->nullable();
-            $table->integer('pajak_service')->nullable();
-            $table->longText('keterangan_tagihan')->nullable();
             $table->integer('hutang');
             $table->integer('total_service');
             $table->timestamps();

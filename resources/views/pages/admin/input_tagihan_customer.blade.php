@@ -12,11 +12,13 @@
 @section('content')
 <div class="content" style="width: 75%">
     <section>
-        <?php $id_jenis_service_spk = 0 ?>
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
 
+        @php
+            $data = "";
+        @endphp
         @if($errors->any())
             <h4 class="message">terdapat field kosong</h4>
         @endif
@@ -34,9 +36,10 @@
                 </select>
             </div>
 
+            <h5 >Tabel Service</h5>
             <div class="table-wrapper"  style="width: 100%;margin-top: 15px">
                 <table style="width: 100%">
-                    <thead id="thead_dokumen_SO">
+                    <thead id="thead_tagihan_customer">
                         <th>Item</th>
                         <th>Description</th>
                         <th>QTY</th>
@@ -46,7 +49,7 @@
                         <th>Amount</th>
                         <th>Active</th>
                     </thead>
-                    <tbody id="tbody_dokumen_SO">
+                    <tbody id="tbody_tagihan_customer">
                         <tr>
 
                         </tr>
@@ -71,7 +74,7 @@
             $("#button_add_service").click(function(){
                 console.log($id_jenis_service_spk);
                 if($id_jenis_service_spk == 1){
-                    $("#tbody_dokumen_SO").append(`
+                    $("#tbody_tagihan_customer").append(`
                         <tr>
                             <td>${nomor_urut_dokumen + 1}</td>
                             <td>
@@ -87,7 +90,9 @@
                                 <input type="text" style = "width:80px;" name="input_harga_service[]">
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
-                            <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td>
+                                <input type="hidden" name="input_pajak_service[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
+                            </td>
                             <td>
                                 <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
                             </td>
@@ -102,7 +107,7 @@
                     `);
                 }
                 else if($id_jenis_service_spk == 2){
-                    $("#tbody_dokumen_SO").append(`
+                    $("#tbody_tagihan_customer").append(`
                         <tr>
                             <td>${nomor_urut_dokumen + 1}</td>
                             <td>
@@ -115,7 +120,9 @@
                                 <input type="text" style = "width:80px;" name="input_harga_service[]">
                             </td>
                             <td><input type="text" style = "width:40px" name="input_diskon_service[]" value = "0"></td>
-                            <td><input type="text" style = "width:40px" name="input_pajak_service[]" value = "0"></td>
+                            <td>
+                                <input type="hidden" name="input_pajak_service[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                            </td>
                             <td>
                                 <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
                             </td>
@@ -133,8 +140,8 @@
 
             $("#option_dokumen_SO").change(function() {
                 $("#option_dokumen_SO option[value='']").remove();
-                $("#tbody_dokumen_SO").empty();
-                $("#thead_dokumen_SO").empty();
+                $("#tbody_tagihan_customer").empty();
+                $("#thead_tagihan_customer").empty();
                 let nomor_so = $('#option_dokumen_SO option:selected').val();
 
                 $.ajax({
@@ -144,12 +151,12 @@
                     success: function(data){
                         console.log(data);
                         console.log(data['list_extra_service'].length);
-                        var banyak_extra_service = data['list_extra_service'].length;
 
                         $id_jenis_service_spk = data['dokumen_so']['id_service'];
 
+
                         if(data['list_extra_service'][0]['container_service'] != null){
-                            $("#thead_dokumen_SO").append(`
+                            $("#thead_tagihan_customer").append(`
                                 <th>Item</th>
                                 <th>Description</th>
                                 <th>QTY</th>
@@ -157,7 +164,6 @@
                                 <th>Unit Price</th>
                                 <th>Disc%</th>
                                 <th>Tax</th>
-                                <th>Vendor</th>
                                 <th>Keterangan</th>
                                 <th>Amount</th>
                                 <th>Active</th>
@@ -165,51 +171,88 @@
 
 
                             for(nomor_urut_dokumen = 0; nomor_urut_dokumen < data['list_extra_service'].length; ++nomor_urut_dokumen){
-                                $("#tbody_dokumen_SO").append(`
-                                    <tr>
-                                        <td>${nomor_urut_dokumen + 1}</td>
-                                        <td>
-                                            <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:40px;" readonly name="input_container_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}">
-                                        </td>
-                                        <td>
-                                            <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                `);
+                                if(data['list_extra_service'][nomor_urut_dokumen]['pajak_service'] != 0){
+                                    $("#tbody_tagihan_customer").append(`
+                                        <tr>
+                                            <td>${nomor_urut_dokumen + 1}</td>
+                                            <td>
+                                                <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px;" readonly name="input_container_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" checked style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                                            </td>
+                                            <td>
+                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    `);
+                                }
+                                else{
+                                    $("#tbody_tagihan_customer").append(`
+                                        <tr>
+                                            <td>${nomor_urut_dokumen + 1}</td>
+                                            <td>
+                                                <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px;" readonly name="input_container_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['container_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1.1-this.previousSibling.value">
+                                            </td>
+                                            <td>
+                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    `);
+                                }
                             }
                         }
                         else{
-                            $("#thead_dokumen_SO").append(`
+                            $("#thead_tagihan_customer").append(`
                                 <th>Item</th>
                                 <th>Description</th>
                                 <th>QTY</th>
                                 <th>Unit Price</th>
                                 <th>Disc%</th>
                                 <th>Tax</th>
-                                <th>Vendor</th>
                                 <th>Keterangan</th>
                                 <th>Amount</th>
                                 <th>Active</th>
@@ -217,37 +260,72 @@
 
 
                             for(nomor_urut_dokumen = 0; nomor_urut_dokumen < data['list_extra_service'].length; ++nomor_urut_dokumen){
-                                $("#tbody_dokumen_SO").append(`
-                                    <tr>
-                                        <td>${nomor_urut_dokumen + 1}</td>
-                                        <td>
-                                            <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['quantity_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:40px" value="0" name="input_pajak_service[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}">
-                                        </td>
-                                        <td>
-                                            <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
-                                        </td>
-                                        <td>
-                                            <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
-                                            </label>
-                                        </td>
-                                    </tr>
-                                `);
+                                if(data['list_extra_service'][nomor_urut_dokumen]['pajak_service'] != 0){
+                                    $("#tbody_tagihan_customer").append(`
+                                        <tr>
+                                            <td>${nomor_urut_dokumen + 1}</td>
+                                            <td>
+                                                <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" checked style ="width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                                            </td>
+                                            <td>
+                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    `);
+                                }
+                                else{
+                                    $("#tbody_tagihan_customer").append(`
+                                        <tr>
+                                            <td>${nomor_urut_dokumen + 1}</td>
+                                            <td>
+                                                <input type="text" style = "width:150px;"  readonly name="input_nama_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['nama_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px;" name="input_quantity_service[]" value = "1">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px;" readonly name="input_harga_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['harga_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:40px" value="0" name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}">
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" style ="width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1-this.previousSibling.value">
+                                            </td>
+                                            <td>
+                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
+                                            </td>
+                                            <td>
+                                                <input type="text" style = "width:80px" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}">
+                                            </td>
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" name="checkbox_status_service[]" value=${nomor_urut_dokumen} class="checkbox_status" checked>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    `);
+                                }
                             }
                         }
                     }

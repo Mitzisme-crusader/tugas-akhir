@@ -31,6 +31,7 @@
     <script src="{{ asset('js/select_input.js') }}"></script>
     <script src="{{ asset('js/make_dokumen_simpan_berjalan.js') }}"></script>
     <script src="{{ asset('js/popup.js') }}"></script>
+    <script src="{{ asset('js/input_untuk_total.js') }}"></script>
     @yield('js')
 </body>
 
