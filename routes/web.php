@@ -97,6 +97,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/get_data_extra_service_SO', 'App\Http\Controllers\admin_controller@get_data_extra_service_SO');
 
 
+    //Jurnal Umum
+    Route::get('/jurnal_umum', 'App\Http\Controllers\admin_controller@pergi_ke_list_jurnal_umum');
+
 });
 
 Route::group(['prefix' => 'user'], function () {

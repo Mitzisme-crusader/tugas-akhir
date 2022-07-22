@@ -15,7 +15,7 @@
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
-        <h1>Edit Dokumen SO</h1>
+        <h1>Detail Tagihan Vendor</h1>
         <form action="{{ url('admin/proses_edit_dokumen_so') }}" style="width:100%" method="post">
             @csrf
 
@@ -25,8 +25,8 @@
                 <input type="hidden" value="{{$dokumen_so->alamat_customer}}" name="input_alamat_customer" id="input_alamat_customer">
                 <div>
                     <textarea rows="3" cols="55" name="data_customer" id="input_data_customer" placeholder="Data Customer" readonly style="width: 100%">
-                        {{$tagihan_vendor->total}}
-                        {{$tagihan_vendor->hutang}}
+                        Total Tagihan :{{$tagihan_vendor->total_service}}
+                        Hutang Tagihan :{{$tagihan_vendor->hutang}}
                     </textarea>
                 </div>
             </div>
@@ -100,10 +100,10 @@
                                 <input type="text" style = "width:80px" name="nominal_pembayaran" value = 0>
                             </td>
                             <td>
-                                <input type="text" style = "width:80px" name="input_bank_pelunasan" value = "{{$tagihan_vendor->total_service}}">
+                                <input type="text" style = "width:80px" name="input_bank_pelunasan" value = " ">
                             </td>
                             <td>
-                                <input type="text" style = "width:80px" name="input_bank_tujuan_pembayaran" value = "{{$tagihan_vendor->total_service}}">
+                                <input type="text" style = "width:80px" name="input_bank_tujuan_pembayaran" value = " ">
                             </td>
                             <td>
                                 <form action="{{url('admin/bayar_tagihan_vendor')}}" method="get">

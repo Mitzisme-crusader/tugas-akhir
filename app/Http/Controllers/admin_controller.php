@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\convert_number as ControllersConvert_number;
 use App\Models\dokumen_simpan_berjalan_model;
 use App\Repository\admin_repository_interface;
 use App\Repository\Eloquent\admin_repository;
+use convert_number;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use numbertowordconverter;
 use PDO;
 use PhpOffice\PhpSpreadsheet\Calculation\TextData\Replace;
 use Psy\CodeCleaner\EmptyArrayDimFetchPass;
@@ -1015,6 +1018,7 @@ class admin_controller extends Controller
        $all_unit_price_service = array();
        $all_total_service = array();
        $tax = array();
+       $tax_all= 0;
        $stotal = 0;
        $final_total = 0;
 
@@ -1080,9 +1084,14 @@ class admin_controller extends Controller
 
             $stotal = $stotal + $all_total_service[$nomor_urut];
 
-            $final_total =
+            if($service_tagihan_customer['pajak_service'] != 0){
+                $tax_all = $tax_all + $service_tagihan_customer['total'] / $service_tagihan_customer['pajak_service'];
+            }
+
             ++$nomor_urut;
         }
+
+        $tax_all = floor($tax_all);
 
         $dokumen_simpan_berjalan = $this->admin_repository->get_dokumen_simpan_berjalan_by_SO($dokumen_so->nomor_so);
 
@@ -1155,8 +1164,26 @@ class admin_controller extends Controller
         $template->setValue('qty_service',  implode('<w:br/>  ', $all_qty_service));
         $template->setValue('total_service',  implode('<w:br/>  ', $all_total_service));
         $template->setValue('tax',  implode('<w:br/>  ', $tax));
+        $template->setValue('tax_all', number_format($tax_all));
 
-        $template->setValue('stotal',  $stotal);
+        $final_total = $stotal - $tax_all;
+
+        $class_num_converter = new ControllersConvert_number();
+
+        $say = $class_num_converter->convert_number($final_total);
+
+        $template->setValue('say', $say);
+
+        $template->setValue('final_total', number_format($final_total));
+
+        if($dokumen_so->id_service == 1){
+            $template->setValue('tax_num', 11);
+        }
+        else{
+            $template->setValue('tax_num', 1.1);
+        }
+
+        $template->setValue('stotal',  number_format($stotal));
 
         $request->session()->flash('message', 'Input Tagihan customer berhasil');
 
@@ -1181,5 +1208,9 @@ class admin_controller extends Controller
 
         return response()->json(array('list_extra_service' => $list_relasi_extra_service_SO, 'dokumen_so' => $dokumen_so));
 
+   }
+
+   public function pergi_ke_list_jurnal_umum(Request $request){
+       return view("pages.admin.list_jurnal_umum");
    }
 }
