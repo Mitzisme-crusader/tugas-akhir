@@ -18,7 +18,5 @@ class relasi_tagihan_vendor_extra_service extends Model
         'diskon_service',
         'pajak_service',
         'total_service',
-        'bank_pelunasan',
-        'bank_tujuan_pembayaran'
     ];
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\dokumen_so_model;
+use App\Models\relasi_dokumenspk_extra_service_model;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +22,10 @@ class DatabaseSeeder extends Seeder
             service_seeder::class,
             port_seeder::class,
             dokumen_simpan_berjalan_seeder::class,
+            dokumenSpkSeeder::class,
+            relasi_dokumenspk_extra_service_seeder::class,
+            relasi_dokumen_so_extra_service_seeder::class,
+            dokumen_so_seeder::class,
         ]);
     }
 }

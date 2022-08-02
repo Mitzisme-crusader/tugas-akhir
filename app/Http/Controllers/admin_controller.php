@@ -915,7 +915,7 @@ class admin_controller extends Controller
        $request->validate([
            'input_nama_service.*' => 'required',
            'input_vendor_service.*' => 'required',
-           'input_total.*' => 'required|numeric',
+           'input_total.*' => 'required|numeric|gt:0',
        ]);
        $list_service_tagihan_vendor = array();
 
@@ -974,7 +974,6 @@ class admin_controller extends Controller
         $request->session()->flash('message', 'Input tagihan vendor berhasil');
 
         return redirect()->back();
-
    }
 
    public function pergi_ke_list_tagihan_vendor(Request $request){
@@ -984,6 +983,7 @@ class admin_controller extends Controller
    }
 
    public function pergi_ke_detail_tagihan_vendor(Request $request){
+
        $id_tagihan_vendor = $_GET['id_tagihan_vendor'];
 
        $tagihan_vendor = $this->admin_repository->get_tagihan_vendor($id_tagihan_vendor);
@@ -992,8 +992,20 @@ class admin_controller extends Controller
 
        $dokumen_so = $this->admin_repository->get_dokumen_so_by_nomor_so($tagihan_vendor['nomor_so']);
 
-       return view("pages.admin.detail_tagihan_vendor")->with('tagihan_vendor', $tagihan_vendor)->with('dokumen_so', $dokumen_so)->with('list_service_tagihan_vendor', $list_service_tagihan_vendor);
+       return view("pages.admin.detail_tagihan_vendor")->with('tagihan_vendor', $tagihan_vendor)->with('dokumen_so', $dokumen_so)->with('list_service_tagihan_vendor', $list_service_tagihan_vendor)->with('id_tagihan_vendor', $id_tagihan_vendor);
    }
+
+   public function proses_bayar_tagihan_vendor(Request $request){
+        dd($_POST);
+        $request->validate([
+            'input_nominal_pembayaran' => 'required',
+        ]);
+
+
+        $request->session()->flash('message', 'Input tagihan vendor berhasil');
+
+        return redirect()->back();
+    }
 
    //input Tagihan customer
    public function pergi_ke_input_tagihan_customer(Request $request){

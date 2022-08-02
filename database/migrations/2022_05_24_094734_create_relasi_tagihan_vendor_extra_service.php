@@ -23,9 +23,6 @@ class CreateRelasiTagihanVendorExtraService extends Migration
             $table->integer('harga_service')->nullable();
             $table->integer('diskon_service')->nullable();
             $table->integer('pajak_service')->nullable();
-            $table->string('bank_tujuan_pembayaran')->nullable();
-            $table->string('bank_pelunasan')->nullable();
-            $table->longText('keterangan_tagihan')->nullable();
             $table->integer('total_service');
             $table->timestamps();
         });

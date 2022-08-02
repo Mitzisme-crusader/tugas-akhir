@@ -29,3 +29,9 @@
     background-color: var(--primary_color) ;
     color:white;
 }
+
+.container_right::after{
+    clear: both;
+    content: "";
+    display: table;
+}

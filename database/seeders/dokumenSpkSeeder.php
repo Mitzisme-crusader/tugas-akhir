@@ -18,12 +18,25 @@ class dokumenSpkSeeder extends Seeder
     public function run()
     {
         DB::table('dokumen_spk')->insert([
-            'nama_customer' => 'customer_pertama',
-            'judul_dokumen' => '001-SP-E-A-L-V-2022',
+            'judul_dokumen' => '001-SP-E-A-L-VII-2022',
             'id_service' => '1',
             'id_customer' => '1',
             'nama_customer' => 'customer pertama',
             'nama_perusahaan_customer' => 'PT Surya Jaya',
+            'metode_pengiriman' => null,
+            'negara_customer' => 'Indonesia',
+            'status_aktif_dokumen' => '1',
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        DB::table('dokumen_spk')->insert([
+            'judul_dokumen' => '002-SP-E-A-L-VII-2022',
+            'id_service' => '2',
+            'id_customer' => '1',
+            'nama_customer' => 'customer pertama',
+            'nama_perusahaan_customer' => 'PT Surya Jaya',
+            'metode_pengiriman' => 'sea',
             'negara_customer' => 'Indonesia',
             'status_aktif_dokumen' => '1',
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

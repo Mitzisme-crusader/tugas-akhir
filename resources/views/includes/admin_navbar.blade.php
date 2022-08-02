@@ -54,6 +54,11 @@
         </li>
         <li>
             <a href="{{ url('/admin/jurnal_umum') }}"><span>Jurnal Umum</span></a>
+            <ul>
+                <li><a href="{{ url('/admin/jurnal_umum') }}"><span>Jurnal Umum</span></a></li>
+                <li><a href="{{ url('/admin/daftarkan_COA') }}"><span>Add COA</span></a></li>
+                <li><a href="{{ url('/admin/list_tagihan_customer') }}"><span>Add </span></a></li>
+            </ul>
         </li>
         <li style="margin-left: auto"><a href="{{ url('/admin/logout') }}"><span>Logout</span></a></li>
     </ul>

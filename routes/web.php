@@ -87,6 +87,8 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/list_tagihan_vendor', 'App\Http\Controllers\admin_controller@pergi_ke_list_tagihan_vendor');
 
+    Route::post('/bayar_tagihan_vendor', 'App\Http\Controllers\admin_controller@proses_bayar_tagihan_vendor');
+
     //Customer
     Route::get('/input_tagihan_customer', 'App\Http\Controllers\admin_controller@pergi_ke_input_tagihan_customer');
 
