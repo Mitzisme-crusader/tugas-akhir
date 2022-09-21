@@ -12,6 +12,6 @@ class nomor_chart_of_account_model extends Model
         'nomor_COA',
         'nama_jenis_COA',
         'total_COA',
-        'status_aktif_COA',
+        'status_aktif',
     ];
 }

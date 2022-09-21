@@ -18,7 +18,7 @@ class CreateNomorChartOfAccountTable extends Migration
             $table->string('nomor_COA');
             $table->string('nama_jenis_COA');
             $table->integer('total_COA');
-            $table->integer("status_aktif_COA");
+            $table->integer("status_aktif");
             $table->timestamps();
         });
     }

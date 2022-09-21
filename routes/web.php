@@ -102,6 +102,18 @@ Route::group(['prefix' => 'admin'], function () {
     //Jurnal Umum
     Route::get('/jurnal_umum', 'App\Http\Controllers\admin_controller@pergi_ke_list_jurnal_umum');
 
+    //Nomor COA
+    Route::get('/get_data_COA', 'App\Http\Controllers\admin_controller@get_data_COA');
+
+    //Rekening
+    Route::get('/daftarkan_rekening', 'App\Http\Controllers\admin_controller@pergi_ke_daftarkan_rekening');
+
+    Route::get('/get_data_rekening', 'App\Http\Controllers\admin_controller@get_data_rekening');
+
+    Route::post('/proses_add_rekening', 'App\Http\Controllers\admin_controller@proses_add_rekening');
+
+
+
 });
 
 Route::group(['prefix' => 'user'], function () {

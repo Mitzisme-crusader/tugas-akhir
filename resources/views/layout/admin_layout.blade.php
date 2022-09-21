@@ -16,6 +16,7 @@
     {{-- font awesome --}}
     <link rel="stylesheet" href="{{ asset('font_awesome/css/all.css') }}">
     <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+    <script type="text/javascript" src="jquery/jquery.number.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 </head>

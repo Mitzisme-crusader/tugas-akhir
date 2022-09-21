@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNomorRekeningTable extends Migration
+class CreateJurnalUmumTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateNomorRekeningTable extends Migration
      */
     public function up()
     {
-        Schema::create('nomor_rekening', function (Blueprint $table) {
-            $table->bigIncrements('id_rekening');
+        Schema::create('jurnal_umum', function (Blueprint $table) {
+            $table->bigIncrements('id_jurnal_umum');
             $table->string('nama_rekening')->nullable();
             $table->string('nomor_rekening');
             $table->string('nomor_COA');
@@ -31,6 +31,6 @@ class CreateNomorRekeningTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nomor_rekening');
+        Schema::dropIfExists('jurnal_umum');
     }
 }

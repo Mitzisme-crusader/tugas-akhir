@@ -14,6 +14,8 @@ use App\models\tagihan_customer_model;
 use App\models\relasi_tagihan_customer_extra_service_model;
 use App\models\relasi_tagihan_vendor_extra_service;
 use App\models\tagihan_vendor_model;
+use App\models\nomor_chart_of_account_model;
+use App\models\nomor_rekening_model;
 use App\Repository\admin_repository_interface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -267,6 +269,12 @@ class admin_repository extends base_repository implements admin_repository_inter
        return relasi_tagihan_vendor_extra_service::where('id_tagihan_vendor', $id_tagihan_vendor)->get();
    }
 
+   public function bayar_tagihan_vendor($nominal_pembayaran, $id_tagihan_vendor){
+        $hutang = tagihan_vendor_model::where('id_tagihan_vendor', $id_tagihan_vendor)->max('hutang');
+        $hutang = $hutang - $nominal_pembayaran;
+        return tagihan_vendor_model::where('id_tagihan_vendor', $id_tagihan_vendor)->update(['hutang' => $hutang]);
+   }
+
    //Tagihan customer
 
    public function add_tagihan_customer($data_tagihan_customer){
@@ -293,4 +301,57 @@ class admin_repository extends base_repository implements admin_repository_inter
    public function find_port($id){
         return port_model::find($id);
    }
+
+   //Nomor COA
+   public function get_nomor_COA($nomor_COA){
+        return nomor_chart_of_account_model::where('nomor_COA', $nomor_COA)->first();
+   }
+   public function get_all_nomor_COA(){
+        return nomor_chart_of_account_model::where('status_aktif', '1')->get();
+   }
+
+   public function tambah_total_COA($nominal, $nomor_COA){
+        $total = nomor_chart_of_account_model::where('nomor_COA', $nomor_COA)->max('total_COA');
+
+        $total = $total + $nominal;
+
+        return nomor_chart_of_account_model::where('nomor_COA', $nomor_COA)->update(['total_COA' => $total]);
+   }
+
+    public function kurangi_total_COA($nominal, $nomor_COA){
+        $total = nomor_chart_of_account_model::where('nomor_COA', $nomor_COA)->max('total_COA');
+
+        $total = $total - $nominal;
+
+        return nomor_chart_of_account_model::where('nomor_COA', $nomor_COA)->update(['total_COA'=> $total]);
+   }
+
+   public function add_COA($data_COA){
+        return nomor_chart_of_account_model::create($data_COA);
+   }
+
+   //rekening
+   public function add_rekening($data_rekening){
+        return nomor_rekening_model::create($data_rekening);
+   }
+
+   public function get_rekening($nomor_COA){
+        return nomor_rekening_model::where('status_aktif', 1)->where('nomor_COA', $nomor_COA)->get();
+   }
+
+   public function tambah_total_rekening($nominal, $nomor_rekening){
+        $total = nomor_rekening_model::where('nomor_rekening', $nomor_rekening)->max('total_rekening');
+
+        $total = $total + $nominal;
+
+        return nomor_rekening_model::where('nomor_rekening', $nomor_rekening)->update(['total_rekening' => $total]);
+   }
+
+    public function kurangi_total_rekening($nominal, $nomor_rekening){
+        $total = nomor_rekening_model::where('nomor_rekening', $nomor_rekening)->max('total_rekening');
+
+        $total = $total - $nominal;
+
+        return nomor_rekening_model::where('nomor_rekening', $nomor_rekening)->update(['total_rekening'=> $total]);
+    }
 }

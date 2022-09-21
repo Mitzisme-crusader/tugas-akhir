@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             relasi_dokumenspk_extra_service_seeder::class,
             relasi_dokumen_so_extra_service_seeder::class,
             dokumen_so_seeder::class,
+            nomor_chart_of_account_seeder::class,
         ]);
     }
 }

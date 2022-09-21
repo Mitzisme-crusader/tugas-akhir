@@ -992,15 +992,31 @@ class admin_controller extends Controller
 
        $dokumen_so = $this->admin_repository->get_dokumen_so_by_nomor_so($tagihan_vendor['nomor_so']);
 
-       return view("pages.admin.detail_tagihan_vendor")->with('tagihan_vendor', $tagihan_vendor)->with('dokumen_so', $dokumen_so)->with('list_service_tagihan_vendor', $list_service_tagihan_vendor)->with('id_tagihan_vendor', $id_tagihan_vendor);
+       $list_nomor_COA = $this->admin_repository->get_all_nomor_COA();
+
+       return view("pages.admin.detail_tagihan_vendor")->with('tagihan_vendor', $tagihan_vendor)->with('dokumen_so', $dokumen_so)->with('list_service_tagihan_vendor', $list_service_tagihan_vendor)->with('id_tagihan_vendor', $id_tagihan_vendor)->with('list_nomor_COA', $list_nomor_COA);
    }
 
    public function proses_bayar_tagihan_vendor(Request $request){
-        dd($_POST);
         $request->validate([
             'input_nominal_pembayaran' => 'required',
+            'nomor_COA' => 'required',
+            'nomor_rekening' => 'required',
         ]);
 
+        $nominal_pembayaran = $_POST['input_nominal_pembayaran'];
+
+        $id_tagihan_vendor = $_POST['Id_dokumen'];
+
+        $nomor_rekening = $_POST['nomor_rekening'];
+
+        $nomor_COA = $_POST['nomor_COA'];
+
+        $tagihan_vendor = $this->admin_repository->bayar_tagihan_vendor($nominal_pembayaran, $id_tagihan_vendor);
+
+        $total_rekening = $this->admin_repository->kurangi_total_rekening($nominal_pembayaran, $nomor_rekening);
+
+        $total_COA = $this->admin_repository->kurangi_total_COA($nominal_pembayaran, $nomor_COA);
 
         $request->session()->flash('message', 'Input tagihan vendor berhasil');
 
@@ -1222,7 +1238,89 @@ class admin_controller extends Controller
 
    }
 
+   //Jurnal Umum
    public function pergi_ke_list_jurnal_umum(Request $request){
        return view("pages.admin.list_jurnal_umum");
    }
+
+   //Nomor COA
+   public function get_data_COA(Request $request){
+       $nomor_COA = $request->get('nomor_COA');
+
+       $nomor_COA = $this->admin_repository->get_nomor_COA($nomor_COA);
+
+       return response()->json(array('nomor_COA' => $nomor_COA));
+   }
+
+   //Rekening
+   public function pergi_ke_daftarkan_rekening(Request $request){
+
+        $list_nomor_COA = $this->admin_repository->get_all_nomor_COA();
+        return view("pages.admin.daftar_rekening")->with('list_nomor_COA', $list_nomor_COA);
+   }
+
+   public function proses_add_rekening(Request $request){
+        $request->validate([
+            'input_nama_jenis_COA' => 'required',
+            'input_total_COA' => 'required',
+            'input_nomor_rekening' => 'required',
+        ]);
+
+        if(!$_POST['input_nama_rekening']){
+            $_POST['input_nama_rekening'] = null;
+        }
+
+        if($_POST['option_nomor_COA']){
+            $data_rekening = [
+                'nama_rekening' => $_POST['input_nama_rekening'],
+                'nomor_rekening' => $_POST['input_nomor_rekening'],
+                'nomor_COA' => $_POST['option_nomor_COA'],
+                'total_rekening' => 0,
+                'status_aktif' => 1,
+            ];
+
+            $rekening = $this->admin_repository->add_rekening($data_rekening);
+
+            $request->session()->flash('message', 'Input rekening berhasil');
+
+            return redirect()->back();
+        }
+
+        if($_POST['input_nomor_COA']){
+
+            $data_COA = [
+                'nomor_COA' => $_POST['input_nomor_COA'],
+                'nama_jenis_COA' => $_POST['input_nama_jenis_COA'],
+                'total_COA' => $_POST['input_total_COA'],
+                'status_aktif' => 1,
+            ];
+
+            $COA = $this->admin_repository->add_COA($data_COA);
+
+            $data_rekening = [
+                'nama_rekening' => $_POST['input_nama_rekening'],
+                'nomor_rekening' => $_POST['input_nomor_rekening'],
+                'nomor_COA' => $_POST['input_nomor_COA'],
+                'total_rekening' => 0,
+                'status_aktif' => 1,
+            ];
+
+            $rekening = $this->admin_repository->add_rekening($data_rekening);
+
+            $request->session()->flash('message', 'Input rekening berhasil');
+
+            return redirect()->back();
+        }
+
+        // $list_nomor_COA = $this->admin_repository->get_all_nomor_COA();
+        // return view("pages.admin.daftar_rekening")->with('list_nomor_COA', $list_nomor_COA);
+   }
+
+   public function get_data_rekening(Request $request){
+        $nomor_COA = $request->get('nomor_COA');
+
+        $list_rekening = $this->admin_repository->get_rekening($nomor_COA);
+
+        return response()->json(array('list_rekening' => $list_rekening));
+    }
 }

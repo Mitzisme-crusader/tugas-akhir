@@ -45,6 +45,7 @@
                     <th>Nama Customer</th>
                     <th>Negara Customer</th>
                     <th>Nama Perusahaan Customer</th>
+                    <th>Tanggal Dibuat</th>
                     <th>edit</th>
                     <th>delete</th>
                 </thead>
@@ -56,6 +57,7 @@
                         <td>{{$dokumen_SPK->nama_customer}}</td>
                         <td>{{$dokumen_SPK->negara_customer}}</td>
                         <td>{{$dokumen_SPK->nama_perusahaan_customer}}</td>
+                        <td>{{date($dokumen_SPK->created_at)}}</td>
                         <td>
                             <form action="{{url('admin/edit_dokumen_SPK')}}" method="get">
                                 {{csrf_field()}}

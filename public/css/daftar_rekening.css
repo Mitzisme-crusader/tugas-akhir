@@ -1,0 +1,29 @@
+input[type="checkbox"]{
+    display :none;
+}
+
+.add_new_rekening{
+    float: right;
+}
+
+.class_nomor_COA{
+    display: none;
+}
+
+.label_checkbox_new_COA{
+    background: var(--primary_color);
+    border: 1px solid var(--primary_color);
+    border-radius: 50px;
+    color: var(--secondary_color);
+    cursor: pointer;
+    margin: 0.3rem 0.5rem;
+    padding: 0.3rem 0.5rem;
+    text-transform: capitalize;
+    transition: all 100ms ease-in-out;
+    display: inline-block;
+}
+
+.label_checkbox_new_COA:hover {
+    background: var(--secondary_color);
+    color: var(--tertiary_color);
+}

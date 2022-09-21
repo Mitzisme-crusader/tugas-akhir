@@ -70,15 +70,15 @@
                         <th>Active</th>
                     </thead>
                     <tbody id="tbody_dokumen_so_PPJK">
-                        <?php $nomor_urut_dokumen = 0?>
+                        <?php $nomor_urut_dokumen_PPJK = 0?>
                         @foreach ($list_relasi_PPJK as $relasi)
                         <tr>
-                            <td>{{$nomor_urut_dokumen + 1}}</td>
+                            <td>{{$nomor_urut_dokumen_PPJK + 1}}</td>
                             <td>
                                 <input type="text" style = "width:200px;" name="input_nama_service_PPJK[]" value="{{$relasi->nama_service}}">
                             </td>
                             <td>
-                                <input type="text" style = "width:40px;" name="input_quantity_service_PPJK[]" value="{{$relasi->quantity_service}}">
+                                <input type="text" style = "width:40px;" id="input_quantity_PPJK_{{$nomor_urut_dokumen_PPJK}}" onkeyup= ubah_total_PPJK({{$nomor_urut_dokumen_PPJK}}) onkeyup= waow() nomor_urut= "{{$nomor_urut_dokumen_PPJK}}" name="input_quantity_service_PPJK[]" value="{{$relasi->quantity_service}}">
                             </td>
                             @if($relasi->container_service != null)
                                 <td>
@@ -86,34 +86,34 @@
                                 </td>
                             @endif
                             <td>
-                                <input type="text" style = "width:80px;" readonly name="input_harga_service_PPJK[]" value="{{$relasi->harga_service}}">
+                                <input type="text" style = "width:80px;" id="input_harga_unit_PPJK_{{$nomor_urut_dokumen_PPJK}}" onkeyup= ubah_total_PPJK({{$nomor_urut_dokumen_PPJK}}) nomor_urut= "{{$nomor_urut_dokumen_PPJK}}" name="input_harga_service_PPJK[]" value="{{$relasi->harga_service}}">
                             </td>
                             <td>
-                                <input type="text" style = "width:40px" name="input_diskon_service_PPJK[]" value="{{$relasi->diskon_service}}">
+                                <input type="text" style = "width:80px" id="input_diskon_PPJK_{{$nomor_urut_dokumen_PPJK}}" onkeyup= ubah_total_PPJK({{$nomor_urut_dokumen_PPJK}}) nomor_urut= "{{$nomor_urut_dokumen_PPJK}}" name="input_diskon_service_PPJK[]" value = "{{$relasi->diskon_service}}">
                             </td>
                             <td>
                                 <input type="hidden" name="input_pajak_service_PPJK[]" value="{{$relasi->pajak_service}}"><input type="checkbox" @if($relasi->pajak_service != 0) checked @endif style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
                             </td>
                             <td>
-                                <input type="text" style = "width:80px" name="input_total_PPJK[]" value = "{{$relasi->total_service}}">
+                                <input type="text" style = "width:80px" id = "input_total_PPJK_{{$nomor_urut_dokumen_PPJK}}" name="input_total_PPJK[]" value = "{{$relasi->total_service}}">
                             </td>
                             <td>
                                 <label>
-                                    <input type="checkbox" name="checkbox_status_service_PPJK[]" value={{$nomor_urut_dokumen}} class="checkbox_status" checked>
+                                    <input type="checkbox" name="checkbox_status_service_PPJK[]" value={{$nomor_urut_dokumen_PPJK}} nomor_urut={{$nomor_urut_dokumen_PPJK}} id="checkbox_status_PPJK_{{$nomor_urut_dokumen_PPJK}}" class = "checkbox_status_PPJK" checked>
                                 </label>
                             </td>
                         </tr>
-                        <?php $nomor_urut_dokumen++?>
+                        <?php $nomor_urut_dokumen_PPJK++?>
                         @endforeach
 
                         @for ($i = 0; $i < count($list_service_unchecked_PPJK); ++$i)
                             <tr>
-                                <td>{{$nomor_urut_dokumen + 1}}</td>
+                                <td>{{$nomor_urut_dokumen_PPJK + 1}}</td>
                                 <td>
                                     <input type="text" style = "width:200px;" name="input_nama_service_PPJK[]" value="{{$list_service_unchecked_PPJK[$i]->nama_extra_service}}">
                                 </td>
                                 <td>
-                                    <input type="text" style = "width:40px;" name="input_quantity_service_PPJK[]" value="1">
+                                    <input type="text" style = "width:40px;" id="input_quantity_PPJK_{{$nomor_urut_dokumen_PPJK}}" onkeyup= ubah_total_PPJK({{$nomor_urut_dokumen_PPJK}}) nomor_urut= "{{$nomor_urut_dokumen_PPJK}}" name="input_quantity_service_PPJK[]" value="{{$relasi->quantity_service}}">
                                 </td>
                                 @if($list_service_unchecked_PPJK[$i]->container != null)
                                     <td>
@@ -121,24 +121,24 @@
                                     </td>
                                 @endif
                                 <td>
-                                    <input type="text" style = "width:80px;" readonly name="input_harga_service_PPJK[]" value="{{$list_service_unchecked_PPJK[$i]->harga_extra_service}}">
+                                    <input type="text" style = "width:80px;" id="input_harga_unit_PPJK_{{$nomor_urut_dokumen_PPJK}}" onkeyup= ubah_total_PPJK({{$nomor_urut_dokumen_PPJK}}) nomor_urut= "{{$nomor_urut_dokumen_PPJK}}" name="input_harga_service_PPJK[]" value="{{$relasi->harga_service}}">
                                 </td>
                                 <td>
-                                    <input type="text" style = "width:40px" name="input_diskon_service_PPJK[]" value="0" value="{{$list_service_unchecked_PPJK[$i]->diskon_service}}">
+                                    <input type="text" style = "width:80px" id="input_diskon_PPJK_{{$nomor_urut_dokumen_PPJK}}" onkeyup= ubah_total_PPJK({{$nomor_urut_dokumen_PPJK}}) nomor_urut= "{{$nomor_urut_dokumen_PPJK}}" name="input_diskon_service_PPJK[]" value = "{{$relasi->diskon_service}}">
                                 </td>
                                 <td>
                                     <input type="hidden" name="input_pajak_service_PPJK[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
                                 </td>
                                 <td>
-                                    <input type="text" style = "width:80px" name="input_total[]" value = "{{$list_service_unchecked_PPJK[$i]->harga_extra_service}}">
+                                    <input type="text" style = "width:80px" id = "input_total_PPJK_{{$nomor_urut_dokumen_PPJK}}" name="input_total_PPJK[]" value = "{{$relasi->total_service}}">
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="checkbox" name="checkbox_status_service[]" value={{$nomor_urut_dokumen}} class="checkbox_status" >
+                                        <input type="checkbox" name="checkbox_status_service_PPJK[]" value={{$nomor_urut_dokumen_PPJK}} nomor_urut={{$nomor_urut_dokumen_PPJK}} id="checkbox_status_PPJK_{{$nomor_urut_dokumen_PPJK}}" class = "checkbox_status_PPJK" checked>
                                     </label>
                                 </td>
                             </tr>
-                            <?php $nomor_urut_dokumen++?>
+                            <?php $nomor_urut_dokumen_PPJK++?>
                         @endfor
                     </tbody>
                 </table>
@@ -159,65 +159,65 @@
                             <th>Active</th>
                         </thead>
                         <tbody id="tbody_dokumen_so_freight">
-                            <?php $nomor_urut_dokumen = 0?>
+                            <?php $nomor_urut_dokumen_freight = 0?>
                             @foreach ($list_relasi_freight as $relasi)
                             <tr>
-                                <td>{{$nomor_urut_dokumen + 1}}</td>
+                                <td>{{$nomor_urut_dokumen_freight + 1}}</td>
                                 <td>
                                     <input type="text" style = "width:200px;" name="input_nama_service_freight[]" value="{{$relasi->nama_service}}">
                                 </td>
                                 <td>
-                                    <input type="text" style = "width:40px;" name="input_quantity_service_freight[]" value="{{$relasi->quantity_service}}">
+                                    <input type="text" style = "width:40px;" id="input_quantity_freight_{{$nomor_urut_dokumen_freight}}" onkeyup= ubah_total_freight({{$nomor_urut_dokumen_freight}}) nomor_urut= "{{$nomor_urut_dokumen_freight}}" name="input_quantity_service_freight[]" value="{{$relasi->quantity_service}}">
                                 </td>
                                 <td>
-                                    <input type="text" style = "width:80px;" readonly name="input_harga_service_freight[]" value="{{$relasi->harga_service}}">
+                                    <input type="text" style = "width:80px;" id="input_harga_unit_freight_{{$nomor_urut_dokumen_freight}}" onkeyup= ubah_total_freight({{$nomor_urut_dokumen_freight}}) nomor_urut= "{{$nomor_urut_dokumen_freight}}" name="input_harga_service_freight[]" value="{{$relasi->harga_service}}">
                                 </td>
                                 <td>
-                                    <input type="text" style = "width:40px" name="input_diskon_service_freight[]" value="{{$relasi->diskon_service}}">
+                                    <input type="text" style = "width:80px" id="input_diskon_freight_{{$nomor_urut_dokumen_freight}}" onkeyup= ubah_total_freight({{$nomor_urut_dokumen_freight}}) nomor_urut= "{{$nomor_urut_dokumen_freight}}" name="input_diskon_service_freight[]" value = "{{$relasi->diskon_service}}">
                                 </td>
                                 <td>
                                     <input type="hidden" name="input_pajak_service_freight[]" value={{$relasi->pajak_service}}><input type="checkbox" @if($relasi->pajak_service != 0) checked @endif style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=1.1-this.previousSibling.value">
                                 </td>
                                 <td>
-                                    <input type="text" style = "width:80px" name="input_total_freight[]" value = "{{$relasi->total_service}}">
+                                    <input type="text" style = "width:80px" id = "input_total_freight_{{$nomor_urut_dokumen_freight}}" name="input_total_freight[]" value = "{{$relasi->total_service}}">
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="checkbox" name="checkbox_status_service_freight[]" value={{$nomor_urut_dokumen}} class="checkbox_status" checked>
+                                        <input type="checkbox" name="checkbox_status_service_freight[]" value={{$nomor_urut_dokumen_freight}} nomor_urut={{$nomor_urut_dokumen_freight}} id="checkbox_status_freight_{{$nomor_urut_dokumen_freight}}" class = "checkbox_status_freight" checked>
                                     </label>
                                 </td>
                             </tr>
-                            <?php $nomor_urut_dokumen++?>
+                            <?php $nomor_urut_dokumen_freight++?>
                             @endforeach
 
                             @for ($i = 0; $i < count($list_service_unchecked_freight); ++$i)
                                 <tr>
-                                    <td>{{$nomor_urut_dokumen + 1}}</td>
+                                    <td>{{$nomor_urut_dokumen_freight + 1}}</td>
                                     <td>
                                         <input type="text" style = "width:200px;" name="input_nama_service_freight[]" value="{{$list_service_unchecked_freight[$i]->nama_extra_service}}">
                                     </td>
                                     <td>
-                                        <input type="text" style = "width:40px;" name="input_quantity_service_freight[]" value="1">
+                                        <input type="text" style = "width:40px;" id="input_quantity_freight_{{$nomor_urut_dokumen_freight}}" onkeyup= ubah_total_freight({{$nomor_urut_dokumen_freight}}) nomor_urut= "{{$nomor_urut_dokumen_freight}}" name="input_quantity_service_freight[]" value="{{$list_service_unchecked_freight[$i]->quantity_extra_service}}">
                                     </td>
                                     <td>
-                                        <input type="text" style = "width:80px;" readonly name="input_harga_service_freight[]" value="{{$list_service_unchecked_freight[$i]->harga_extra_service}}">
+                                        <input type="text" style = "width:80px;" id="input_quantity_freight_{{$nomor_urut_dokumen_freight}}" onkeyup= ubah_total_freight({{$nomor_urut_dokumen_freight}}) nomor_urut= "{{$nomor_urut_dokumen_freight}}" name="input_harga_service_freight[]" value="{{$list_service_unchecked_freight[$i]->harga_extra_service}}">
                                     </td>
                                     <td>
-                                        <input type="text" style = "width:40px" name="input_diskon_service_freight[]" value="0" value="{{$list_service_unchecked_freight[$i]->diskon_service}}">
+                                        <input type="text" style = "width:80px" id="input_diskon_freight_${nomor_urut_dokumen_freight}" onkeyup= ubah_total_freight({{$nomor_urut_dokumen_freight}}) nomor_urut= "{{$nomor_urut_dokumen_freight}}" name="input_diskon_service_freight[]" value = "{{$list_service_unchecked_freight[$i]->diskon_service}}"></td>
                                     </td>
                                     <td>
                                         <input type="hidden" name="input_pajak_service_freight[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
                                     </td>
                                     <td>
-                                        <input type="text" style = "width:80px" name="input_total_freight[]" value = "{{$list_service_unchecked_freight[$i]->harga_extra_service}}">
+                                        <input type="text" style = "width:80px" id = "input_total_freight_${nomor_urut_dokumen_freight}" name="input_total_freight[]" value = "{{$list_service_unchecked_freight[$i]->harga_extra_service}}">
                                     </td>
                                     <td>
                                         <label>
-                                            <input type="checkbox" name="checkbox_status_service_freight[]" value={{$nomor_urut_dokumen}} class="checkbox_status" >
+                                            <input type="checkbox" name="checkbox_status_service_freight[]" value={{$nomor_urut_dokumen_freight}} nomor_urut={{$nomor_urut_dokumen_freight}} id="checkbox_status_freight_{{$nomor_urut_dokumen_freight}}" class = "checkbox_status_freight" checked>
                                         </label>
                                     </td>
                                 </tr>
-                                <?php $nomor_urut_dokumen++?>
+                                <?php $nomor_urut_dokumen_freight++?>
                             @endfor
                         </tbody>
                     </table>
@@ -233,7 +233,24 @@
     </section>
     <script>
         $(document).ready(function () {
+
         });
+    </script>
+
+    <script type="text/javascript">
+        function ubah_total_PPJK(nomor_urut_dokumen){
+            $harga_unit = $("#input_harga_unit_PPJK_"+nomor_urut_dokumen).val();
+            $quantity_unit = $("#input_quantity_PPJK_"+nomor_urut_dokumen).val();
+            $diskon_unit = $("#input_diskon_PPJK_"+nomor_urut_dokumen).val();
+            $("#input_total_PPJK_"+nomor_urut_dokumen).val($harga_unit * $quantity_unit - $diskon_unit);
+        }
+        function ubah_total_freight(nomor_urut_dokumen){
+            $harga_unit = $("#input_harga_unit_freight_"+nomor_urut_dokumen).val();
+            $quantity_unit = $("#input_quantity_freight_"+nomor_urut_dokumen).val();
+            $diskon_unit = $("#input_diskon_freight_"+nomor_urut_dokumen).val();
+            $("#input_total_freight_"+nomor_urut_dokumen).val($harga_unit * $quantity_unit - $diskon_unit);
+        }
+
     </script>
 </div>
 @endsection

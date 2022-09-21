@@ -17,12 +17,37 @@
         @endif
         <form action="{{ url('admin/bayar_tagihan_vendor') }}" style="width:100%;::after" method="post">
             <div>
-                <div>
+                <div style="display: inline-block;width:50%;">
                     <h1>Detail Tagihan Vendor</h1>
+                </div>
+
+                <div style="display: inline-block;width:50%;height: 100%;float:right;;text-align: center">
+                    <div style="height: 10%; border: none">
+                        <h5 style="border-width: 0px;margin-bottom :20px;margin-top:0px"> Info rekening</h5>
+                    </div>
+                    <div class="input-wrapper" style="width: 40%;margin-bottom:0px; display:inline-block">
+                        <select style="width:100%" name="nomor_COA" class = "select_nomor_COA" id="select_nomor_COA" placeholder="nomor_COA">
+                            <option value="">Select Nomor COA</option>
+                            @for ($i = 0; $i<count($list_nomor_COA); ++$i)
+                                <option value ="{{$list_nomor_COA[$i]->nomor_COA}}"> {{$list_nomor_COA[$i]->nomor_COA}}-{{$list_nomor_COA[$i]->nama_jenis_COA}} </option>
+                            @endfor
+                        </select>
+                        <span class="error-message">{{ $errors->first('nomor_COA') }}</span>
+                    </div>
+                    <div class="input-wrapper" style="width: 40%;margin-bottom:0px; display:inline-block">
+                        <select style="width:100%" name="nomor_rekening" class = "select_nomor_rekening" id="select_nomor_rekening" placeholder="nomor_rekening">
+                            <option value="">Select Nomor Rekening</option>
+                        </select>
+                        <span class="error-message">{{ $errors->first('nomor_rekening') }}</span>
+                    </div>
                 </div>
             </div>
             @csrf
-            <h5 >Info Tagihan</h5>
+            <div>
+                <h5 style="display: inline-block;width:50%">Info Tagihan</h5>
+
+                <h5 style="display: inline-block;left : 200px">Data so</h5>
+            </div>
             <div style="display:inline-block;border:1px solid;width : 48%;height: 200px;padding-left:50px;padding-top: 10px;right:18px">
                 <input type="hidden" value="{{$dokumen_so->nama_customer}}" name="input_nama_customer" id="input_nama_customer">
                 <input type="hidden" value="{{$dokumen_so->alamat_customer}}" name="input_alamat_customer" id="input_alamat_customer">
@@ -48,7 +73,7 @@
                 </div>
             </div>
 
-            <h5 style="display: inline;position: absolute;top:84px">Data so</h5>
+
             <div style="display:inline;right:0px;border:1px solid;position: absolute;width:50%;height:200px;padding-left:100px;padding-top: 10px;right:18px">
                 <div class="input-wrapper" style="width: 75%;margin-bottom:0px;">
                     <input type="Id_dokumen" name="Id_dokumen" id="Id_dokumen" readonly
@@ -140,6 +165,39 @@
     </section>
     <script>
         $(document).ready(function () {
+            $("#select_nomor_COA").change(function() {
+                let nomor_COA = $('#select_nomor_COA option:selected').val();
+                $("#select_nomor_COA option[value='']").remove();
+                $("#select_nomor_rekening").empty();
+
+                $.ajax({
+                    type : 'GET',
+                    url: "{{ url('admin/get_data_rekening') }}"+'/?nomor_COA='+nomor_COA,
+                    data: '',
+                    success: function(data){
+                        console.log(data);
+
+                        for(let i = 0; i<data['list_rekening'].length; ++i){
+                            console.log(data['list_rekening'][i]['nama_rekening'])
+                            if(data['list_rekening'][i]['nama_rekening'] == null){
+                                $('#select_nomor_rekening').append(new Option(data['list_rekening'][i]['nomor_rekening'], data['list_rekening'][i]['nomor_rekening']))
+                            }
+                            else{
+                                $('#select_nomor_rekening').append(new Option(data['list_rekening'][i]['nama_rekening'] +"-"+ data['list_rekening'][i]['nomor_rekening'], data['list_rekening'][i]['nomor_rekening']))
+                            }
+                        }
+
+                        // $("#input_nama_jenis_COA").val(data['nomor_COA']['nama_jenis_COA']);
+                        // $('#input_nama_jenis_COA').addClass("not-empty");
+                        // $("#input_total_COA").val(data['nomor_COA']['total_COA']);
+                        // $('#input_total_COA').addClass("not-empty");
+                        // $("#input_total_COA").val(data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
+
+                        // $id_jenis_service_spk = data['dokumen_spk']['id_service'];
+
+                    }
+                });
+            });
         });
     </script>
 </div>
