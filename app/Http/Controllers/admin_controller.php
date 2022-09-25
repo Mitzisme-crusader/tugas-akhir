@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\convert_number as ControllersConvert_number;
-use App\Models\dokumen_simpan_berjalan_model;
 use App\Repository\admin_repository_interface;
-use App\Repository\Eloquent\admin_repository;
-use convert_number;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use numbertowordconverter;
@@ -54,6 +51,8 @@ class admin_controller extends Controller
         ];
 
         $this->admin_repository->add_customer($data_customer);
+
+        $this->user_repository->all();
 
         $request->session()->flash('message', 'add customer berhasil');
         return redirect()->back();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repository\admin_repository_interface;
 use App\Repository\user_repository_interface;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,7 @@ use function PHPUnit\Framework\isEmpty;
 
 class user_controller extends Controller
 {
-    private $user_repository;
+    private user_repository_interface $user_repository;
 
     public function __construct(user_repository_interface $user_repository)
     {
@@ -19,6 +20,8 @@ class user_controller extends Controller
     public function index()
     {
         $users = $this->user_repository->all();
+
+        $users = $this->admin_repository->get_all_dokumen_SPK();
 
         return view('pages.login', [
             'users' => $users

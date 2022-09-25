@@ -1,8 +1,6 @@
 <?php
 namespace App\Repository;
 
-use App\Model\User;
-use App\models\user_model;
 use Illuminate\Support\Collection;
 
 interface admin_repository_interface
@@ -17,6 +15,9 @@ interface admin_repository_interface
    public function add_service($data_service);
    public function get_service($target_kolom);
    public function all_service();
+    //port
+    public function get_port($target_kolom);
+    public function find_port($id);
    //Dokumen SPK
    public function get_id_dokumen_terbaru();
    public function create_dokumen_spk($dokumen_spk);
@@ -27,6 +28,7 @@ interface admin_repository_interface
    public function get_relasi_dokumen_spk_extra_service($judul_dokumen);
    public function get_relasi_dokumen_spk_extra_service_freight_origin($judul_dokumen);
    public function get_relasi_dokumen_spk_extra_service_freight_destination($judul_dokumen);
+
    //Dokumen Simpan Berjalan
    public function create_dokumen_simpan_berjalan($dokumen_simpan_berjalan);
    public function update_dokumen_simpan_berjalan($dokumen_simpan_berjalan);
@@ -34,6 +36,7 @@ interface admin_repository_interface
    public function search_dokumen_simpan_berjalan($query,$attribute,$month);
    public function get_dokumen_simpan_berjalan_by_SO($nomor_so);
    public function get_all_dokumen_simpan_berjalan();
+
    //Dokumen SO
    public function get_id_dokumenSO_terbaru();
    public function add_dokumen_SO($data_dokumen_SO);
@@ -43,6 +46,7 @@ interface admin_repository_interface
    public function get_dokumen_so_by_nomor_so($nomor_so);
    public function get_all_dokumen_SO();
    public function find_dokumen_SO($id_dokumen_SO);
+
    //Tagihan
    //input tagihan vendor
    public function add_tagihan_vendor($data_tagihan_vendor);
@@ -55,9 +59,6 @@ interface admin_repository_interface
    public function add_tagihan_customer($data_tagihan_customer);
    public function add_service_tagihan_customer($data_service_tagihan_customer);
    public function get_all_tagihan_customer();
-   //port
-   public function get_port($target_kolom);
-   public function find_port($id);
 
    //Nomor COA
    public function get_nomor_COA($nomor_COA);

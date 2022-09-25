@@ -12,7 +12,7 @@ use App\models\dokumen_so_model;
 use App\models\relasi_dokumen_so_extra_service_model;
 use App\models\tagihan_customer_model;
 use App\models\relasi_tagihan_customer_extra_service_model;
-use App\models\relasi_tagihan_vendor_extra_service;
+use App\models\relasi_tagihan_vendor_extra_service_model;
 use App\models\tagihan_vendor_model;
 use App\models\nomor_chart_of_account_model;
 use App\models\nomor_rekening_model;
@@ -83,6 +83,19 @@ class admin_repository extends base_repository implements admin_repository_inter
    {
        return service_model::all();
    }
+
+   //port
+   public function get_port($target_kolom){
+    $hasil = [];
+    foreach($target_kolom as $kolom){
+        $hasil["$kolom"] = port_model::select("$kolom")->get();
+    }
+    return $hasil;
+    }
+
+    public function find_port($id){
+        return port_model::find($id);
+    }
 
    //dokumenSPK
    public function get_id_dokumen_terbaru()
@@ -259,14 +272,14 @@ class admin_repository extends base_repository implements admin_repository_inter
        return tagihan_vendor_model::where('id_tagihan_vendor', $id_tagihan_vendor)->first();
    }
    public function add_service_tagihan_vendor($data_service_tagihan_vendor){
-       return relasi_tagihan_vendor_extra_service::create($data_service_tagihan_vendor);
+       return relasi_tagihan_vendor_extra_service_model::create($data_service_tagihan_vendor);
    }
    public function get_all_tagihan_vendor(){
        return tagihan_vendor_model::all();
    }
 
    public function get_service_tagihan_vendor($id_tagihan_vendor){
-       return relasi_tagihan_vendor_extra_service::where('id_tagihan_vendor', $id_tagihan_vendor)->get();
+       return relasi_tagihan_vendor_extra_service_model::where('id_tagihan_vendor', $id_tagihan_vendor)->get();
    }
 
    public function bayar_tagihan_vendor($nominal_pembayaran, $id_tagihan_vendor){
@@ -287,19 +300,6 @@ class admin_repository extends base_repository implements admin_repository_inter
 
    public function get_all_tagihan_customer(){
        return tagihan_customer_model::all();
-   }
-
-   //port
-   public function get_port($target_kolom){
-        $hasil = [];
-        foreach($target_kolom as $kolom){
-            $hasil["$kolom"] = port_model::select("$kolom")->get();
-        }
-        return $hasil;
-   }
-
-   public function find_port($id){
-        return port_model::find($id);
    }
 
    //Nomor COA

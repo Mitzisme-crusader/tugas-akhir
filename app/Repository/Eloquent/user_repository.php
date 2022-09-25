@@ -12,7 +12,7 @@ class user_repository extends base_repository implements user_repository_interfa
    /**
     * UserRepository constructor.
     *
-    * @param User $model
+    * @param user_model $model
     */
    public function __construct(user_model $model)
    {

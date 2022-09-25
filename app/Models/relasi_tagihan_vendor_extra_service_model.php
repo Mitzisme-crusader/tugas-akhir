@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class relasi_tagihan_vendor_extra_service extends Model
+class relasi_tagihan_vendor_extra_service_model extends Model
 {
     protected $table = 'relasi_tagihan_vendor_extra_service';
     protected $primaryKey  = 'id_relasi_tagihan_vendor_extra_service';
