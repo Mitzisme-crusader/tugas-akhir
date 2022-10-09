@@ -21,8 +21,6 @@ class user_controller extends Controller
     {
         $users = $this->user_repository->all();
 
-        $users = $this->admin_repository->get_all_dokumen_SPK();
-
         return view('pages.login', [
             'users' => $users
         ]);

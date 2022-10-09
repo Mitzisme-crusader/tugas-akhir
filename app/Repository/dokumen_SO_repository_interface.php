@@ -14,4 +14,6 @@ interface dokumen_SO_repository_interface
    public function get_dokumen_so_by_nomor_so($nomor_so);
    public function get_all_dokumen_SO();
    public function find_dokumen_SO($id_dokumen_SO);
+   public function add_tagihan_customer($data_tagihan_customer);
+   public function add_service_tagihan_customer($data_service_tagihan_customer);
 }

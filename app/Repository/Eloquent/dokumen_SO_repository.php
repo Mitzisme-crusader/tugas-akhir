@@ -4,9 +4,9 @@ namespace App\Repository\Eloquent;
 
 use App\models\dokumen_so_model;
 use App\models\relasi_dokumen_so_extra_service_model;
-use App\Repository\dokumen_simpan_berjalan_repository_interface;
+use App\models\relasi_tagihan_customer_extra_service_model;
+use App\models\tagihan_customer_model;
 use App\Repository\dokumen_SO_repository_interface;
-use App\Repository\user_repository_interface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
 
@@ -82,4 +82,12 @@ class dokumen_SO_repository extends base_repository implements dokumen_SO_reposi
        return dokumen_so_model::find($id_dokumen_SO);
    }
 
+   //tagihan pelanggan
+    public function add_tagihan_customer($data_tagihan_customer){
+        return tagihan_customer_model::create($data_tagihan_customer);
+    }
+
+    public function add_service_tagihan_customer($data_service_tagihan_customer){
+        return relasi_tagihan_customer_extra_service_model::create($data_service_tagihan_customer);
+    }
 }

@@ -186,15 +186,6 @@
                                 $('#select_nomor_rekening').append(new Option(data['list_rekening'][i]['nama_rekening'] +"-"+ data['list_rekening'][i]['nomor_rekening'], data['list_rekening'][i]['nomor_rekening']))
                             }
                         }
-
-                        // $("#input_nama_jenis_COA").val(data['nomor_COA']['nama_jenis_COA']);
-                        // $('#input_nama_jenis_COA').addClass("not-empty");
-                        // $("#input_total_COA").val(data['nomor_COA']['total_COA']);
-                        // $('#input_total_COA').addClass("not-empty");
-                        // $("#input_total_COA").val(data['customer']['alamat_customer'] + '- ' + data['customer']['provinsi_customer'] + '- ' + data['customer']['negara_customer']);
-
-                        // $id_jenis_service_spk = data['dokumen_spk']['id_service'];
-
                     }
                 });
             });

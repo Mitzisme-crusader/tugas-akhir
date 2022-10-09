@@ -43,16 +43,18 @@ $(document).ready(function () {
         var harga_extra_service_40_feet = $("#harga_extra_service_40_feet").val();
         var harga_extra_service_45_feet = $("#harga_extra_service_45_feet").val();
 
+        var nama_id = nama_extra_service.replace(" ", "_");
+
         var extra_service = document.createElement("label");
         extra_service.setAttribute("class", "label_item_extra_service");
-        extra_service.setAttribute("id", nama_extra_service);
+        extra_service.setAttribute("id", nama_id);
         extra_service.setAttribute("service" , "normal");
         extra_service.onclick = remove_label_extra_service;
         extra_service.style.display = "inline";
 
         $("#container_extra_service_custom_handling").append(extra_service);
 
-        $("#"+nama_extra_service+"").html(nama_extra_service);
+        $("#"+nama_id+"").html(nama_extra_service);
 
         if($("#hidden_nama_extra_service").val() == ""){
             $("#hidden_nama_extra_service").val(nama_extra_service);
@@ -76,16 +78,20 @@ $(document).ready(function () {
         var nama_extra_service_freight = $("#nama_extra_service_freight").val();
         var harga_extra_service_freight = $("#harga_extra_service_freight").val();
         var extra_service = document.createElement("label");
+
+        var nama_id = nama_extra_service_freight.replace(" ", "_");
+
         extra_service.setAttribute("class", "label_item_extra_service");
-        extra_service.setAttribute("id", nama_extra_service_freight);
+        extra_service.setAttribute("id", nama_id);
         extra_service.setAttribute("service", "freight");
         extra_service.onclick = remove_label_extra_service;
         extra_service.style.display = "inline";
+
         if($(".button-add_extra_service_freight").val() == "origin"){
-            extra_service.setAttribute("id", nama_extra_service_freight+"origin");
+            extra_service.setAttribute("id", nama_id+"origin");
             extra_service.setAttribute("service", "origin");
             $("#container_extra_service_freight_origin").append(extra_service);
-            $("#"+nama_extra_service_freight+"origin").html(nama_extra_service_freight);
+            $("#"+nama_id+"origin").html(nama_extra_service_freight);
 
             if($("#hidden_nama_service_freight_origin").val() == ""){
                 $("#hidden_nama_service_freight_origin").val(nama_extra_service_freight);
@@ -97,10 +103,10 @@ $(document).ready(function () {
             }
         }
         else if($(".button-add_extra_service_freight").val() == "destination"){
-            extra_service.setAttribute("id", nama_extra_service_freight+"destination");
+            extra_service.setAttribute("id", nama_id+"destination");
             extra_service.setAttribute("service", "destination");
             $("#container_extra_service_freight_destination").append(extra_service);
-            $("#"+nama_extra_service_freight+"destination").html(nama_extra_service_freight);
+            $("#"+nama_id+"destination").html(nama_extra_service_freight);
 
             if($("#hidden_nama_service_freight_destination").val() == ""){
                 $("#hidden_nama_service_freight_destination").val(nama_extra_service_freight);
@@ -166,6 +172,7 @@ $(document).ready(function () {
 
     function remove_label_extra_service(){
         var id = $(this).attr("id");
+        id = id.replace("_"," ");
         if($(this).attr("service") == "normal"){
             var hidden_nama = $("#hidden_nama_extra_service").val().split(",");
             var hidden_harga_20 = $("#hidden_harga_20_feet_extra_service").val().split(",");

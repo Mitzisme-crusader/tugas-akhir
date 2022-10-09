@@ -357,7 +357,7 @@
 
                             for(nomor_urut_dokumen_PPJK = 0; nomor_urut_dokumen_PPJK < data['list_relasi_extra_service_freight_origin'].length; ++nomor_urut_dokumen_PPJK){
                                 $("#tbody_dokumen_SO_PPJK").append(`
-                                    <tr value = "2">
+                                    <tr>
                                         <td>${nomor_urut_dokumen_PPJK + 1}</td>
                                         <td>
                                             <input type="text" style = "width:200px;"  readonly name="input_nama_service_PPJK[]" value="${data['list_relasi_extra_service_freight_origin'][nomor_urut_dokumen_PPJK]['nama_extra_service']}">

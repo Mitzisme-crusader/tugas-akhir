@@ -28,7 +28,7 @@ class admin_repository extends base_repository implements admin_repository_inter
    /**
     * admin repository constructor.
     *
-    *
+    *@param customer_model $model
     */
    public function __construct(customer_model $model)
    {
@@ -86,11 +86,11 @@ class admin_repository extends base_repository implements admin_repository_inter
 
    //port
    public function get_port($target_kolom){
-    $hasil = [];
-    foreach($target_kolom as $kolom){
-        $hasil["$kolom"] = port_model::select("$kolom")->get();
-    }
-    return $hasil;
+        $hasil = [];
+        foreach($target_kolom as $kolom){
+            $hasil["$kolom"] = port_model::select("$kolom")->get();
+        }
+        return $hasil;
     }
 
     public function find_port($id){

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\convert_number as ControllersConvert_number;
 use App\Repository\admin_repository_interface;
+use App\Repository\dokumen_SO_repository_interface;
+use App\Repository\dokumen_simpan_berjalan_repository_interface;
+use App\Repository\tagihan_repository_interface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use numbertowordconverter;
@@ -15,10 +18,16 @@ use Throwable;
 class admin_controller extends Controller
 {
     private $admin_repository;
+    private $dokumen_so_repository;
+    private $dokumen_simpan_berjalan_repository;
+    private $tagihan_repository;
 
-    public function __construct(admin_repository_interface $admin_repository)
+    public function __construct(admin_repository_interface $admin_repository, dokumen_SO_repository_interface $dokumen_so_repository, dokumen_simpan_berjalan_repository_interface $dokumen_simpan_berjalan_repository, tagihan_repository_interface $tagihan_repository )
    {
        $this->admin_repository = $admin_repository;
+       $this->dokumen_so_repository = $dokumen_so_repository;
+       $this->dokumen_simpan_berjalan_repository = $dokumen_simpan_berjalan_repository;
+       $this->tagihan_repository = $tagihan_repository;
    }
 
    //Customer
@@ -51,8 +60,6 @@ class admin_controller extends Controller
         ];
 
         $this->admin_repository->add_customer($data_customer);
-
-        $this->user_repository->all();
 
         $request->session()->flash('message', 'add customer berhasil');
         return redirect()->back();
@@ -132,226 +139,226 @@ class admin_controller extends Controller
        return view("pages.admin.list_dokumen_SPK")->with('list_dokumen_SPK', $list_dokumen_SPK);
    }
 
-   public function proses_save_document_SPK(Request $request){
-        $request->validate([
-            'list_id_customer' => 'required',
-            'list_id_service' => 'required',
-            'list_id_port' => 'required',
-            'list_container' => 'required_if:list_id_service,1',
-            'jenis_pengiriman_radio' => 'required',
-            'jenis_pengangkutan_radio' => 'required|in:export,import',
-            'list_metode_pengangkutan' => 'required_if:list_id_service,2',
-            'jenis_pekerjaan_radio' => 'required',
-            'origin' =>"required_if:list_id_service,2",
-            'destination' =>"required_if:list_id_service,2"
-        ]);
+//    public function proses_save_document_SPK(Request $request){
+//         $request->validate([
+//             'list_id_customer' => 'required',
+//             'list_id_service' => 'required',
+//             'list_id_port' => 'required',
+//             'list_container' => 'required_if:list_id_service,1',
+//             'jenis_pengiriman_radio' => 'required',
+//             'jenis_pengangkutan_radio' => 'required|in:export,import',
+//             'list_metode_pengangkutan' => 'required_if:list_id_service,2',
+//             'jenis_pekerjaan_radio' => 'required',
+//             'origin' =>"required_if:list_id_service,2",
+//             'destination' =>"required_if:list_id_service,2"
+//         ]);
 
-        $jenis_id_service = $_POST['list_id_service'];
-        $jenis_service = $_POST['jenis_pekerjaan_radio'];
-        $jenis_pengiriman = $_POST['jenis_pengiriman_radio'];
-        $jenis_pengangkutan = $_POST['jenis_pengangkutan_radio'];
+//         $jenis_id_service = $_POST['list_id_service'];
+//         $jenis_service = $_POST['jenis_pekerjaan_radio'];
+//         $jenis_pengiriman = $_POST['jenis_pengiriman_radio'];
+//         $jenis_pengangkutan = $_POST['jenis_pengangkutan_radio'];
 
-        $metode_pengirman = null;
-        if($jenis_id_service == 2){
-            $metode_pengirman = $_POST['list_metode_pengangkutan'];
-        }
+//         $metode_pengirman = null;
+//         if($jenis_id_service == 2){
+//             $metode_pengirman = $_POST['list_metode_pengangkutan'];
+//         }
 
-        $customer = $this->admin_repository->find_customer($_POST['list_id_customer']);
-        $port = $this->admin_repository->find_port($_POST['list_id_port']);
+//         $customer = $this->admin_repository->find_customer($_POST['list_id_customer']);
+//         $port = $this->admin_repository->find_port($_POST['list_id_port']);
 
-        $kode_dokumen = str_pad($this->admin_repository->get_id_dokumen_terbaru(),3,"0",STR_PAD_LEFT);
-        $kode_dokumen = $kode_dokumen.'/SP-'.strtoupper($jenis_pengangkutan[0]);
-        if($jenis_service == "all in"){
-            $kode_dokumen = $kode_dokumen.'/AI-'.strtoupper($jenis_pengiriman[0]);
-        }
-        else{
-            $kode_dokumen = $kode_dokumen.'/'.strtoupper($jenis_service[0]).'-'.strtoupper($jenis_pengiriman[0]);
-        }
-        $kode_bulan = Carbon::now()->month;
-        $map = array('X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
-        $returnValue = '';
-        while ($kode_bulan > 0) {
-            foreach ($map as $roman => $int) {
-                if($kode_bulan >= $int) {
-                    $kode_bulan -= $int;
-                    $returnValue .= $roman;
-                        break;
-                }
-            }
-        }
-        $kode_dokumen = $kode_dokumen . '/' . $returnValue . '/' . Carbon::now()->year;
+//         $kode_dokumen = str_pad($this->admin_repository->get_id_dokumen_terbaru(),3,"0",STR_PAD_LEFT);
+//         $kode_dokumen = $kode_dokumen.'/SP-'.strtoupper($jenis_pengangkutan[0]);
+//         if($jenis_service == "all in"){
+//             $kode_dokumen = $kode_dokumen.'/AI-'.strtoupper($jenis_pengiriman[0]);
+//         }
+//         else{
+//             $kode_dokumen = $kode_dokumen.'/'.strtoupper($jenis_service[0]).'-'.strtoupper($jenis_pengiriman[0]);
+//         }
+//         $kode_bulan = Carbon::now()->month;
+//         $map = array('X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+//         $returnValue = '';
+//         while ($kode_bulan > 0) {
+//             foreach ($map as $roman => $int) {
+//                 if($kode_bulan >= $int) {
+//                     $kode_bulan -= $int;
+//                     $returnValue .= $roman;
+//                         break;
+//                 }
+//             }
+//         }
+//         $kode_dokumen = $kode_dokumen . '/' . $returnValue . '/' . Carbon::now()->year;
 
-        $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path("template_dokumen/template_SPK_$jenis_id_service.docx"));
-        $template->setValue('port', $port->nama_port);
-        $template->setValue('kode_dokumen', $kode_dokumen);
-        $template->setValue('tanggal_pembuatan', Carbon::today()->format('d F y'));
-        $template->setValue('nama_customer', $customer->nama_customer);
-        $template->setValue('nama_perusahaan_customer', $customer->nama_perusahaan_customer);
-        $template->setValue('alamat_customer', $customer->alamat_customer);
-        $template->setValue('provinsi_customer', $customer->provinsi_customer);
-        $template->setValue('jenis_pengiriman', $jenis_pengiriman);
-        $template->setValue('metode_pengiriman', ucfirst($metode_pengirman));
-        $template->setValue('origin', $_POST['origin']);
-        $template->setValue('destination', $_POST['destination']);
+//         $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path("template_dokumen/template_SPK_$jenis_id_service.docx"));
+//         $template->setValue('port', $port->nama_port);
+//         $template->setValue('kode_dokumen', $kode_dokumen);
+//         $template->setValue('tanggal_pembuatan', Carbon::today()->format('d F y'));
+//         $template->setValue('nama_customer', $customer->nama_customer);
+//         $template->setValue('nama_perusahaan_customer', $customer->nama_perusahaan_customer);
+//         $template->setValue('alamat_customer', $customer->alamat_customer);
+//         $template->setValue('provinsi_customer', $customer->provinsi_customer);
+//         $template->setValue('jenis_pengiriman', $jenis_pengiriman);
+//         $template->setValue('metode_pengiriman', ucfirst($metode_pengirman));
+//         $template->setValue('origin', $_POST['origin']);
+//         $template->setValue('destination', $_POST['destination']);
 
-        $kode_dokumen = str_replace('/','-',$kode_dokumen);
+//         $kode_dokumen = str_replace('/','-',$kode_dokumen);
 
-        try{
-            $dokumen_spk = [
-                'judul_dokumen' => $kode_dokumen,
-                'id_customer' => $customer->id_customer,
-                'id_service' => $jenis_id_service,
-                'nama_customer' => $customer->nama_customer,
-                'nama_perusahaan_customer' => $customer->nama_perusahaan_customer,
-                'negara_customer' => $customer->negara_customer,
-                'metode_pengiriman' => $metode_pengirman,
-                'status_aktif_dokumen' => 1,
-            ];
-            $dokumen = $this->admin_repository->create_dokumen_spk($dokumen_spk);
+//         try{
+//             $dokumen_spk = [
+//                 'judul_dokumen' => $kode_dokumen,
+//                 'id_customer' => $customer->id_customer,
+//                 'id_service' => $jenis_id_service,
+//                 'nama_customer' => $customer->nama_customer,
+//                 'nama_perusahaan_customer' => $customer->nama_perusahaan_customer,
+//                 'negara_customer' => $customer->negara_customer,
+//                 'metode_pengiriman' => $metode_pengirman,
+//                 'status_aktif_dokumen' => 1,
+//             ];
+//             $dokumen = $this->admin_repository->create_dokumen_spk($dokumen_spk);
 
-        }catch (Throwable $e){
-            $request->session()->flash('message', "fail to safe");
-            return redirect()->back();
-        }
+//         }catch (Throwable $e){
+//             $request->session()->flash('message', "fail to safe");
+//             return redirect()->back();
+//         }
 
-        $list_nama_extra_service = array_filter(explode(',', $_POST['hidden_nama_extra_service']));
+//         $list_nama_extra_service = array_filter(explode(',', $_POST['hidden_nama_extra_service']));
 
-        $list_nama_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_origin']));
+//         $list_nama_extra_service_freight_origin = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_origin']));
 
-        $list_nama_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_destination']));
+//         $list_nama_extra_service_freight_destination = array_filter(explode(',', $_POST['hidden_nama_extra_service_freight_destination']));
 
-        //INPUT DATA EXTRA SERVICE PPJK
-        if(count($list_nama_extra_service) > 0){
-            $list_harga_20_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_20_feet_extra_service']));
-            $list_harga_40_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_40_feet_extra_service']));
-            $list_harga_45_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_45_feet_extra_service']));
+//         //INPUT DATA EXTRA SERVICE PPJK
+//         if(count($list_nama_extra_service) > 0){
+//             $list_harga_20_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_20_feet_extra_service']));
+//             $list_harga_40_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_40_feet_extra_service']));
+//             $list_harga_45_feet_extra_service = array_filter(explode(',',$_POST['hidden_harga_45_feet_extra_service']));
 
-            for ($i=0; $i < count($list_nama_extra_service); $i++) {
+//             for ($i=0; $i < count($list_nama_extra_service); $i++) {
 
-                $data_extra_service[$i]['nama_extra_service'] = $i + 3 . ". " . $list_nama_extra_service[$i];
+//                 $data_extra_service[$i]['nama_extra_service'] = $i + 3 . ". " . $list_nama_extra_service[$i];
 
-                if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service)){
-                    $data_extra_service[$i]['harga_20_feet'] = "Rp. " . number_format((float)$list_harga_20_feet_extra_service[$i], 0, ',', '.');
-                    $data_relasi = [
-                        'judul_dokumen' => $dokumen->judul_dokumen,
-                        'nama_extra_service' => $list_nama_extra_service[$i],
-                        'harga_extra_service' => $list_harga_20_feet_extra_service[$i],
-                        'freight_location' => '1',
-                        'container' => '20',
-                    ];
+//                 if(!in_array("undefined",$list_harga_20_feet_extra_service) && !empty($list_harga_20_feet_extra_service)){
+//                     $data_extra_service[$i]['harga_20_feet'] = "Rp. " . number_format((float)$list_harga_20_feet_extra_service[$i], 0, ',', '.');
+//                     $data_relasi = [
+//                         'judul_dokumen' => $dokumen->judul_dokumen,
+//                         'nama_extra_service' => $list_nama_extra_service[$i],
+//                         'harga_extra_service' => $list_harga_20_feet_extra_service[$i],
+//                         'freight_location' => '1',
+//                         'container' => '20',
+//                     ];
 
-                    $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
-                }
-                if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service)){
-                    $data_extra_service[$i]['harga_40_feet'] = "Rp. " . number_format((float)$list_harga_40_feet_extra_service[$i], 0, ',', '.');
-                    $data_relasi = [
-                        'judul_dokumen' => $dokumen->judul_dokumen,
-                        'nama_extra_service' => $list_nama_extra_service[$i],
-                        'harga_extra_service' => $list_harga_40_feet_extra_service[$i],
-                        'freight_location' => '1',
-                        'container' => '40',
-                    ];
+//                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
+//                 }
+//                 if(!in_array("undefined",$list_harga_40_feet_extra_service) && !empty($list_harga_40_feet_extra_service)){
+//                     $data_extra_service[$i]['harga_40_feet'] = "Rp. " . number_format((float)$list_harga_40_feet_extra_service[$i], 0, ',', '.');
+//                     $data_relasi = [
+//                         'judul_dokumen' => $dokumen->judul_dokumen,
+//                         'nama_extra_service' => $list_nama_extra_service[$i],
+//                         'harga_extra_service' => $list_harga_40_feet_extra_service[$i],
+//                         'freight_location' => '1',
+//                         'container' => '40',
+//                     ];
 
-                    $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
-                }
-                if(!in_array("undefined",$list_harga_45_feet_extra_service) && !empty($list_harga_45_feet_extra_service)){
-                    $data_extra_service[$i]['harga_45_feet'] = "Rp. " . number_format((float)$list_harga_45_feet_extra_service[$i], 0, ',', '.');
-                    $data_relasi = [
-                        'judul_dokumen' => $dokumen->judul_dokumen,
-                        'nama_extra_service' => $list_nama_extra_service[$i],
-                        'harga_extra_service' => $list_harga_45_feet_extra_service[$i],
-                        'freight_location' => '1',
-                        'container' => '45',
-                    ];
+//                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
+//                 }
+//                 if(!in_array("undefined",$list_harga_45_feet_extra_service) && !empty($list_harga_45_feet_extra_service)){
+//                     $data_extra_service[$i]['harga_45_feet'] = "Rp. " . number_format((float)$list_harga_45_feet_extra_service[$i], 0, ',', '.');
+//                     $data_relasi = [
+//                         'judul_dokumen' => $dokumen->judul_dokumen,
+//                         'nama_extra_service' => $list_nama_extra_service[$i],
+//                         'harga_extra_service' => $list_harga_45_feet_extra_service[$i],
+//                         'freight_location' => '1',
+//                         'container' => '45',
+//                     ];
 
-                    $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
-                }
+//                     $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
+//                 }
 
-            }
+//             }
 
-            $all_nama_extra_service = array_map(function($data){return $data['nama_extra_service'];}, $data_extra_service);
-            $all_harga_20_feet = array_map(function($data){return $data['harga_20_feet'];}, $data_extra_service);
-            $all_harga_40_feet = array_map(function($data){return $data['harga_40_feet'];}, $data_extra_service);
+//             $all_nama_extra_service = array_map(function($data){return $data['nama_extra_service'];}, $data_extra_service);
+//             $all_harga_20_feet = array_map(function($data){return $data['harga_20_feet'];}, $data_extra_service);
+//             $all_harga_40_feet = array_map(function($data){return $data['harga_40_feet'];}, $data_extra_service);
 
-            $template->setValue('nama_extra_service', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service));
-            $template->setValue('harga_20_feet',  implode('<w:br/> &#160;&#160;', $all_harga_20_feet));
-            $template->setValue('harga_40_feet',  implode('<w:br/>  &#160;&#160;', $all_harga_40_feet));
-        }
-        else{
-            $template->setValue('nama_extra_service', '');
-            $template->setValue('harga_20_feet', '');
-            $template->setValue('harga_40_feet', '');
-        }
+//             $template->setValue('nama_extra_service', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service));
+//             $template->setValue('harga_20_feet',  implode('<w:br/> &#160;&#160;', $all_harga_20_feet));
+//             $template->setValue('harga_40_feet',  implode('<w:br/>  &#160;&#160;', $all_harga_40_feet));
+//         }
+//         else{
+//             $template->setValue('nama_extra_service', '');
+//             $template->setValue('harga_20_feet', '');
+//             $template->setValue('harga_40_feet', '');
+//         }
 
-        //INPUT DATA EXTRA SERVICE FREIGHT
-        if(count($list_nama_extra_service_freight_origin) > 0 || count($list_nama_extra_service_freight_destination) > 0){
-            $list_harga_extra_service_freight_origin = array_filter(explode(',',$_POST['hidden_harga_extra_service_freight_origin']));
-            $list_harga_extra_service_freight_destination = array_filter(explode(',',$_POST['hidden_harga_extra_service_freight_destination']));
+//         //INPUT DATA EXTRA SERVICE FREIGHT
+//         if(count($list_nama_extra_service_freight_origin) > 0 || count($list_nama_extra_service_freight_destination) > 0){
+//             $list_harga_extra_service_freight_origin = array_filter(explode(',',$_POST['hidden_harga_extra_service_freight_origin']));
+//             $list_harga_extra_service_freight_destination = array_filter(explode(',',$_POST['hidden_harga_extra_service_freight_destination']));
 
-            for ($i=0; $i < count($list_nama_extra_service_freight_origin); $i++) {
-                $data_extra_service['nama_extra_service_origin'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_origin[$i];
-                $data_extra_service['harga_extra_service_origin'][$i] = number_format((float)$list_harga_extra_service_freight_origin[$i], 0, ',', '.');
+//             for ($i=0; $i < count($list_nama_extra_service_freight_origin); $i++) {
+//                 $data_extra_service['nama_extra_service_origin'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_origin[$i];
+//                 $data_extra_service['harga_extra_service_origin'][$i] = number_format((float)$list_harga_extra_service_freight_origin[$i], 0, ',', '.');
 
-                $data_relasi = [
-                    'judul_dokumen' => $dokumen->judul_dokumen,
-                    'nama_extra_service' => $list_nama_extra_service_freight_origin[$i],
-                    'harga_extra_service' => $list_harga_extra_service_freight_origin[$i],
-                    'freight_location' => '1',
-                ];
+//                 $data_relasi = [
+//                     'judul_dokumen' => $dokumen->judul_dokumen,
+//                     'nama_extra_service' => $list_nama_extra_service_freight_origin[$i],
+//                     'harga_extra_service' => $list_harga_extra_service_freight_origin[$i],
+//                     'freight_location' => '1',
+//                 ];
 
-                $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
-            }
+//                 $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
+//             }
 
-            for ($i=0; $i < count($list_nama_extra_service_freight_destination); $i++) {
-                $data_extra_service['nama_extra_service_destination'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_destination[$i];
-                $data_extra_service['harga_extra_service_destination'][$i] = number_format((float)$list_harga_extra_service_freight_destination[$i], 0, ',', '.');
+//             for ($i=0; $i < count($list_nama_extra_service_freight_destination); $i++) {
+//                 $data_extra_service['nama_extra_service_destination'][$i] = $i + 1 . ". " . $list_nama_extra_service_freight_destination[$i];
+//                 $data_extra_service['harga_extra_service_destination'][$i] = number_format((float)$list_harga_extra_service_freight_destination[$i], 0, ',', '.');
 
-                $data_relasi = [
-                    'judul_dokumen' => $dokumen->judul_dokumen,
-                    'nama_extra_service' => $list_nama_extra_service_freight_destination[$i],
-                    'harga_extra_service' => $list_harga_extra_service_freight_destination[$i],
-                    'freight_location' => '2',
-                ];
+//                 $data_relasi = [
+//                     'judul_dokumen' => $dokumen->judul_dokumen,
+//                     'nama_extra_service' => $list_nama_extra_service_freight_destination[$i],
+//                     'harga_extra_service' => $list_harga_extra_service_freight_destination[$i],
+//                     'freight_location' => '2',
+//                 ];
 
-                $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
-            }
+//                 $this->admin_repository->create_relasi_dokumenspk_extra_service($data_relasi);
+//             }
 
-            if(!empty($list_nama_extra_service_freight_origin)){
-                $all_nama_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_origin']);
-                $all_harga_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_origin']);
-                $template->setValue('servis_origin', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_origin));
-                $template->setValue('cost_origin', "Rp ." . implode('<w:br/>&#160;&#160;', $all_harga_extra_service_origin));
-                // number_format($all_harga_extra_service_origin, 0, ',', '.');
-            }
-            else{
-                $template->setValue('servis_origin', 'N/A');
-                $template->setValue('cost_origin', 'N/A');
-            }
+//             if(!empty($list_nama_extra_service_freight_origin)){
+//                 $all_nama_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_origin']);
+//                 $all_harga_extra_service_origin = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_origin']);
+//                 $template->setValue('servis_origin', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_origin));
+//                 $template->setValue('cost_origin', "Rp ." . implode('<w:br/>&#160;&#160;', $all_harga_extra_service_origin));
+//                 // number_format($all_harga_extra_service_origin, 0, ',', '.');
+//             }
+//             else{
+//                 $template->setValue('servis_origin', 'N/A');
+//                 $template->setValue('cost_origin', 'N/A');
+//             }
 
-            if(!empty($list_nama_extra_service_freight_destination)){
-                $all_nama_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_destination']);
-                $all_harga_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_destination']);
-                $template->setValue('servis_destination', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_destination));
-                $template->setValue('cost_destination', "Rp ." . implode('<w:br/>&#160;&#160;', $all_harga_extra_service_destination));
-            }
-            else{
-                $template->setValue('servis_destination', 'N/A');
-                $template->setValue('cost_destination', 'N/A');
-            }
+//             if(!empty($list_nama_extra_service_freight_destination)){
+//                 $all_nama_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['nama_extra_service_destination']);
+//                 $all_harga_extra_service_destination = array_map(function($data){return $data;}, $data_extra_service['harga_extra_service_destination']);
+//                 $template->setValue('servis_destination', implode('<w:br/>  &#160;&#160;', $all_nama_extra_service_destination));
+//                 $template->setValue('cost_destination', "Rp ." . implode('<w:br/>&#160;&#160;', $all_harga_extra_service_destination));
+//             }
+//             else{
+//                 $template->setValue('servis_destination', 'N/A');
+//                 $template->setValue('cost_destination', 'N/A');
+//             }
 
-        }
-        else{
-            $template->setValue('servis_origin', 'N/A');
-            $template->setValue('cost_origin', 'N/A');
-            $template->setValue('servis_destination', 'N/A');
-            $template->setValue('cost_destination', 'N/A');
-        }
+//         }
+//         else{
+//             $template->setValue('servis_origin', 'N/A');
+//             $template->setValue('cost_origin', 'N/A');
+//             $template->setValue('servis_destination', 'N/A');
+//             $template->setValue('cost_destination', 'N/A');
+//         }
 
-        $template->saveAs(public_path("hasil_dokumen/$kode_dokumen.docx"));
+//         $template->saveAs(public_path("hasil_dokumen/$kode_dokumen.docx"));
 
-        $request->session()->flash('message', 'add dokumen berhasil');
-        return response()->download(public_path("hasil_dokumen/$kode_dokumen.docx"));
-   }
+//         $request->session()->flash('message', 'add dokumen berhasil');
+//         return response()->download(public_path("hasil_dokumen/$kode_dokumen.docx"));
+//    }
 
    //Dokumen simpan berjalan
 
@@ -441,7 +448,7 @@ class admin_controller extends Controller
             }
         }
 
-        $dokumen_spk = $this->admin_repository->create_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
+        $dokumen_spk = $this->dokumen_simpan_berjalan_repository->create_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
 
         $request->session()->flash('message', 'add dokumen berhasil');
         return redirect()->back();
@@ -633,7 +640,7 @@ class admin_controller extends Controller
            'status_aktif_dokumen' => 1
        ];
 
-       $dokumen_SO = $this->admin_repository->add_dokumen_SO($data_dokumen_SO);
+       $dokumen_SO = $this->dokumen_so_repository->add_dokumen_SO($data_dokumen_SO);
 
        foreach ($list_service_dokumen_so_PPJK as $service_dokumen_so_PPJK) {
             if((isset($_POST['input_container_service_PPJK']))){
@@ -670,7 +677,7 @@ class admin_controller extends Controller
                 }
             }
 
-            $relasi = $this->admin_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_PPJK);
+            $relasi = $this->dokumen_so_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_PPJK);
        }
 
        if(count($list_service_dokumen_so_freight) > 0){
@@ -711,7 +718,7 @@ class admin_controller extends Controller
                     }
                 }
 
-                $relasi = $this->admin_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_freight);
+                $relasi = $this->dokumen_so_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_freight);
             }
        }
 
@@ -943,7 +950,7 @@ class admin_controller extends Controller
             'hutang' =>$total_tagihan,
         ];
 
-        $tagihan_vendor = $this->admin_repository->add_tagihan_vendor($data_tagihan_vendor);
+        $tagihan_vendor = $this->tagihan_repository->add_tagihan_vendor($data_tagihan_vendor);
 
        foreach ($list_service_tagihan_vendor as $service_tagihan_vendor) {
             $data_relasi_tagihan_vendor_service = [
@@ -967,7 +974,7 @@ class admin_controller extends Controller
                 }
             }
 
-            $relasi_tagihan_vendor = $this->admin_repository->add_service_tagihan_vendor($data_relasi_tagihan_vendor_service);
+            $relasi_tagihan_vendor = $this->tagihan_repository->add_service_tagihan_vendor($data_relasi_tagihan_vendor_service);
         }
 
         $request->session()->flash('message', 'Input tagihan vendor berhasil');
@@ -1011,11 +1018,11 @@ class admin_controller extends Controller
 
         $nomor_COA = $_POST['nomor_COA'];
 
-        $tagihan_vendor = $this->admin_repository->bayar_tagihan_vendor($nominal_pembayaran, $id_tagihan_vendor);
+        $tagihan_vendor = $this->tagihan_repository->bayar_tagihan_vendor($nominal_pembayaran, $id_tagihan_vendor);
 
-        $total_rekening = $this->admin_repository->kurangi_total_rekening($nominal_pembayaran, $nomor_rekening);
+        $total_rekening = $this->tagihan_repository->kurangi_total_rekening($nominal_pembayaran, $nomor_rekening);
 
-        $total_COA = $this->admin_repository->kurangi_total_COA($nominal_pembayaran, $nomor_COA);
+        $total_COA = $this->tagihan_repository->kurangi_total_COA($nominal_pembayaran, $nomor_COA);
 
         $request->session()->flash('message', 'Input tagihan vendor berhasil');
 
@@ -1029,195 +1036,195 @@ class admin_controller extends Controller
        return view('pages.admin.input_tagihan_customer')->with('list_dokumen_SO', $list_dokumen_SO);
    }
 
-   public function proses_input_tagihan_customer(Request $request){
-       $request->validate([
-           'input_nama_service.*' => 'required',
-           'input_total.*' => 'required|numeric|min:10000',
-       ]);
+//    public function proses_input_tagihan_customer(Request $request){
+//        $request->validate([
+//            'input_nama_service.*' => 'required',
+//            'input_total.*' => 'required|numeric|min:10000',
+//        ]);
 
-       $total_tagihan = 0;
+//        $total_tagihan = 0;
 
-       $nomor_urut = 0;
+//        $nomor_urut = 0;
 
-       $all_nomor_urut = array();
-       $all_service_invoice = array();
-       $all_qty_service = array();
-       $all_unit_price_service = array();
-       $all_total_service = array();
-       $tax = array();
-       $tax_all= 0;
-       $stotal = 0;
-       $final_total = 0;
+//        $all_nomor_urut = array();
+//        $all_service_invoice = array();
+//        $all_qty_service = array();
+//        $all_unit_price_service = array();
+//        $all_total_service = array();
+//        $tax = array();
+//        $tax_all= 0;
+//        $stotal = 0;
+//        $final_total = 0;
 
-       $list_tagihan_customer = array();
+//        $list_tagihan_customer = array();
 
-       $dokumen_so = $this->admin_repository->get_dokumen_so_by_nomor_so($_POST['option_dokumen_SO']);
+//        $dokumen_so = $this->dokumen_so_repository->get_dokumen_so_by_nomor_so($_POST['option_dokumen_SO']);
 
-       foreach ($_POST['checkbox_status_service'] as $key) {
-           $list_service_tagihan_customer[$key]['nama_service'] = $_POST['input_nama_service'][$key];
-           $list_service_tagihan_customer[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
+//         foreach ($_POST['checkbox_status_service'] as $key) {
+//            $list_service_tagihan_customer[$key]['nama_service'] = $_POST['input_nama_service'][$key];
+//            $list_service_tagihan_customer[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
 
-           if(isset($_POST['input_container_service'])){
-               $list_service_tagihan_customer[$key]['container_service'] = $_POST['input_container_service'][$key];
-           }
-           $list_service_tagihan_customer[$key]['harga_service'] = $_POST['input_harga_service'][$key];
-           $list_service_tagihan_customer[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
-           $list_service_tagihan_customer[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
-           $list_service_tagihan_customer[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
-           $list_service_tagihan_customer[$key]['total'] = $_POST['input_total'][$key];
+//            if(isset($_POST['input_container_service'])){
+//                $list_service_tagihan_customer[$key]['container_service'] = $_POST['input_container_service'][$key];
+//            }
+//            $list_service_tagihan_customer[$key]['harga_service'] = $_POST['input_harga_service'][$key];
+//            $list_service_tagihan_customer[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
+//            $list_service_tagihan_customer[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
+//            $list_service_tagihan_customer[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
+//            $list_service_tagihan_customer[$key]['total'] = $_POST['input_total'][$key];
 
-           $total_tagihan = $total_tagihan + $list_service_tagihan_customer[$key]['total'];
-        }
+//            $total_tagihan = $total_tagihan + $list_service_tagihan_customer[$key]['total'];
+//         }
 
-        $data_tagihan_customer = [
-            'nomor_so' => $dokumen_so->nomor_so,
-            'bank_pelunasan' => '',
-            'total_service' => $total_tagihan,
-        ];
+//         $data_tagihan_customer = [
+//             'nomor_so' => $dokumen_so->nomor_so,
+//             'bank_pelunasan' => '',
+//             'total_service' => $total_tagihan,
+//         ];
 
-        $tagihan_customer = $this->admin_repository->add_tagihan_customer($data_tagihan_customer);
+//         $tagihan_customer = $this->dokumen_so_repository->add_tagihan_customer($data_tagihan_customer);
 
-        foreach ($list_service_tagihan_customer as $service_tagihan_customer) {
-            $data_service_tagihan_customer= [
-                'id_tagihan_customer' => $tagihan_customer->id_tagihan_customer,
-                'keterangan_tagihan' =>$service_tagihan_customer['keterangan_tagihan'],
-                'nama_service' => $service_tagihan_customer['nama_service'],
-                'quantity_service' => $service_tagihan_customer['quantity_service'],
-                'harga_service' => $service_tagihan_customer['harga_service'],
-                'diskon_service' => $service_tagihan_customer['diskon_service'],
-                'pajak_service' => $service_tagihan_customer['pajak_service'],
-                'total_service' => $service_tagihan_customer['total'],
-                'hutang' =>$service_tagihan_customer['total'],
-            ];
+//         foreach ($list_service_tagihan_customer as $service_tagihan_customer) {
+//             $data_service_tagihan_customer= [
+//                 'id_tagihan_customer' => $tagihan_customer->id_tagihan_customer,
+//                 'keterangan_tagihan' =>$service_tagihan_customer['keterangan_tagihan'],
+//                 'nama_service' => $service_tagihan_customer['nama_service'],
+//                 'quantity_service' => $service_tagihan_customer['quantity_service'],
+//                 'harga_service' => $service_tagihan_customer['harga_service'],
+//                 'diskon_service' => $service_tagihan_customer['diskon_service'],
+//                 'pajak_service' => $service_tagihan_customer['pajak_service'],
+//                 'total_service' => $service_tagihan_customer['total'],
+//                 'hutang' =>$service_tagihan_customer['total'],
+//             ];
 
-            if(isset($_POST['input_container_service'])){
-                $data_tagihan_customer['container_service'] =  $service_tagihan_customer['container_service'];
-            }
+//             if(isset($_POST['input_container_service'])){
+//                 $data_tagihan_customer['container_service'] =  $service_tagihan_customer['container_service'];
+//             }
 
-            foreach ($data_service_tagihan_customer as $element=>$key) {
-                if($key == ""){
-                    $data_service_tagihan_customer[$element] = null;
-                }
-            }
+//             foreach ($data_service_tagihan_customer as $element=>$key) {
+//                 if($key == ""){
+//                     $data_service_tagihan_customer[$element] = null;
+//                 }
+//             }
 
-            $all_nomor_urut[$nomor_urut] = $nomor_urut + 1;
-            $all_service_invoice[$nomor_urut] = $service_tagihan_customer['nama_service'];
-            $all_qty_service[$nomor_urut] = $service_tagihan_customer['quantity_service'];
-            $all_unit_price_service[$nomor_urut] = $service_tagihan_customer['harga_service'];
-            $all_total_service[$nomor_urut] =  $all_qty_service[$nomor_urut] * $all_unit_price_service[$nomor_urut];
-            $tax[$nomor_urut] = $service_tagihan_customer['pajak_service'];
+//             $all_nomor_urut[$nomor_urut] = $nomor_urut + 1;
+//             $all_service_invoice[$nomor_urut] = $service_tagihan_customer['nama_service'];
+//             $all_qty_service[$nomor_urut] = $service_tagihan_customer['quantity_service'];
+//             $all_unit_price_service[$nomor_urut] = $service_tagihan_customer['harga_service'];
+//             $all_total_service[$nomor_urut] =  $all_qty_service[$nomor_urut] * $all_unit_price_service[$nomor_urut];
+//             $tax[$nomor_urut] = $service_tagihan_customer['pajak_service'];
 
-            $tagihan_customer = $this->admin_repository->add_service_tagihan_customer($data_service_tagihan_customer);
+//             $tagihan_customer = $this->dokumen_so_repository->add_service_tagihan_customer($data_service_tagihan_customer);
 
-            $stotal = $stotal + $all_total_service[$nomor_urut];
+//             $stotal = $stotal + $all_total_service[$nomor_urut];
 
-            if($service_tagihan_customer['pajak_service'] != 0){
-                $tax_all = $tax_all + $service_tagihan_customer['total'] / $service_tagihan_customer['pajak_service'];
-            }
+//             if($service_tagihan_customer['pajak_service'] != 0){
+//                 $tax_all = $tax_all + $service_tagihan_customer['total'] / $service_tagihan_customer['pajak_service'];
+//             }
 
-            ++$nomor_urut;
-        }
+//             ++$nomor_urut;
+//         }
 
-        $tax_all = floor($tax_all);
+//         $tax_all = floor($tax_all);
 
-        $dokumen_simpan_berjalan = $this->admin_repository->get_dokumen_simpan_berjalan_by_SO($dokumen_so->nomor_so);
+//         $dokumen_simpan_berjalan = $this->dokumen_simpan_berjalan_repository->get_dokumen_simpan_berjalan_by_SO($dokumen_so->nomor_so);
 
-        if(!isset($dokumen_simpan_berjalan)){
-            $request->session()->flash('message', 'Dokumen Simpan Berjalan belum dibuat');
-            return redirect()->back();
-        }
+//         if(!isset($dokumen_simpan_berjalan)){
+//             $request->session()->flash('message', 'Dokumen Simpan Berjalan belum dibuat');
+//             return redirect()->back();
+//         }
 
-        $dokumen_spk = $this->admin_repository->get_dokumen_SPK($dokumen_so->judul_dokumen_spk);
+//         $dokumen_spk = $this->admin_repository->get_dokumen_SPK($dokumen_so->judul_dokumen_spk);
 
-        $customer = $this->admin_repository->find_customer($dokumen_spk->id_customer);
+//         $customer = $this->admin_repository->find_customer($dokumen_spk->id_customer);
 
 
-        $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path("template_dokumen/template_invoice.docx"));
-        $template->setValue('nomor_so', $_POST['option_dokumen_SO']);
-        $template->setValue('tanggal_invoice', Carbon::today()->format('d F y'));
-        $template->setValue('nama_customer', $customer->nama_customer);
-        $template->setValue('nama_perusahaan_customer', $customer->nama_perusahaan_customer);
-        $template->setValue('alamat_customer', $customer->alamat_customer);
-        $template->setValue('provinsi_customer', $customer->provinsi_customer);
-        $template->setValue('negara_customer', $customer->negara_customer);
-        $template->setValue('metode_pengiriman', ucfirst($dokumen_spk->metode_pengiriman));
+//         $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path("template_dokumen/template_invoice.docx"));
+//         $template->setValue('nomor_so', $_POST['option_dokumen_SO']);
+//         $template->setValue('tanggal_invoice', Carbon::today()->format('d F y'));
+//         $template->setValue('nama_customer', $customer->nama_customer);
+//         $template->setValue('nama_perusahaan_customer', $customer->nama_perusahaan_customer);
+//         $template->setValue('alamat_customer', $customer->alamat_customer);
+//         $template->setValue('provinsi_customer', $customer->provinsi_customer);
+//         $template->setValue('negara_customer', $customer->negara_customer);
+//         $template->setValue('metode_pengiriman', ucfirst($dokumen_spk->metode_pengiriman));
 
-        //data dokumen simpan berjalan
-        $template->setValue('nopen', $dokumen_simpan_berjalan->nomor_surat_penjaluran . '/'. str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->tanggal_nopen))));
-        $template->setValue('SPPB', $dokumen_simpan_berjalan->SPPB . '/'. str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->tanggal_SPPB))));
-        $template->setValue('vessal', $dokumen_simpan_berjalan->vessal);
-        $template->setValue('nomor_BL', $dokumen_simpan_berjalan->nomor_BL);
-        $template->setValue('POL', $dokumen_simpan_berjalan->POL);
-        $template->setValue('POD', $dokumen_simpan_berjalan->POD);
-        $template->setValue('ETA', str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->ETD))) .'/'. str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->ETA))));
-        $template->setValue('commodity', $dokumen_simpan_berjalan->commodity);
+//         //data dokumen simpan berjalan
+//         $template->setValue('nopen', $dokumen_simpan_berjalan->nomor_surat_penjaluran . '/'. str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->tanggal_nopen))));
+//         $template->setValue('SPPB', $dokumen_simpan_berjalan->SPPB . '/'. str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->tanggal_SPPB))));
+//         $template->setValue('vessal', $dokumen_simpan_berjalan->vessal);
+//         $template->setValue('nomor_BL', $dokumen_simpan_berjalan->nomor_BL);
+//         $template->setValue('POL', $dokumen_simpan_berjalan->POL);
+//         $template->setValue('POD', $dokumen_simpan_berjalan->POD);
+//         $template->setValue('ETA', str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->ETD))) .'/'. str_replace(' ','/',date("d F y", strtotime($dokumen_simpan_berjalan->ETA))));
+//         $template->setValue('commodity', $dokumen_simpan_berjalan->commodity);
 
-        if($dokumen_simpan_berjalan->option_container == 'FCL'){
-            if($dokumen_simpan_berjalan->party_20 != ""){
-                $template->setValue('total_party_20', $dokumen_spk->party_20. 'X 20" ' . "(" . $dokumen_simpan_berjalan->nomor_container . ")". '<w:br/>  &#160;&#160;');
-            }
-            else{
-                $template->setValue('total_party_20', "");
-            }
+//         if($dokumen_simpan_berjalan->option_container == 'FCL'){
+//             if($dokumen_simpan_berjalan->party_20 != ""){
+//                 $template->setValue('total_party_20', $dokumen_spk->party_20. 'X 20" ' . "(" . $dokumen_simpan_berjalan->nomor_container . ")". '<w:br/>  &#160;&#160;');
+//             }
+//             else{
+//                 $template->setValue('total_party_20', "");
+//             }
 
-            if($dokumen_simpan_berjalan->party_40 != ""){
-                $template->setValue('total_party_40', $dokumen_spk->party_40. 'X 40" ' . "(" . $dokumen_simpan_berjalan->nomor_container . ")". '<w:br/>  &#160;&#160;');
-            }
-            else{
-                $template->setValue('total_party_40', "");
-            }
+//             if($dokumen_simpan_berjalan->party_40 != ""){
+//                 $template->setValue('total_party_40', $dokumen_spk->party_40. 'X 40" ' . "(" . $dokumen_simpan_berjalan->nomor_container . ")". '<w:br/>  &#160;&#160;');
+//             }
+//             else{
+//                 $template->setValue('total_party_40', "");
+//             }
 
-            if($dokumen_simpan_berjalan->party_45 != ""){
-                $template->setValue('total_party_45', $dokumen_spk->party_45. 'X 45" ' . "(" . $dokumen_simpan_berjalan->nomor_container . ")". '<w:br/>  &#160;&#160;' );
-            }
-            else{
-                $template->setValue('total_party_45', "");
-            }
+//             if($dokumen_simpan_berjalan->party_45 != ""){
+//                 $template->setValue('total_party_45', $dokumen_spk->party_45. 'X 45" ' . "(" . $dokumen_simpan_berjalan->nomor_container . ")". '<w:br/>  &#160;&#160;' );
+//             }
+//             else{
+//                 $template->setValue('total_party_45', "");
+//             }
 
-            $template->setValue('LCL', "");
-        }
+//             $template->setValue('LCL', "");
+//         }
 
-        if($dokumen_simpan_berjalan->option_container == 'LCL'){
-            $template->setValue('LCL', 'LCL ' . $dokumen_simpan_berjalan->LCL .' '. $dokumen_simpan_berjalan->berat_container .' '. $dokumen_simpan_berjalan->nomor_container);
-            $template->setValue('total_party_45', "");
-            $template->setValue('total_party_40', "");
-            $template->setValue('total_party_20', "");
-        }
+//         if($dokumen_simpan_berjalan->option_container == 'LCL'){
+//             $template->setValue('LCL', 'LCL ' . $dokumen_simpan_berjalan->LCL .' '. $dokumen_simpan_berjalan->berat_container .' '. $dokumen_simpan_berjalan->nomor_container);
+//             $template->setValue('total_party_45', "");
+//             $template->setValue('total_party_40', "");
+//             $template->setValue('total_party_20', "");
+//         }
 
-        $template->setValue('nomor_urut', implode('<w:br/>  ', $all_nomor_urut));
-        $template->setValue('service_invoice',  implode('<w:br/> ', $all_service_invoice));
-        $template->setValue('qty_service',  implode('<w:br/>  ', $all_qty_service));
-        $template->setValue('unit_price_service',  implode('<w:br/>  ', $all_unit_price_service));
-        $template->setValue('qty_service',  implode('<w:br/>  ', $all_qty_service));
-        $template->setValue('total_service',  implode('<w:br/>  ', $all_total_service));
-        $template->setValue('tax',  implode('<w:br/>  ', $tax));
-        $template->setValue('tax_all', number_format($tax_all));
+//         $template->setValue('nomor_urut', implode('<w:br/>  ', $all_nomor_urut));
+//         $template->setValue('service_invoice',  implode('<w:br/> ', $all_service_invoice));
+//         $template->setValue('qty_service',  implode('<w:br/>  ', $all_qty_service));
+//         $template->setValue('unit_price_service',  implode('<w:br/>  ', $all_unit_price_service));
+//         $template->setValue('qty_service',  implode('<w:br/>  ', $all_qty_service));
+//         $template->setValue('total_service',  implode('<w:br/>  ', $all_total_service));
+//         $template->setValue('tax',  implode('<w:br/>  ', $tax));
+//         $template->setValue('tax_all', number_format($tax_all));
 
-        $final_total = $stotal - $tax_all;
+//         $final_total = $stotal - $tax_all;
 
-        $class_num_converter = new ControllersConvert_number();
+//         $class_num_converter = new ControllersConvert_number();
 
-        $say = $class_num_converter->convert_number($final_total);
+//         $say = $class_num_converter->convert_number($final_total);
 
-        $template->setValue('say', $say);
+//         $template->setValue('say', $say);
 
-        $template->setValue('final_total', number_format($final_total));
+//         $template->setValue('final_total', number_format($final_total));
 
-        if($dokumen_so->id_service == 1){
-            $template->setValue('tax_num', 11);
-        }
-        else{
-            $template->setValue('tax_num', 1.1);
-        }
+//         if($dokumen_so->id_service == 1){
+//             $template->setValue('tax_num', "11%");
+//         }
+//         else{
+//             $template->setValue('tax_num', "1%");
+//         }
 
-        $template->setValue('stotal',  number_format($stotal));
+//         $template->setValue('stotal',  number_format($stotal));
 
-        $request->session()->flash('message', 'Input Tagihan customer berhasil');
+//         $request->session()->flash('message', 'Input Tagihan customer berhasil');
 
-        $template->saveAs(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so.docx"));
+//         $template->saveAs(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so.docx"));
 
-        return response()->download(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so.docx"));
-   }
+//         return response()->download(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so.docx"));
+//    }
 
    public function pergi_ke_list_tagihan_customer(Request $request){
        $list_tagihan_customer = $this->admin_repository->get_all_tagihan_customer();
