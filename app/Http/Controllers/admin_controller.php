@@ -105,7 +105,7 @@ class admin_controller extends Controller
     }
    public function pergi_ke_list_service(Request $request){
        $list_service = $this->admin_repository->all_service();
-       return view("pages.admin.list_service")->with('list_service', $list_service);
+       return view("pages.login")->with('list_service', $list_service);
    }
    public function pergi_ke_add_service(Request $request){
        return view("pages.admin.add_service");
