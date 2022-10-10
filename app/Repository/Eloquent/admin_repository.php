@@ -3,7 +3,7 @@
 namespace App\Repository\Eloquent;
 
 use App\Models\customer_model;
-use App\ModelS\service_model;
+use App\Models\service_model;
 use App\Models\dokumenSpk_model;
 use App\Models\port_model;
 use App\Models\dokumen_simpan_berjalan_model;
