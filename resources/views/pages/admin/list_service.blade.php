@@ -23,7 +23,7 @@
                     <th>delete</th>
                 </thead>
                 <tbody>
-                    {{-- @foreach($list_service as $service)
+                    @foreach($list_service as $service)
                     <tr>
                         <td>{{$service->id_service}}</td>
                         <td>{{$service->nama_service}}</td>
@@ -46,7 +46,7 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach --}}
+                    @endforeach
                 </tbody>
                 {{-- <tfoot>
 
