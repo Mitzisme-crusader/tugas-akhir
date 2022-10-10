@@ -2,20 +2,20 @@
 
 namespace App\Repository\Eloquent;
 
-use App\models\customer_model;
-use App\modelS\service_model;
-use App\models\dokumenSpk_model;
-use App\models\port_model;
-use App\models\dokumen_simpan_berjalan_model;
+use App\Models\customer_model;
+use App\ModelS\service_model;
+use App\Models\dokumenSpk_model;
+use App\Models\port_model;
+use App\Models\dokumen_simpan_berjalan_model;
 use App\Models\relasi_dokumenspk_extra_service_model;
-use App\models\dokumen_so_model;
-use App\models\relasi_dokumen_so_extra_service_model;
-use App\models\tagihan_customer_model;
-use App\models\relasi_tagihan_customer_extra_service_model;
-use App\models\relasi_tagihan_vendor_extra_service_model;
-use App\models\tagihan_vendor_model;
-use App\models\nomor_chart_of_account_model;
-use App\models\nomor_rekening_model;
+use App\Models\dokumen_so_model;
+use App\Models\relasi_dokumen_so_extra_service_model;
+use App\Models\tagihan_customer_model;
+use App\Models\relasi_tagihan_customer_extra_service_model;
+use App\Models\relasi_tagihan_vendor_extra_service_model;
+use App\Models\tagihan_vendor_model;
+use App\Models\nomor_chart_of_account_model;
+use App\Models\nomor_rekening_model;
 use App\Repository\admin_repository_interface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;

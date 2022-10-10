@@ -2,7 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
-use App\models\dokumen_simpan_berjalan_model;
+use App\Models\dokumen_simpan_berjalan_model;
 use App\Repository\dokumen_simpan_berjalan_repository_interface;
 use App\Repository\user_repository_interface;
 use Illuminate\Support\Collection;

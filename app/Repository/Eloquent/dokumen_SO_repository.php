@@ -2,10 +2,10 @@
 
 namespace App\Repository\Eloquent;
 
-use App\models\dokumen_so_model;
-use App\models\relasi_dokumen_so_extra_service_model;
-use App\models\relasi_tagihan_customer_extra_service_model;
-use App\models\tagihan_customer_model;
+use App\Models\dokumen_so_model;
+use App\Models\relasi_dokumen_so_extra_service_model;
+use App\Models\relasi_tagihan_customer_extra_service_model;
+use App\Models\tagihan_customer_model;
 use App\Repository\dokumen_SO_repository_interface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;

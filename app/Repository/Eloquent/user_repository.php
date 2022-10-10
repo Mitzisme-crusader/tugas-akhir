@@ -2,7 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
-use App\models\user_model;
+use App\Models\user_model;
 use App\Repository\user_repository_interface;
 use Illuminate\Support\Collection;
 

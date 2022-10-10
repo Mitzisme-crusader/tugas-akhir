@@ -2,12 +2,12 @@
 
 namespace App\Repository\Eloquent;
 
-use App\models\tagihan_customer_model;
-use App\models\tagihan_vendor_model;
-use App\models\nomor_chart_of_account_model;
-use App\models\nomor_rekening_model;
-use App\models\relasi_tagihan_vendor_extra_service_model;
-use App\models\relasi_tagihan_customer_extra_service_model;
+use App\Models\tagihan_customer_model;
+use App\Models\tagihan_vendor_model;
+use App\Models\nomor_chart_of_account_model;
+use App\Models\nomor_rekening_model;
+use App\Models\relasi_tagihan_vendor_extra_service_model;
+use App\Models\relasi_tagihan_customer_extra_service_model;
 use App\Repository\tagihan_repository_interface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
