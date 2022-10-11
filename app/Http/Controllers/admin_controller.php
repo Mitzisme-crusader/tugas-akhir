@@ -1170,7 +1170,7 @@ class admin_controller extends Controller
             $all_total_service[$nomor_urut] =  $all_qty_service[$nomor_urut] * $all_unit_price_service[$nomor_urut];
             $tax[$nomor_urut] = $service_tagihan_customer['pajak_service'];
 
-            $tagihan_customer = $this->dokumen_so_repository->add_service_tagihan_customer($data_service_tagihan_customer);
+            $data_tagihan_customer = $this->dokumen_so_repository->add_service_tagihan_customer($data_service_tagihan_customer);
 
             $stotal = $stotal + $all_total_service[$nomor_urut];
 
@@ -1277,9 +1277,9 @@ class admin_controller extends Controller
 
         $request->session()->flash('message', 'Input Tagihan customer berhasil');
 
-        $template->saveAs(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so.docx"));
+        $template->saveAs(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so"."_$tagihan_customer->id_tagihan_customer.docx"));
 
-        return response()->download(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so.docx"));
+        return response()->download(public_path("hasil_dokumen/invoice_$dokumen_so->nomor_so"."_$tagihan_customer->id_tagihan_customer.docx"));
    }
 
    public function pergi_ke_list_tagihan_customer(Request $request){
@@ -1362,7 +1362,13 @@ class admin_controller extends Controller
         return view("pages.admin.detail_tagihan_customer")->with('tagihan_customer', $tagihan_customer)->with('dokumen_so', $dokumen_so)->with('list_service_tagihan_customer', $list_service_tagihan_customer)->with('id_tagihan_customer', $tagihan_customer->id_tagihan_customer)->with('list_nomor_COA', $list_nomor_COA);
     }
 
-   //Jurnal Umum
+    public function proses_download_tagihan_customer(Request $request){
+        $tagihan_customer = $this->tagihan_repository->get_tagihan_customer($_POST['id_tagihan_customer']);
+
+        return response()->download(public_path("hasil_dokumen/invoice_$tagihan_customer->nomor_so"."_$tagihan_customer->id_tagihan_customer.docx"));
+    }
+
+    //Jurnal Umum
    public function pergi_ke_list_jurnal_umum(Request $request){
         $list_jurnal_umum = $this->tagihan_repository->get_all_jurnal_umum();
         return view("pages.admin.list_jurnal_umum")->with('list_jurnal_umum', $list_jurnal_umum);

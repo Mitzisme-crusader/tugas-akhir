@@ -170,6 +170,13 @@
             </div>
         </form>
 
+        <form action="{{ url('admin/download_tagihan_customer') }}" style="width:100%;::after"  method="post">
+            @csrf
+            <input type="hidden" name="id_tagihan_customer" id="id_tagihan_customer" value= {{$id_tagihan_customer}}>
+            <div class="container_right">
+                <button type="submit" class="button" style="bottom: 20px;float:left;display:inline"><span>download</span></button>
+            </div>
+        </form>
     </section>
     <script>
         $(document).ready(function () {

@@ -104,6 +104,8 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post('/pembayaran_tagihan_customer', 'App\Http\Controllers\admin_controller@proses_menerima_pembayaran_tagihan_customer');
 
+    Route::post('/download_tagihan_customer', 'App\Http\Controllers\admin_controller@proses_download_tagihan_customer');
+
     Route::get('/get_data_extra_service_SO', 'App\Http\Controllers\admin_controller@get_data_extra_service_SO');
 
 
