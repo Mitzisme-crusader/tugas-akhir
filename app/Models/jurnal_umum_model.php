@@ -12,6 +12,11 @@ class jurnal_umum_model extends Model
         'nama_rekening',
         'nomor_rekening',
         'nomor_COA',
+        'keterangan_tagihan',
+        'total_debit',
+        'total_kredit',
+        'hutang',
+        'piutang',
         'total_rekening',
         'status_aktif',
     ];

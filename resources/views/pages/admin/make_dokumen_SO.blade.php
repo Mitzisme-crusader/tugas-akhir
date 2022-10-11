@@ -35,6 +35,7 @@
                 <input type="hidden" value="" name="input_nama_customer" id="input_nama_customer">
                 <input type="hidden" value="" name="input_alamat_customer" id="input_alamat_customer">
                 <input type="hidden" value="" name="input_id_service" id="input_id_service">
+                <input type="hidden" value="" name="checkbox_status_service_PPJK" id="checkbox_status_service_PPJK">
                 <div>
                     <textarea rows="3" cols="55" name="data_customer" id="input_data_customer" placeholder="Data Customer" readonly style="width: 100%">
                     </textarea>
@@ -108,7 +109,7 @@
 
         </div>
 
-        <div class = "btn_submit_spk" style="position: relative;bottom:69px;left:200px">
+        <div class = "btn_submit_spk" style="position: relative;bottom:69px;left:200px;">
             <button  class="button" id="button_add_service_PPJK"><span>Add New Service PPJK</span></button>
         </div>
         <div class = "btn_submit_spk" style="position: relative;bottom:69px;left:200px">

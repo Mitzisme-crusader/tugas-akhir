@@ -404,6 +404,7 @@ class admin_controller extends Controller
        return view("pages.admin.make_dokumen_simpan_berjalan")->with('list_dokumen_SO', $list_dokumen_SO);
    }
 
+   //dokumen simpan berjalan
    public function proses_add_dokumen_simpan_berjalan(Request $request){
         $request->validate([
             'nomor_SO' => 'required',
@@ -637,6 +638,11 @@ class admin_controller extends Controller
             'input_total_PPJK.*' => 'required|numeric|min:10000',
             'input_total_freight.*' => 'required|numeric|min:10000',
        ]);
+
+       if($_POST['checkbox_status_service_PPJK'] == ""){
+            $request->session()->flash('message', 'Dokumen SPK belum dpilih');
+            return redirect()->back();
+       }
 
        $list_service_dokumen_so_PPJK = array();
 
@@ -1106,7 +1112,6 @@ class admin_controller extends Controller
            $list_service_tagihan_customer[$key]['harga_service'] = $_POST['input_harga_service'][$key];
            $list_service_tagihan_customer[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
            $list_service_tagihan_customer[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
-           $list_service_tagihan_customer[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
            $list_service_tagihan_customer[$key]['total'] = $_POST['input_total'][$key];
 
            $total_tagihan = $total_tagihan + $list_service_tagihan_customer[$key]['total'];
@@ -1115,6 +1120,7 @@ class admin_controller extends Controller
         $data_tagihan_customer = [
             'nomor_so' => $dokumen_so->nomor_so,
             'bank_pelunasan' => '',
+            'piutang' => $total_tagihan,
             'total_service' => $total_tagihan,
         ];
 
@@ -1123,7 +1129,6 @@ class admin_controller extends Controller
         foreach ($list_service_tagihan_customer as $service_tagihan_customer) {
             $data_service_tagihan_customer= [
                 'id_tagihan_customer' => $tagihan_customer->id_tagihan_customer,
-                'keterangan_tagihan' =>$service_tagihan_customer['keterangan_tagihan'],
                 'nama_service' => $service_tagihan_customer['nama_service'],
                 'quantity_service' => $service_tagihan_customer['quantity_service'],
                 'harga_service' => $service_tagihan_customer['harga_service'],
@@ -1280,9 +1285,71 @@ class admin_controller extends Controller
 
    }
 
+   public function proses_menerima_pembayaran_tagihan_customer(Request $request){
+        $request->validate([
+            'input_nominal_pembayaran' => 'required',
+            'nomor_COA' => 'required',
+            'nomor_rekening' => 'required',
+        ]);
+
+        $nominal_pembayaran = $_POST['input_nominal_pembayaran'];
+
+        $bank_pelunasan = $_POST['input_nomor_rekening'];
+        if($nominal_pembayaran > $_POST['input_total_tagihan']){
+            $request->session()->flash('message', 'Nominal Pembayaran melebihi total');
+
+            return redirect()->back();
+        }
+
+        $id_tagihan_customer = $_POST['Id_dokumen'];
+
+        $nomor_rekening = $_POST['nomor_rekening'];
+
+        $nomor_COA = $_POST['nomor_COA'];
+
+        $tagihan_customer = $this->tagihan_repository->terima_pembayaran_tagihan_customer($nominal_pembayaran, $id_tagihan_customer, $bank_pelunasan);
+
+        $tagihan_customer = $this->tagihan_repository->get_tagihan_customer($id_tagihan_customer);
+
+        $total_rekening = $this->tagihan_repository->tambah_total_rekening($nominal_pembayaran, $nomor_rekening);
+
+        $total_COA = $this->tagihan_repository->tambah_total_COA($nominal_pembayaran, $nomor_COA);
+
+        $data_jurnal_umum = [
+            'nomor_COA' => $_POST['input_nomor_COA'],
+            'nama_rekening' => $_POST['input_nama_rekening'],
+            'nomor_rekening' => $_POST['input_nomor_rekening'],
+            'keterangan_tagihan' => $_POST['keterangan_tagihan'],
+            'status_aktif' => '1',
+            'total_debit' => $tagihan_customer->total_service,
+            'hutang' => null,
+            'piutang' => $tagihan_customer->piutang,
+            'total_kredit' => $nominal_pembayaran,
+        ];
+
+        $jurnal_umum = $this->tagihan_repository->add_jurnal_umum($data_jurnal_umum);
+        $request->session()->flash('message', 'Penerimaan pembayaran tagihan customer berhasil');
+
+        return redirect()->back();
+    }
+
+   public function pergi_ke_detail_tagihan_customer(Request $request){
+
+        $tagihan_customer = $this->tagihan_repository->get_tagihan_customer($_GET['id_tagihan_customer']);
+
+        $list_service_tagihan_customer = $this->tagihan_repository->get_service_tagihan_customer($tagihan_customer->id_tagihan_customer);
+
+        $dokumen_so = $this->dokumen_so_repository->get_dokumen_so_by_nomor_so($tagihan_customer->nomor_so);
+
+        $list_nomor_COA = $this->tagihan_repository->get_all_nomor_COA();
+
+        return view("pages.admin.detail_tagihan_customer")->with('tagihan_customer', $tagihan_customer)->with('dokumen_so', $dokumen_so)->with('list_service_tagihan_customer', $list_service_tagihan_customer)->with('id_tagihan_customer', $tagihan_customer->id_tagihan_customer)->with('list_nomor_COA', $list_nomor_COA);
+    }
+
    //Jurnal Umum
    public function pergi_ke_list_jurnal_umum(Request $request){
-       return view("pages.admin.list_jurnal_umum");
+        $list_jurnal_umum = $this->tagihan_repository->get_all_jurnal_umum();
+        return view("pages.admin.list_jurnal_umum")->with('list_jurnal_umum', $list_jurnal_umum);
    }
 
    //Nomor COA

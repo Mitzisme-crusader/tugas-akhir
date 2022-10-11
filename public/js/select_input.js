@@ -87,7 +87,7 @@ $(document).ready(function () {
     });
 
     $("#label_extra_service_common").click(function(){
-        if($('#select_id_container option:selected').val() == 1){
+        if($('#select_id_container option:selected').val() == 2){
             var input_harga_20_feet = document.createElement("input");
             input_harga_20_feet.setAttribute("type", "number");
             input_harga_20_feet.setAttribute("id", "harga_extra_service_20_feet");
@@ -118,7 +118,7 @@ $(document).ready(function () {
 
         }
 
-        if($('#select_id_container option:selected').val() == 2){
+        if($('#select_id_container option:selected').val() == 3){
             var input_harga_20_feet = document.createElement("input");
             input_harga_20_feet.setAttribute("type", "number");
             input_harga_20_feet.setAttribute("id", "harga_extra_service_20_feet");

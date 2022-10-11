@@ -15,10 +15,10 @@
         @if (Session::has('message'))
             <h4 class="message">{{ Session::get('message') }}</h4>
         @endif
-        <form action="{{ url('admin/bayar_tagihan_vendor') }}" style="width:100%;::after" method="post">
+        <form action="{{ url('admin/pembayaran_tagihan_customer') }}" style="width:100%;::after" method="post">
             <div>
                 <div style="display: inline-block;width:50%;">
-                    <h1>Detail Tagihan Vendor</h1>
+                    <h1>Detail Tagihan Customer</h1>
                 </div>
 
                 <div style="display: inline-block;width:50%;height: 100%;float:right;;text-align: center">
@@ -51,27 +51,31 @@
             <div style="display:inline-block;border:1px solid;width : 48%;height: 250px;padding-left:50px;padding-top: 10px;right:18px">
                 <input type="hidden" value="{{$dokumen_so->nama_customer}}" name="input_nama_customer" id="input_nama_customer">
                 <input type="hidden" value="{{$dokumen_so->alamat_customer}}" name="input_alamat_customer" id="input_alamat_customer">
+                <input type="hidden" value="" name="input_rekening" id="input_rekening">
+                <input type="hidden" value="" name="input_nama_rekening" id="input_nama_rekening">
+                <input type="hidden" value="" name="input_nomor_rekening" id="input_nomor_rekening">
+                <input type="hidden" value="" name="input_nomor_COA" id="input_nomor_COA">
                 <div>
                     <div class="input-wrapper" style = "width:75%;background-color: white;margin-bottom:0px;" >
-                        <input type="text" name="input_total_tagihan" value="{{$tagihan_vendor->total_service}}">
+                        <input type="text" name="input_total_tagihan" value="{{$tagihan_customer->total_service}}" readonly>
                         <label for="input_total_tagihan" ><span> Total Service</span></label>
                         <span class="error-message">{{ $errors->first('input_total_tagihan') }}</span>
                     </div>
 
                     <div class="input-wrapper" style = "width:75%;background-color: white;margin-bottom:0px;" >
-                        <input type="text" name="input_hutang_tagihan" value="{{$tagihan_vendor->hutang}}">
-                        <label for="input_hutang_tagihan" ><span> Hutang Service</span></label>
-                        <span class="error-message">{{ $errors->first('input_hutang_tagihan') }}</span>
+                        <input type="text" name="input_piutang_tagihan" value="{{$tagihan_customer->piutang}}" readonly>
+                        <label for="input_piutang_tagihan" ><span> Piutang Service</span></label>
+                        <span class="error-message">{{ $errors->first('input_piutang_tagihan') }}</span>
                     </div>
 
                     <div class="input-wrapper" style = "width:75%;background-color: white;margin-bottom:0px;" >
-                        <input type="text"  name="input_nominal_pembayaran" value="{{$tagihan_vendor->quantity_service}}">
+                        <input type="text"  name="input_nominal_pembayaran" value="{{$tagihan_customer->quantity_service}}">
                         <label for="input_nominal_pembayaran" ><span> Nominal Pembayaran</span></label>
                         <span class="error-message">{{ $errors->first('input_nominal_pembayaran') }}</span>
                     </div>
 
                     <div class="input-wrapper" style="">
-                        <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Masukkan Keterangan Tagihan" style="width: 75%;margin-top:10px"></textarea>
+                        <textarea rows="3" cols="20" name="keterangan_tagihan" id="input_keterangan_tagihan" placeholder="Masukkan Keterangan Tagihan" style="width: 75%;margin-top:10px"></textarea>
                         <span class="error-message">{{ $errors->first('keterangan_tagihan') }}</span>
                     </div>
                 </div>
@@ -88,8 +92,8 @@
 
                 <div class="input-wrapper" style="width: 75%;margin-bottom:0px;">
                     <input type="Id_dokumen" name="Id_dokumen" id="Id_dokumen" readonly
-                        value= {{$id_tagihan_vendor}}>
-                    <label for="Id_dokumen" ><span> ID Tagihan Vendor</span></label>
+                        value= {{$id_tagihan_customer}}>
+                    <label for="Id_dokumen" ><span> ID Tagihan Customer</span></label>
                     <span class="error-message">{{ $errors->first('Id_dokumen') }}</span>
                 </div>
 
@@ -107,8 +111,8 @@
                         <th>Item</th>
                         <th>Description</th>
                         <th>QTY</th>
-                        @if(count($list_service_tagihan_vendor) > 0)
-                            @if($list_service_tagihan_vendor[0]->container_service != null)
+                        @if(count($list_service_tagihan_customer) > 0)
+                            @if($list_service_tagihan_customer[0]->container_service != null)
                                 <th>container</th>
                             @endif
                         @endif
@@ -119,31 +123,31 @@
                     </thead>
                     <tbody id="tbody_tagihan_vendor">
                         <?php $nomor_urut_dokumen = 0 ?>
-                        @foreach ($list_service_tagihan_vendor as $tagihan_vendor)
+                        @foreach ($list_service_tagihan_customer as $tagihan_customer)
                         <tr>
                             <td>{{$nomor_urut_dokumen + 1}}</td>
                             <td>
-                                <input type="text" style = "width:200px;" readonly name="input_nama_service" value="{{$tagihan_vendor->nama_service}}">
+                                <input type="text" style = "width:200px;" readonly name="input_nama_service" value="{{$tagihan_customer->nama_service}}">
                             </td>
                             <td>
-                                <input type="text" style = "width:40px;" readonly name="input_quantity_service" value="{{$tagihan_vendor->quantity_service}}">
+                                <input type="text" style = "width:40px;" readonly name="input_quantity_service" value="{{$tagihan_customer->quantity_service}}">
                             </td>
-                            @if($tagihan_vendor->container_service != null)
+                            @if($tagihan_customer->container_service != null)
                                 <td>
-                                    <input type="text" style = "width:40px;" readonly name="input_container_service" value="{{$tagihan_vendor->container_service}}">
+                                    <input type="text" style = "width:40px;" readonly name="input_container_service" value="{{$tagihan_customer->container_service}}">
                                 </td>
                             @endif
                             <td>
-                                <input type="text" style = "width:100px;" readonly name="input_harga_service" value="{{$tagihan_vendor->harga_service}}">
+                                <input type="text" style = "width:100px;" readonly name="input_harga_service" value="{{$tagihan_customer->harga_service}}">
                             </td>
                             <td>
-                                <input type="text" style = "width:100px" name="input_diskon_service" value="{{$tagihan_vendor->diskon_service}}">
+                                <input type="text" style = "width:100px" name="input_diskon_service" value="{{$tagihan_customer->diskon_service}}">
                             </td>
                             <td>
-                                <input type="hidden" name="input_pajak_service" value="{{$tagihan_vendor->pajak_service}}"><input type="checkbox" @if($tagihan_vendor->pajak_service != 0) checked @endif style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
+                                <input type="hidden" name="input_pajak_service" value="{{$tagihan_customer->pajak_service}}"><input type="checkbox" @if($tagihan_customer->pajak_service != 0) checked @endif style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
                             </td>
                             <td>
-                                <input type="text" style = "width:80px" readonly name="input_total" value = "{{$tagihan_vendor->total_service}}">
+                                <input type="text" style = "width:80px" readonly name="input_total" value = "{{$tagihan_customer->total_service}}">
                             </td>
                             {{-- <td>
                                 <input type="text" style = "width:80px" name="nominal_pembayaran" value = 0>
@@ -162,7 +166,7 @@
             </div>
 
             <div class="container_right">
-                <button type="submit" class="button" style="top: 10px;float:right"><span>Bayar</span></button>
+                <button type="submit" class="button" style="top: 10px;float:right"><span>Lunas</span></button>
             </div>
         </form>
 
@@ -173,6 +177,7 @@
                 let nomor_COA = $('#select_nomor_COA option:selected').val();
                 $("#select_nomor_COA option[value='']").remove();
                 $("#select_nomor_rekening").empty();
+                $('#input_nomor_COA').val(nomor_COA);
 
                 $.ajax({
                     type : 'GET',
@@ -185,9 +190,16 @@
                             console.log(data['list_rekening'][i]['nama_rekening'])
                             if(data['list_rekening'][i]['nama_rekening'] == null){
                                 $('#select_nomor_rekening').append(new Option(data['list_rekening'][i]['nomor_rekening'], data['list_rekening'][i]['nomor_rekening']))
+                                $('#input_nomor_rekening').val(data['list_rekening'][i]['nomor_rekening']);
+                                $('#input_rekening').val(data['list_rekening'][i]['nomor_rekening']);
+                                $('#input_nama_rekening').val('');
+
                             }
                             else{
                                 $('#select_nomor_rekening').append(new Option(data['list_rekening'][i]['nama_rekening'] +"-"+ data['list_rekening'][i]['nomor_rekening'], data['list_rekening'][i]['nomor_rekening']))
+                                $('#input_rekening').val(data['list_rekening'][i]['nomor_rekening']+"-"+data['list_rekening'][i]['nama_rekening']);
+                                $('#input_nomor_rekening').val(data['list_rekening'][i]['nomor_rekening']);
+                                $('#input_nama_rekening').val(data['list_rekening'][i]['nama_rekening']);
                             }
                         }
                     }

@@ -11,6 +11,8 @@ class tagihan_customer_model extends Model
     protected $fillable = [
         'nomor_so',
         'bank_pelunasan',
+        'piutang',
+        'keterangan_tagihan',
         'total_service'
     ];
 }

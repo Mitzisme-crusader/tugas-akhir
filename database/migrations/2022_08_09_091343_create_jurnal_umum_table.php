@@ -18,7 +18,11 @@ class CreateJurnalUmumTable extends Migration
             $table->string('nama_rekening')->nullable();
             $table->string('nomor_rekening');
             $table->string('nomor_COA');
-            $table->integer('total_rekening');
+            $table->string('keterangan_tagihan')->nullable();
+            $table->integer('total_debit');
+            $table->integer('total_kredit');
+            $table->integer('hutang')->nullable();
+            $table->integer('piutang')->nullable();
             $table->integer('status_aktif');
             $table->timestamps();
         });

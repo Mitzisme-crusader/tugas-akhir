@@ -93,9 +93,6 @@
                             <td>
                                 <input type="hidden" name="input_pajak_service[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
                             </td>
-                            <td>
-                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
-                            </td>
                             <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "0"></td>
                             <td>
                                 <label>
@@ -123,9 +120,6 @@
                             <td><input type="text" style = "width:40px" id="input_diskon_${nomor_urut_dokumen}" onkeyup= (ubah_total(${nomor_urut_dokumen})) name="input_diskon_service[]" nomor_urut= "${nomor_urut_dokumen}" value = "0"></td>
                             <td>
                                 <input type="hidden" name="input_pajak_service[]" value="0"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
-                            </td>
-                            <td>
-                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
                             </td>
                             <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "0"></td>
                             <td>
@@ -185,7 +179,6 @@
                                 <th>Unit Price</th>
                                 <th>Disc%</th>
                                 <th>Tax</th>
-                                <th>Keterangan</th>
                                 <th>Amount</th>
                                 <th>Active</th>
                             `);
@@ -211,9 +204,6 @@
                                             <td><input type="text" style = "width:40px" id="input_diskon_${nomor_urut_dokumen}" onkeyup= (ubah_total(${nomor_urut_dokumen})) name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}" nomor_urut= "${nomor_urut_dokumen}" value = "0"></td>
                                             <td>
                                                 <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" checked onclick="this.previousSibling.value=11-this.previousSibling.value">
-                                            </td>
-                                            <td>
-                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
                                             </td>
                                             <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}"></td>
                                             <td>
@@ -244,9 +234,6 @@
                                             <td>
                                                 <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
                                             </td>
-                                            <td>
-                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
-                                            </td>
                                             <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}"></td>
                                             <td>
                                                 <label>
@@ -267,7 +254,6 @@
                                 <th>Unit Price</th>
                                 <th>Disc%</th>
                                 <th>Tax</th>
-                                <th>Keterangan</th>
                                 <th>Amount</th>
                                 <th>Active</th>
                             `);
@@ -290,9 +276,6 @@
                                             <td><input type="text" style = "width:40px" id="input_diskon_${nomor_urut_dokumen}" onkeyup= (ubah_total(${nomor_urut_dokumen})) name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}" nomor_urut= "${nomor_urut_dokumen}" value = "0"></td>
                                             <td>
                                                 <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" checked onclick="this.previousSibling.value=11-this.previousSibling.value">
-                                            </td>
-                                            <td>
-                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
                                             </td>
                                             <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}"></td>
                                             <td>
@@ -319,9 +302,6 @@
                                             <td><input type="text" style = "width:40px" id="input_diskon_${nomor_urut_dokumen}" onkeyup= (ubah_total(${nomor_urut_dokumen})) name="input_diskon_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['diskon_service']}" nomor_urut= "${nomor_urut_dokumen}" value = "0"></td>
                                             <td>
                                                 <input type="hidden" name="input_pajak_service[]" value="${data['list_extra_service'][nomor_urut_dokumen]['pajak_service']}"><input type="checkbox" style = "width:40px" nomor_urut= "${nomor_urut_dokumen}" onchange="ubah_total(this)" onclick="this.previousSibling.value=11-this.previousSibling.value">
-                                            </td>
-                                            <td>
-                                                <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Keterangan Tagihan" style="width: 100%"></textarea>
                                             </td>
                                             <td><input type="text" style = "width:80px" id="input_total_${nomor_urut_dokumen}" name="input_total[]" value = "${data['list_extra_service'][nomor_urut_dokumen]['total_service']}"></td>
                                             <td>

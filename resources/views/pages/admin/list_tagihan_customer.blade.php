@@ -31,7 +31,7 @@
                         <td>
                             <form action="{{url('admin/detail_tagihan_customer')}}" method="get">
                                 {{csrf_field()}}
-                                <input type="hidden" name="nomor_so" value="{{$tagihan_customer->id_tagihan_customer}}">
+                                <input type="hidden" name="id_tagihan_customer" value="{{$tagihan_customer->id_tagihan_customer}}">
                                 <button type="submit" class="button"><span>Detail</span></button>
                             </form>
                         </td>

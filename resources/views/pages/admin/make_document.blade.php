@@ -178,7 +178,7 @@
             <label class="label_extra_service popupable_freight_destination" id="label_extra_service_freight_destination"><span>Add Services for Destination</span></label>
 
             <div class = "btn_submit_spk">
-                <button type="submit" class="button"><span>Create Document</span></button>
+                <button type="submit" class="button" style="bottom:30px;float:right;display:block"><span>Create Document</span></button>
             </div>
 
         </form>

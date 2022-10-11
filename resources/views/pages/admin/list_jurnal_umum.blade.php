@@ -40,36 +40,55 @@
         <div class="table-wrapper">
             <table>
                 <thead>
-                    <th>Tanggal JV</th>
+                    <th>Tanggal Jurnal Umummm</th>
                     <th>No.Akun</th>
                     <th>Nama Akun</th>
                     <th>Debit</th>
                     <th>Kredit</th>
                 </thead>
                 <tbody>
-                    {{-- @foreach($list_dokumen_SPK as $dokumen_SPK)
-                    <tr>
-                        <td>{{$dokumen_SPK->id_dokumen_spk}}</td>
-                        <td>{{$dokumen_SPK->judul_dokumen}}</td>
-                        <td>{{$dokumen_SPK->nama_customer}}</td>
-                        <td>{{$dokumen_SPK->negara_customer}}</td>
-                        <td>{{$dokumen_SPK->nama_perusahaan_customer}}</td>
-                        <td>
-                            <form action="{{url('admin/edit_dokumen_SPK')}}" method="get">
-                                {{csrf_field()}}
-                                <input type="hidden" name="id_dokumen" value="{{$dokumen_SPK->id_dokumen_spk}}">
-                                <button type="submit" class="button"><span>Edit</span></button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="{{url('admin/delete_dokumen_SPK')}}" method="post">
-                                {{csrf_field()}}
-                                <input type="hidden" name="id_dokumen" value="{{$dokumen_SPK->id_dokumen_spk}}">
-                                <button type="submit" class="button"><span>Delete</span></button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach --}}
+                    @foreach($list_jurnal_umum as $jurnal_umum)
+                        @if($jurnal_umum->piutang!= null)
+                            <tr>
+                                <td>{{$jurnal_umum->created_at}}</td>
+                                <td>{{$jurnal_umum->nomor_rekening}}-{{$jurnal_umum->nama_rekening}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->total_debit}}</td>
+                                <td></td>
+                            </tr>
+                            @if($jurnal_umum->piutang > 0)
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Piutang</td>
+                                    <td></td>
+                                    <td>{{$jurnal_umum->total_kredit}}</td>
+                                </tr>
+                            @endif
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>{{$jurnal_umum->keterangan_tagihan}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->total_debit - $jurnal_umum->piutang}}</td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td>{{$jurnal_umum->created_at}}</td>
+                                <td>{{$jurnal_umum->nomor_rekening}}-{{$jurnal_umum->nama_rekening}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->total_debit}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>{{$jurnal_umum->keterangan_tagihan}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->total_kredit}}</td>
+                            </tr>
+                        @endif
+                    @endforeach
                 </tbody>
                 {{-- <tfoot>
 

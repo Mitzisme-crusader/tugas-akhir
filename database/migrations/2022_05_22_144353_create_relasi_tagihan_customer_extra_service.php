@@ -23,7 +23,6 @@ class CreateRelasiTagihanCustomerExtraService extends Migration
             $table->integer('harga_service')->nullable();
             $table->integer('diskon_service')->nullable();
             $table->integer('pajak_service')->nullable();
-            $table->longText('keterangan_tagihan')->nullable();
             $table->integer('total_service');
             $table->timestamps();
         });

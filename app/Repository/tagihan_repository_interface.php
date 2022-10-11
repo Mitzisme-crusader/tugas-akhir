@@ -29,5 +29,11 @@ interface tagihan_repository_interface
    //input tagihan customer
    public function add_tagihan_customer($data_tagihan_customer);
    public function add_service_tagihan_customer($data_service_tagihan_customer);
+   public function get_tagihan_customer($id_tagihan_customer);
+   public function get_service_tagihan_customer($id_tagihan_customer);
+   public function terima_pembayaran_tagihan_customer($nominal_pembayaran, $id_tagihan_customer,$bank_pelunasan);
    public function get_all_tagihan_customer();
+   //Jurnal Umum
+   public function add_jurnal_umum($data_jurnal_umum);
+   public function get_all_jurnal_umum();
 }

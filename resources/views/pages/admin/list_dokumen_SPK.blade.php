@@ -62,7 +62,7 @@
                             <form action="{{url('admin/edit_dokumen_SPK')}}" method="post">
                                 {{csrf_field()}}
                                 <input type="hidden" name="judul_dokumen" value="{{$dokumen_SPK->judul_dokumen}}">
-                                <button type="submit" class="button"><span>Edit</span></button>
+                                <button type="submit" class="button"><span>Detail</span></button>
                             </form>
                         </td>
                         <td>

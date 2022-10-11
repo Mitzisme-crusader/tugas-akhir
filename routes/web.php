@@ -96,9 +96,13 @@ Route::group(['prefix' => 'admin'], function () {
     //Customer
     Route::get('/input_tagihan_customer', 'App\Http\Controllers\admin_controller@pergi_ke_input_tagihan_customer');
 
+    Route::get('/detail_tagihan_customer', 'App\Http\Controllers\admin_controller@pergi_ke_detail_tagihan_customer');
+
     Route::post('/proses_input_tagihan_customer', 'App\Http\Controllers\admin_controller@proses_input_tagihan_customer');
 
     Route::get('/list_tagihan_customer', 'App\Http\Controllers\admin_controller@pergi_ke_list_tagihan_customer');
+
+    Route::post('/pembayaran_tagihan_customer', 'App\Http\Controllers\admin_controller@proses_menerima_pembayaran_tagihan_customer');
 
     Route::get('/get_data_extra_service_SO', 'App\Http\Controllers\admin_controller@get_data_extra_service_SO');
 

@@ -17,6 +17,7 @@ class CreateTagihanVendorTable extends Migration
             $table->bigIncrements('id_tagihan_vendor');
             $table->string('nomor_so');
             $table->integer('hutang');
+            $table->string('keterangan_tagihan')->nullable();
             $table->integer('total_service');
             $table->timestamps();
         });

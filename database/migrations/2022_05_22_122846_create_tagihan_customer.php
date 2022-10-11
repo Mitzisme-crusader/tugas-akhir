@@ -17,6 +17,8 @@ class CreateTagihanCustomer extends Migration
             $table->bigIncrements('id_tagihan_customer');
             $table->string('nomor_so');
             $table->string('bank_pelunasan')->nullable();
+            $table->integer('piutang');
+            $table->string('keterangan_tagihan')->nullable();
             $table->integer('total_service');
             $table->timestamps();
         });
