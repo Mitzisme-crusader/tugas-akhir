@@ -49,6 +49,10 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post('/proses_save_document', 'App\Http\Controllers\admin_controller@proses_save_document_SPK');
 
+    Route::post('/download_dokumen_SPK', 'App\Http\Controllers\admin_controller@proses_download_dokumen_SPK');
+
+    Route::post('/edit_dokumen_SPK', 'App\Http\Controllers\admin_controller@pergi_ke_detail_dokumen_SPK');
+
     //Dokumen SO
 
     Route::get('/make_dokumen_SO', 'App\Http\Controllers\admin_controller@pergi_ke_make_dokumen_SO');

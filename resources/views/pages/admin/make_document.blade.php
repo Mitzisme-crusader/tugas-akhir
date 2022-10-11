@@ -41,8 +41,8 @@
             <div class="input-wrapper">
                 <select name="list_container" class="select_id" id="select_id_container">
                     <option value="">Select Container</option>
-                    <option value="1">1x20'' && 1x40''</option>
-                    <option value="2">1x20'' && 1x40'' && 1x45''</option>
+                    <option value="2">1x20'' && 1x40''</option>
+                    <option value="3">1x20'' && 1x40'' && 1x45''</option>
                 </select>
                 <span class="error-message">{{ $errors->first('list_container') }}</span>
             </div>

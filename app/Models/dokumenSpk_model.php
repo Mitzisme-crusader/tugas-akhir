@@ -15,6 +15,10 @@ class dokumenSpk_model extends Model
         'nama_customer',
         'nama_perusahaan_customer',
         'metode_pengiriman',
+        'nama_port',
+        'origin',
+        'destination',
+        'container',
         'negara_customer',
         'status_aktif_dokumen',
     ];

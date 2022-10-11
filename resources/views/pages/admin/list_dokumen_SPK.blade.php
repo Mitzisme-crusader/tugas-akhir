@@ -59,16 +59,16 @@
                         <td>{{$dokumen_SPK->nama_perusahaan_customer}}</td>
                         <td>{{date($dokumen_SPK->created_at)}}</td>
                         <td>
-                            <form action="{{url('admin/edit_dokumen_SPK')}}" method="get">
+                            <form action="{{url('admin/edit_dokumen_SPK')}}" method="post">
                                 {{csrf_field()}}
-                                <input type="hidden" name="id_dokumen" value="{{$dokumen_SPK->id_dokumen_spk}}">
+                                <input type="hidden" name="judul_dokumen" value="{{$dokumen_SPK->judul_dokumen}}">
                                 <button type="submit" class="button"><span>Edit</span></button>
                             </form>
                         </td>
                         <td>
                             <form action="{{url('admin/delete_dokumen_SPK')}}" method="post">
                                 {{csrf_field()}}
-                                <input type="hidden" name="id_dokumen" value="{{$dokumen_SPK->id_dokumen_spk}}">
+                                <input type="hidden" name="judul_dokumen" value="{{$dokumen_SPK->judul_dokumen}}">
                                 <button type="submit" class="button"><span>Delete</span></button>
                             </form>
                         </td>

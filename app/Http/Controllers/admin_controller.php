@@ -212,6 +212,10 @@ class admin_controller extends Controller
                 'nama_perusahaan_customer' => $customer->nama_perusahaan_customer,
                 'negara_customer' => $customer->negara_customer,
                 'metode_pengiriman' => $metode_pengirman,
+                'nama_port' => $port->nama_port,
+                'origin' => $_POST['origin'],
+                'destination' => $_POST['destination'],
+                'container' => $_POST['list_container'],
                 'status_aktif_dokumen' => 1,
             ];
             $dokumen = $this->admin_repository->create_dokumen_spk($dokumen_spk);
@@ -360,8 +364,40 @@ class admin_controller extends Controller
         return response()->download(public_path("hasil_dokumen/$kode_dokumen.docx"));
    }
 
-   //Dokumen simpan berjalan
+   public function pergi_ke_detail_dokumen_SPK(Request $request){
+        $dokumen_SPK = $this->admin_repository->get_dokumen_SPK($_POST['judul_dokumen']);
 
+        $array_data_SPK = array(
+            'pengangkutan' => $dokumen_SPK->judul_dokumen[7],
+            'service' => $dokumen_SPK->judul_dokumen[9],
+            'shipment' => $dokumen_SPK->judul_dokumen[11]
+        );
+
+        if($dokumen_SPK->metode_pengiriman == null){
+            $list_relasi_extra_service_SPK = $this->admin_repository->get_relasi_dokumen_spk_extra_service($_POST['judul_dokumen']);
+
+            return view("pages.admin.detail_dokumen_SPK")->with('dokumen_SPK', $dokumen_SPK)->with('array_data_SPK', $array_data_SPK)->with('list_relasi_extra_service_SPK', $list_relasi_extra_service_SPK);
+        }
+        else{
+            $list_relasi_extra_service_SPK_PPJK = $this->admin_repository->get_relasi_dokumen_spk_extra_service_freight_origin($_POST['judul_dokumen']);
+
+            $list_relasi_extra_service_SPK_freight = $this->admin_repository->get_relasi_dokumen_spk_extra_service_freight_destination($_POST['judul_dokumen']);
+
+            return view("pages.admin.detail_dokumen_SPK")->with('dokumen_SPK', $dokumen_SPK)->with('array_data_SPK', $array_data_SPK)->with('list_relasi_extra_service_SPK_PPJK', $list_relasi_extra_service_SPK_PPJK)->with('list_relasi_extra_service_SPK_freight', $list_relasi_extra_service_SPK_freight);
+        }
+
+        return view("pages.admin.detail_dokumen_SPK")->with('dokumen_SPK', $dokumen_SPK)->with('array_data_SPK', $array_data_SPK);
+    }
+
+
+   public function proses_download_dokumen_SPK(Request $request){
+
+        $kode_dokumen = $_POST['judul_dokumen'];
+
+        return response()->download(public_path("hasil_dokumen/$kode_dokumen.docx"));
+    }
+
+    //Dokumen Simpan Berjalan
    public function pergi_ke_make_dokumen_simpan_berjalan(Request $request){
        $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
 

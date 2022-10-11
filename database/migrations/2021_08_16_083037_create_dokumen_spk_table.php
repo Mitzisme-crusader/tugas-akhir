@@ -23,6 +23,10 @@ class CreateDokumenSpkTable extends Migration
             $table->string('nama_customer');
             $table->string('nama_perusahaan_customer');
             $table->string('metode_pengiriman')->nullable();
+            $table->string('nama_port')->nullable();
+            $table->string('origin')->nullable();
+            $table->string('destination')->nullable();
+            $table->string('container')->nullable();
             $table->string('negara_customer');
             $table->integer("status_aktif_dokumen");
             $table->timestamps();
