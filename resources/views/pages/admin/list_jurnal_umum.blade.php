@@ -40,7 +40,7 @@
         <div class="table-wrapper">
             <table>
                 <thead>
-                    <th>Tanggal Jurnal Umummm</th>
+                    <th>Tanggal Jurnal Umum</th>
                     <th>No.Akun</th>
                     <th>Nama Akun</th>
                     <th>Debit</th>
@@ -50,7 +50,7 @@
                     @foreach($list_jurnal_umum as $jurnal_umum)
                         @if($jurnal_umum->jenis_tagihan == 2 && $jurnal_umum->piutang > 0)
                             <tr>
-                                <td>{{$jurnal_umum->created_at->format('Y-m-d')}} ini customer</td>
+                                <td>{{$jurnal_umum->created_at->format('Y-m-d')}}</td>
                                 <td>{{$jurnal_umum->nomor_rekening}}-{{$jurnal_umum->nama_rekening}}</td>
                                 <td></td>
                                 <td>{{$jurnal_umum->total_debit}}</td>
