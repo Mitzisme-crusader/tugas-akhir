@@ -18,6 +18,7 @@ class jurnal_umum_model extends Model
         'hutang',
         'piutang',
         'total_rekening',
+        'jenis_tagihan',
         'status_aktif',
     ];
 }

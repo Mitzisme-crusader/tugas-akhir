@@ -51,6 +51,10 @@
             <div style="display:inline-block;border:1px solid;width : 48%;height: 250px;padding-left:50px;padding-top: 10px;right:18px">
                 <input type="hidden" value="{{$dokumen_so->nama_customer}}" name="input_nama_customer" id="input_nama_customer">
                 <input type="hidden" value="{{$dokumen_so->alamat_customer}}" name="input_alamat_customer" id="input_alamat_customer">
+                <input type="hidden" value="" name="input_rekening" id="input_rekening">
+                <input type="hidden" value="" name="input_nama_rekening" id="input_nama_rekening">
+                <input type="hidden" value="" name="input_nomor_rekening" id="input_nomor_rekening">
+                <input type="hidden" value="" name="input_nomor_COA" id="input_nomor_COA">
                 <div>
                     <div class="input-wrapper" style = "width:75%;background-color: white;margin-bottom:0px;" >
                         <input type="text" name="input_total_tagihan" value="{{$tagihan_vendor->total_service}}">
@@ -71,7 +75,7 @@
                     </div>
 
                     <div class="input-wrapper" style="">
-                        <textarea rows="3" cols="20" name="keterangan_tagihan[]" id="input_keterangan_tagihan" placeholder="Masukkan Keterangan Tagihan" style="width: 75%;margin-top:10px"></textarea>
+                        <textarea rows="3" cols="20" name="keterangan_tagihan" id="input_keterangan_tagihan" placeholder="Masukkan Keterangan Tagihan" style="width: 75%;margin-top:10px"></textarea>
                         <span class="error-message">{{ $errors->first('keterangan_tagihan') }}</span>
                     </div>
                 </div>
@@ -185,9 +189,15 @@
                             console.log(data['list_rekening'][i]['nama_rekening'])
                             if(data['list_rekening'][i]['nama_rekening'] == null){
                                 $('#select_nomor_rekening').append(new Option(data['list_rekening'][i]['nomor_rekening'], data['list_rekening'][i]['nomor_rekening']))
+                                $('#input_nomor_rekening').val(data['list_rekening'][i]['nomor_rekening']);
+                                $('#input_rekening').val(data['list_rekening'][i]['nomor_rekening']);
+                                $('#input_nama_rekening').val('');
                             }
                             else{
                                 $('#select_nomor_rekening').append(new Option(data['list_rekening'][i]['nama_rekening'] +"-"+ data['list_rekening'][i]['nomor_rekening'], data['list_rekening'][i]['nomor_rekening']))
+                                $('#input_rekening').val(data['list_rekening'][i]['nomor_rekening']+"-"+data['list_rekening'][i]['nama_rekening']);
+                                $('#input_nomor_rekening').val(data['list_rekening'][i]['nomor_rekening']);
+                                $('#input_nama_rekening').val(data['list_rekening'][i]['nama_rekening']);
                             }
                         }
                     }

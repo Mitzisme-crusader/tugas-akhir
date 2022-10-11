@@ -23,6 +23,7 @@ class CreateJurnalUmumTable extends Migration
             $table->integer('total_kredit');
             $table->integer('hutang')->nullable();
             $table->integer('piutang')->nullable();
+            $table->integer('jenis_tagihan')->nullable();
             $table->integer('status_aktif');
             $table->timestamps();
         });

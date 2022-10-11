@@ -48,9 +48,9 @@
                 </thead>
                 <tbody>
                     @foreach($list_jurnal_umum as $jurnal_umum)
-                        @if($jurnal_umum->piutang!= null)
+                        @if($jurnal_umum->jenis_tagihan == 2 && $jurnal_umum->piutang > 0)
                             <tr>
-                                <td>{{$jurnal_umum->created_at}}</td>
+                                <td>{{$jurnal_umum->created_at->format('Y-m-d')}} ini customer</td>
                                 <td>{{$jurnal_umum->nomor_rekening}}-{{$jurnal_umum->nama_rekening}}</td>
                                 <td></td>
                                 <td>{{$jurnal_umum->total_debit}}</td>
@@ -60,24 +60,65 @@
                                 <tr>
                                     <td></td>
                                     <td></td>
-                                    <td>Piutang</td>
+                                    <td>{{$jurnal_umum->keterangan_tagihan}}</td>
                                     <td></td>
-                                    <td>{{$jurnal_umum->total_kredit}}</td>
+                                    <td>{{$jurnal_umum->total_debit - $jurnal_umum->piutang}}</td>
                                 </tr>
                             @endif
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td>{{$jurnal_umum->keterangan_tagihan}}</td>
+                                <td>Piutang</td>
                                 <td></td>
-                                <td>{{$jurnal_umum->total_debit - $jurnal_umum->piutang}}</td>
+                                <td>{{$jurnal_umum->piutang}}</td>
                             </tr>
-                        @else
+                        @elseif($jurnal_umum->jenis_tagihan == 2 && $jurnal_umum->piutang == 0)
                             <tr>
-                                <td>{{$jurnal_umum->created_at}}</td>
+                                <td>{{$jurnal_umum->created_at->format('Y-m-d')}}</td>
                                 <td>{{$jurnal_umum->nomor_rekening}}-{{$jurnal_umum->nama_rekening}}</td>
                                 <td></td>
-                                <td>{{$jurnal_umum->total_debit}}</td>
+                                <td>{{$jurnal_umum->total_kredit}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>{{$jurnal_umum->keterangan_tagihan}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->total_kredit}}</td>
+                            </tr>
+                        @endif
+
+                        @if($jurnal_umum->jenis_tagihan == 1 && $jurnal_umum->hutang > 0)
+                            <tr>
+                                <td>{{$jurnal_umum->created_at->format('Y-m-d')}}</td>
+                                <td>{{$jurnal_umum->keterangan_tagihan}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->total_kredit}}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>{{$jurnal_umum->nomor_rekening}}-{{$jurnal_umum->nama_rekening}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->hutang}}</td>
+                            </tr>
+                            @if($jurnal_umum->hutang > 0)
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>hutang</td>
+                                    <td></td>
+                                    <td>{{$jurnal_umum->total_kredit -$jurnal_umum->hutang}}</td>
+                                </tr>
+                            @endif
+                        @elseif($jurnal_umum->jenis_tagihan == 1 && $jurnal_umum->piutang == 0)
+                            <tr>
+                                <td></td>
+                                <td>{{$jurnal_umum->nomor_rekening}}-{{$jurnal_umum->nama_rekening}}</td>
+                                <td></td>
+                                <td>{{$jurnal_umum->total_kredit}}</td>
                                 <td></td>
                             </tr>
                             <tr>

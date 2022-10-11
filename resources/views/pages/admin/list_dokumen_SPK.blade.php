@@ -57,7 +57,7 @@
                         <td>{{$dokumen_SPK->nama_customer}}</td>
                         <td>{{$dokumen_SPK->negara_customer}}</td>
                         <td>{{$dokumen_SPK->nama_perusahaan_customer}}</td>
-                        <td>{{date($dokumen_SPK->created_at)}}</td>
+                        <td>{{date($dokumen_SPK->created_at->format('Y-m-d'))}}</td>
                         <td>
                             <form action="{{url('admin/edit_dokumen_SPK')}}" method="post">
                                 {{csrf_field()}}

@@ -969,7 +969,6 @@ class admin_controller extends Controller
 
        $total_tagihan = 0;
        foreach ($_POST['checkbox_status_service'] as $key) {
-            $list_service_tagihan_vendor[$key]['vendor_service'] = $_POST['input_vendor_service'][$key];
             $list_service_tagihan_vendor[$key]['nama_service'] = $_POST['input_nama_service'][$key];
             $list_service_tagihan_vendor[$key]['quantity_service'] = $_POST['input_quantity_service'][$key];
 
@@ -980,7 +979,6 @@ class admin_controller extends Controller
             $list_service_tagihan_vendor[$key]['harga_service'] = $_POST['input_harga_service'][$key];
             $list_service_tagihan_vendor[$key]['diskon_service'] = $_POST['input_diskon_service'][$key];
             $list_service_tagihan_vendor[$key]['pajak_service'] = $_POST['input_pajak_service'][$key];
-            $list_service_tagihan_vendor[$key]['keterangan_tagihan'] = $_POST['keterangan_tagihan'][$key];
             $list_service_tagihan_vendor[$key]['total'] = $_POST['input_total'][$key];
 
             $total_tagihan = $total_tagihan + $list_service_tagihan_vendor[$key]['total'];
@@ -1062,9 +1060,26 @@ class admin_controller extends Controller
 
         $tagihan_vendor = $this->tagihan_repository->bayar_tagihan_vendor($nominal_pembayaran, $id_tagihan_vendor);
 
+        $tagihan_vendor = $this->tagihan_repository->get_tagihan_vendor($id_tagihan_vendor);
+
         $total_rekening = $this->tagihan_repository->kurangi_total_rekening($nominal_pembayaran, $nomor_rekening);
 
         $total_COA = $this->tagihan_repository->kurangi_total_COA($nominal_pembayaran, $nomor_COA);
+
+        $data_jurnal_umum = [
+            'nomor_COA' => $_POST['input_nomor_COA'],
+            'nama_rekening' => $_POST['input_nama_rekening'],
+            'nomor_rekening' => $_POST['input_nomor_rekening'],
+            'keterangan_tagihan' => $_POST['keterangan_tagihan'],
+            'status_aktif' => '1',
+            'total_debit' => $nominal_pembayaran,
+            'hutang' => $tagihan_vendor->hutang,
+            'piutang' => null,
+            'jenis_tagihan' => 1,
+            'total_kredit' => $tagihan_vendor->total_service,
+        ];
+
+        $jurnal_umum = $this->tagihan_repository->add_jurnal_umum($data_jurnal_umum);
 
         $request->session()->flash('message', 'Input tagihan vendor berhasil');
 
@@ -1324,6 +1339,7 @@ class admin_controller extends Controller
             'total_debit' => $tagihan_customer->total_service,
             'hutang' => null,
             'piutang' => $tagihan_customer->piutang,
+            'jenis_tagihan' => 2,
             'total_kredit' => $nominal_pembayaran,
         ];
 
