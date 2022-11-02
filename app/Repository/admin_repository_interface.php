@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 interface admin_repository_interface
 {
    //Customer
-   public function all(): Collection;
+   public function all();
    public function add_customer($data_customer);
    public function delete_customer($id_customer);
    public function get_customer($target_kolom);

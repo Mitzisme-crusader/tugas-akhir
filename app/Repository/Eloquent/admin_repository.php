@@ -35,14 +35,14 @@ class admin_repository extends base_repository implements admin_repository_inter
        parent::__construct($model);
    }
 
-//    /**
-//     * @return Collection
-//     */
-//    //Customer
-//    public function all(): Collection
-//    {
-//        return $this->model->all();
-//    }
+   /**
+    * @return Collection
+    */
+   //Customer
+   public function all()
+   {
+       return $this->model->all();
+   }
 
    public function add_customer($data_customer)
    {
