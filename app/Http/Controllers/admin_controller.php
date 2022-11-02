@@ -1171,7 +1171,7 @@ class admin_controller extends Controller
             $all_service_invoice[$nomor_urut] = $service_tagihan_customer['nama_service'];
             $all_qty_service[$nomor_urut] = $service_tagihan_customer['quantity_service'];
             $all_unit_price_service[$nomor_urut] = $service_tagihan_customer['harga_service'];
-            $all_total_service[$nomor_urut] =  $all_qty_service[$nomor_urut] * $all_unit_price_service[$nomor_urut];
+            $all_total_service[$nomor_urut] =  $all_qty_service[$nomor_urut] * $all_unit_price_service[$nomor_urut] - $service_tagihan_customer['diskon_service'];
             $tax[$nomor_urut] = $service_tagihan_customer['pajak_service'];
 
             $data_tagihan_customer = $this->dokumen_so_repository->add_service_tagihan_customer($data_service_tagihan_customer);
@@ -1179,7 +1179,7 @@ class admin_controller extends Controller
             $stotal = $stotal + $all_total_service[$nomor_urut];
 
             if($service_tagihan_customer['pajak_service'] != 0){
-                $tax_all = $tax_all + $service_tagihan_customer['total'] / $service_tagihan_customer['pajak_service'];
+                $tax_all = $tax_all + $service_tagihan_customer['total'] / 100 * $service_tagihan_customer['pajak_service'];
             }
 
             ++$nomor_urut;
@@ -1260,7 +1260,7 @@ class admin_controller extends Controller
         $template->setValue('tax',  implode('<w:br/>  ', $tax));
         $template->setValue('tax_all', number_format($tax_all));
 
-        $final_total = $stotal - $tax_all;
+        $final_total = $stotal + $tax_all;
 
         $class_num_converter = new ControllersConvert_number();
 
