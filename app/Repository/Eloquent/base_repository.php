@@ -41,4 +41,9 @@ class base_repository implements eloquent_repository_interface
     {
         return $this->model->find($id);
     }
+
+    public function all()
+    {
+        return $this->model->all();
+    }
 }

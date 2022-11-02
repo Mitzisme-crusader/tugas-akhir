@@ -159,8 +159,11 @@ class admin_controller extends Controller
         $jenis_pengangkutan = $_POST['jenis_pengangkutan_radio'];
 
         $metode_pengirman = null;
+        $list_container = $_POST['list_container'];
+
         if($jenis_id_service == 2){
             $metode_pengirman = $_POST['list_metode_pengangkutan'];
+            $list_container = null;
         }
 
         $customer = $this->admin_repository->find_customer($_POST['list_id_customer']);
@@ -215,13 +218,14 @@ class admin_controller extends Controller
                 'nama_port' => $port->nama_port,
                 'origin' => $_POST['origin'],
                 'destination' => $_POST['destination'],
-                'container' => $_POST['list_container'],
+                'container' => $list_container,
                 'status_aktif_dokumen' => 1,
             ];
+
             $dokumen = $this->admin_repository->create_dokumen_spk($dokumen_spk);
 
         }catch (Throwable $e){
-            $request->session()->flash('message', "fail to safe");
+            $request->session()->flash('message', 'fail to safe');
             return redirect()->back();
         }
 
@@ -399,7 +403,7 @@ class admin_controller extends Controller
 
     //Dokumen Simpan Berjalan
    public function pergi_ke_make_dokumen_simpan_berjalan(Request $request){
-       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+       $list_dokumen_SO = $this->dokumen_so_repository->get_all_dokumen_SO();
 
        return view("pages.admin.make_dokumen_simpan_berjalan")->with('list_dokumen_SO', $list_dokumen_SO);
    }
@@ -571,26 +575,26 @@ class admin_controller extends Controller
             }
         }
 
-        $dokumen_simpan_berjalan = $this->admin_repository->update_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
+        $dokumen_simpan_berjalan = $this->dokumen_simpan_berjalan_repository->update_dokumen_simpan_berjalan($data_dokumen_simpan_berjalan);
 
         $request->session()->flash('message', 'Dokumen berhasil diubah');
         return redirect()->back();
    }
 
    public function pergi_ke_list_dokumen_simpan_berjalan(Request $request){
-       $list_dokumen_simpan_berjalan = $this->admin_repository->get_all_dokumen_simpan_berjalan();
+       $list_dokumen_simpan_berjalan = $this->dokumen_simpan_berjalan_repository->get_all_dokumen_simpan_berjalan();
 
        return view("pages.admin.list_dokumen_simpan_berjalan")->with('list_dokumen_simpan_berjalan', $list_dokumen_simpan_berjalan)->with('range_month',"");
    }
 
    public function search_dokumen_simpan_berjalan(Request $request){
-        $list_dokumen_simpan_berjalan = $this->admin_repository->search_dokumen_simpan_berjalan($_GET['query_search'], $_GET['list_option_table'],$_GET['range_month']);
+        $list_dokumen_simpan_berjalan = $this->dokumen_simpan_berjalan_repository->search_dokumen_simpan_berjalan($_GET['query_search'], $_GET['list_option_table'],$_GET['range_month']);
 
         return view("pages.admin.list_dokumen_simpan_berjalan")->with('list_dokumen_simpan_berjalan', $list_dokumen_simpan_berjalan)->with('range_month', $_GET['range_month']);
    }
 
    public function pergi_ke_detail_dokumen_simpan_berjalan(Request $request){
-       $dokumen_simpan_berjalan = $this->admin_repository->find_dokumen_simpan_berjalan($_GET['id_dokumen']);
+       $dokumen_simpan_berjalan = $this->dokumen_simpan_berjalan_repository->find_dokumen_simpan_berjalan($_GET['id_dokumen']);
 
        return view("pages.admin.edit_dokumen_simpan_berjalan")->with('dokumen_simpan_berjalan', $dokumen_simpan_berjalan);
    }
@@ -601,7 +605,7 @@ class admin_controller extends Controller
 
        $year = Carbon::now()->format('y');
        $month = Carbon::now()->format('m');
-       $nomor_urut = $this->admin_repository->get_id_dokumenSO_terbaru();
+       $nomor_urut = $this->dokumen_so_repository->get_id_dokumenSO_terbaru();
 
        $nomor_dokumen_SO = "SO" . $year . $month . $nomor_urut;
 
@@ -725,7 +729,7 @@ class admin_controller extends Controller
        if(count($list_service_dokumen_so_freight) > 0){
             $year = Carbon::now()->format('y');
             $month = Carbon::now()->format('m');
-            $nomor_urut = $this->admin_repository->get_id_dokumenSO_terbaru();
+            $nomor_urut = $this->dokumen_so_repository->get_id_dokumenSO_terbaru();
 
             $nomor_dokumen_SO = "SO" . $year . $month . $nomor_urut;
 
@@ -739,7 +743,7 @@ class admin_controller extends Controller
                 'status_aktif_dokumen' => 1
             ];
 
-            $dokumen_SO = $this->admin_repository->add_dokumen_SO($data_dokumen_SO);
+            $dokumen_SO = $this->dokumen_so_repository->add_dokumen_SO($data_dokumen_SO);
 
             foreach ($list_service_dokumen_so_freight as $service_dokumen_so_freight) {
                 $data_relasi_dokumen_so_extra_service_freight = [
@@ -769,7 +773,7 @@ class admin_controller extends Controller
    }
 
    public function pergi_ke_list_dokumen_SO(Request $request){
-       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+       $list_dokumen_SO = $this->dokumen_so_repository->get_all_dokumen_SO();
 
        return view('pages.admin.list_dokumen_so')->with('list_dokumen_SO', $list_dokumen_SO);
    }
@@ -777,12 +781,12 @@ class admin_controller extends Controller
    public function pergi_ke_edit_so(Request $request){
        $id_dokumen_so = $_GET['id_dokumen_so'];
 
-       $dokumen_so = $this->admin_repository->find_dokumen_SO($id_dokumen_so);
+       $dokumen_so = $this->dokumen_so_repository->find_dokumen_SO($id_dokumen_so);
 
        //1 = PPJK/Null, 2 = 'freight
-       $list_relasi_dokumen_so_extra_service_PPJK = $this->admin_repository->get_relasi_dokumen_so_extra_service($dokumen_so->nomor_so, "1");
+       $list_relasi_dokumen_so_extra_service_PPJK = $this->dokumen_so_repository->get_relasi_dokumen_so_extra_service($dokumen_so->nomor_so, "1");
 
-       $list_relasi_dokumen_so_extra_service_freight = $this->admin_repository->get_relasi_dokumen_so_extra_service($dokumen_so->nomor_so, "2");
+       $list_relasi_dokumen_so_extra_service_freight = $this->dokumen_so_repository->get_relasi_dokumen_so_extra_service($dokumen_so->nomor_so, "2");
 
        $list_relasi_dokumen_spk_extra_service = $this->admin_repository->get_relasi_dokumen_spk_extra_service($dokumen_so->judul_dokumen_spk);
 
@@ -877,7 +881,7 @@ class admin_controller extends Controller
             }
         }
 
-       $this->admin_repository->delete_relasi_dokumen_so_extra_service($_POST['Id_dokumen']);
+       $this->dokumen_so_repository->delete_relasi_dokumen_so_extra_service($_POST['Id_dokumen']);
 
         foreach ($list_service_dokumen_so_PPJK as $service_dokumen_so_PPJK) {
             if((isset($_POST['input_container_service_PPJK']))){
@@ -914,7 +918,7 @@ class admin_controller extends Controller
                 }
             }
 
-            $relasi = $this->admin_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_PPJK);
+            $relasi = $this->dokumen_so_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_PPJK);
        }
 
        if(count($list_service_dokumen_so_freight) > 0){
@@ -937,7 +941,7 @@ class admin_controller extends Controller
                     }
                 }
 
-                $relasi = $this->admin_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_freight);
+                $relasi = $this->dokumen_so_repository->add_relasi_dokumen_so_extra_service($data_relasi_dokumen_so_extra_service_freight);
             }
         }
 
@@ -954,7 +958,7 @@ class admin_controller extends Controller
    //Input Tagihan Vendor
 
    public function pergi_ke_input_tagihan_vendor(Request $request){
-       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+       $list_dokumen_SO = $this->dokumen_so_repository->get_all_dokumen_SO();
 
        return view('pages.admin.input_tagihan_vendor')->with('list_dokumen_SO', $list_dokumen_SO);
    }
@@ -1023,7 +1027,7 @@ class admin_controller extends Controller
    }
 
    public function pergi_ke_list_tagihan_vendor(Request $request){
-       $list_tagihan_vendor = $this->admin_repository->get_all_tagihan_vendor();
+       $list_tagihan_vendor = $this->tagihan_repository->get_all_tagihan_vendor();
 
        return view('pages.admin.list_tagihan_vendor')->with('list_tagihan_vendor', $list_tagihan_vendor);
    }
@@ -1032,13 +1036,13 @@ class admin_controller extends Controller
 
        $id_tagihan_vendor = $_GET['id_tagihan_vendor'];
 
-       $tagihan_vendor = $this->admin_repository->get_tagihan_vendor($id_tagihan_vendor);
+       $tagihan_vendor = $this->tagihan_repository->get_tagihan_vendor($id_tagihan_vendor);
 
-       $list_service_tagihan_vendor = $this->admin_repository->get_service_tagihan_vendor($tagihan_vendor['id_tagihan_vendor']);
+       $list_service_tagihan_vendor = $this->tagihan_repository->get_service_tagihan_vendor($tagihan_vendor['id_tagihan_vendor']);
 
-       $dokumen_so = $this->admin_repository->get_dokumen_so_by_nomor_so($tagihan_vendor['nomor_so']);
+       $dokumen_so = $this->dokumen_so_repository->get_dokumen_so_by_nomor_so($tagihan_vendor['nomor_so']);
 
-       $list_nomor_COA = $this->admin_repository->get_all_nomor_COA();
+       $list_nomor_COA = $this->tagihan_repository->get_all_nomor_COA();
 
        return view("pages.admin.detail_tagihan_vendor")->with('tagihan_vendor', $tagihan_vendor)->with('dokumen_so', $dokumen_so)->with('list_service_tagihan_vendor', $list_service_tagihan_vendor)->with('id_tagihan_vendor', $id_tagihan_vendor)->with('list_nomor_COA', $list_nomor_COA);
    }
@@ -1088,7 +1092,7 @@ class admin_controller extends Controller
 
    //input Tagihan customer
    public function pergi_ke_input_tagihan_customer(Request $request){
-       $list_dokumen_SO = $this->admin_repository->get_all_dokumen_SO();
+       $list_dokumen_SO = $this->dokumen_so_repository->get_all_dokumen_SO();
 
        return view('pages.admin.input_tagihan_customer')->with('list_dokumen_SO', $list_dokumen_SO);
    }
@@ -1283,7 +1287,7 @@ class admin_controller extends Controller
    }
 
    public function pergi_ke_list_tagihan_customer(Request $request){
-       $list_tagihan_customer = $this->admin_repository->get_all_tagihan_customer();
+       $list_tagihan_customer = $this->tagihan_repository->get_all_tagihan_customer();
 
        return view('pages.admin.list_tagihan_customer')->with('list_tagihan_customer', $list_tagihan_customer);
    }
@@ -1291,10 +1295,10 @@ class admin_controller extends Controller
    public function get_data_extra_service_SO(Request $request){
         $nomor_SO = $request->get('nomor_so');
 
-        $dokumen_so = $this->admin_repository->get_dokumen_so_by_nomor_so($nomor_SO);
+        $dokumen_so = $this->dokumen_so_repository->get_dokumen_so_by_nomor_so($nomor_SO);
 
         //ambil semua relasi service-dokumen so
-        $list_relasi_extra_service_SO = $this->admin_repository->get_relasi_dokumen_so_extra_service($nomor_SO, "all");
+        $list_relasi_extra_service_SO = $this->dokumen_so_repository->get_relasi_dokumen_so_extra_service($nomor_SO, "all");
 
         return response()->json(array('list_extra_service' => $list_relasi_extra_service_SO, 'dokumen_so' => $dokumen_so));
 
@@ -1378,7 +1382,7 @@ class admin_controller extends Controller
    public function get_data_COA(Request $request){
        $nomor_COA = $request->get('nomor_COA');
 
-       $nomor_COA = $this->admin_repository->get_nomor_COA($nomor_COA);
+       $nomor_COA = $this->tagihan_repository->get_nomor_COA($nomor_COA);
 
        return response()->json(array('nomor_COA' => $nomor_COA));
    }
@@ -1386,7 +1390,7 @@ class admin_controller extends Controller
    //Rekening
    public function pergi_ke_daftarkan_rekening(Request $request){
 
-        $list_nomor_COA = $this->admin_repository->get_all_nomor_COA();
+        $list_nomor_COA = $this->tagihan_repository->get_all_nomor_COA();
         return view("pages.admin.daftar_rekening")->with('list_nomor_COA', $list_nomor_COA);
    }
 
@@ -1410,7 +1414,7 @@ class admin_controller extends Controller
                 'status_aktif' => 1,
             ];
 
-            $rekening = $this->admin_repository->add_rekening($data_rekening);
+            $rekening = $this->tagihan_repository->add_rekening($data_rekening);
 
             $request->session()->flash('message', 'Input rekening berhasil');
 
@@ -1426,7 +1430,7 @@ class admin_controller extends Controller
                 'status_aktif' => 1,
             ];
 
-            $COA = $this->admin_repository->add_COA($data_COA);
+            $COA = $this->tagihan_repository->add_COA($data_COA);
 
             $data_rekening = [
                 'nama_rekening' => $_POST['input_nama_rekening'],
@@ -1436,7 +1440,7 @@ class admin_controller extends Controller
                 'status_aktif' => 1,
             ];
 
-            $rekening = $this->admin_repository->add_rekening($data_rekening);
+            $rekening = $this->tagihan_repository->add_rekening($data_rekening);
 
             $request->session()->flash('message', 'Input rekening berhasil');
 
@@ -1450,7 +1454,7 @@ class admin_controller extends Controller
    public function get_data_rekening(Request $request){
         $nomor_COA = $request->get('nomor_COA');
 
-        $list_rekening = $this->admin_repository->get_rekening($nomor_COA);
+        $list_rekening = $this->tagihan_repository->get_rekening($nomor_COA);
 
         return response()->json(array('list_rekening' => $list_rekening));
     }

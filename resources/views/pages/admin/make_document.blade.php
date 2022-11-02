@@ -149,6 +149,8 @@
                 </div>
             </div>
 
+            <input type="hidden" name="list_container" id="hidden_nilai_container" value="selected value">
+
             <input type="hidden" name="hidden_nama_extra_service" id="hidden_nama_extra_service">
             <input type="hidden" name="hidden_harga_20_feet_extra_service" id="hidden_harga_20_feet_extra_service">
             <input type="hidden" name="hidden_harga_40_feet_extra_service" id="hidden_harga_40_feet_extra_service">
