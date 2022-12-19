@@ -14,13 +14,13 @@ interface eloquent_repository_interface
     * @param array $attributes
     * @return Model
     */
-   public function create(array $attributes): Model;
+   public function create($attributes);
 
    /**
     * @param $id
     * @return Model
     */
-   public function find($id): ?Model;
+   public function find($id);
 
    public function all();
 }

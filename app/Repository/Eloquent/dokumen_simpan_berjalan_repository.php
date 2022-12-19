@@ -26,11 +26,16 @@ class dokumen_simpan_berjalan_repository extends base_repository implements doku
     */
    public function all(): Collection
    {
-       return $this->model->all();
+        $lastmonth = now()->subMonth()->month;
+        $month = now()->month;
+        $year = now()->year;
+        $date = 25;
+        $lastdate = 26;
+        return dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.'-'.$lastmonth.'-'.$lastdate , $year.'-'.$month.'-'.$date])->get();
    }
 
    //Dokumen Simpan Berjalan
-   public function create_dokumen_simpan_berjalan($dokumen_simpan_berjalan)
+   public function create($dokumen_simpan_berjalan)
    {
        return dokumen_simpan_berjalan_model::create($dokumen_simpan_berjalan);
    }
@@ -46,12 +51,12 @@ class dokumen_simpan_berjalan_repository extends base_repository implements doku
 
    public function get_all_dokumen_simpan_berjalan()
    {
-       $lastmonth = now()->subMonth()->month;
-       $month = now()->month;
-       $year = now()->year;
-       $date = 25;
-       $lastdate = 26;
-       return dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.'-'.$lastmonth.'-'.$lastdate , $year.'-'.$month.'-'.$date])->get();
+    //    $lastmonth = now()->subMonth()->month;
+    //    $month = now()->month;
+    //    $year = now()->year;
+    //    $date = 25;
+    //    $lastdate = 26;
+    //    return dokumen_simpan_berjalan_model::whereBetween('ETA',[$year.'-'.$lastmonth.'-'.$lastdate , $year.'-'.$month.'-'.$date])->get();
    }
 
    public function find_dokumen_simpan_berjalan($id_dokumen)

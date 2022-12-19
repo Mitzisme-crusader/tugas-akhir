@@ -42,7 +42,7 @@ class dokumen_SO_repository extends base_repository implements dokumen_SO_reposi
        return $id_dokumen + 1;
    }
 
-   public function add_dokumen_SO($data_dokumen_SO){
+   public function create($data_dokumen_SO){
        return dokumen_so_model::create($data_dokumen_SO);
    }
 
@@ -72,10 +72,6 @@ class dokumen_SO_repository extends base_repository implements dokumen_SO_reposi
    public function get_dokumen_so_by_nomor_so($nomor_so)
    {
        return dokumen_so_model::where('nomor_so', $nomor_so)->first();
-   }
-
-   public function get_all_dokumen_SO(){
-       return dokumen_so_model::all();
    }
 
    public function find_dokumen_SO($id_dokumen_SO){

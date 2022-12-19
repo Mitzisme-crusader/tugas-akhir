@@ -28,7 +28,7 @@ class base_repository implements eloquent_repository_interface
     *
     * @return Model
     */
-    public function create(array $attributes): Model
+    public function create($attributes)
     {
         return $this->model->create($attributes);
     }
@@ -37,7 +37,7 @@ class base_repository implements eloquent_repository_interface
     * @param $id
     * @return Model
     */
-    public function find($id): ?Model
+    public function find($id)
     {
         return $this->model->find($id);
     }
