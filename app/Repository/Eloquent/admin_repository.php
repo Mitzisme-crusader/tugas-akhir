@@ -35,9 +35,9 @@ class admin_repository extends base_repository implements admin_repository_inter
        return $this->model->all();
    }
 
-   public function add_customer($data_customer)
+   public function create($data_customer)
    {
-       $this->model->insert($data_customer);
+       $this->model->create($data_customer);
    }
 
    public function delete_customer($id_customer){
@@ -52,7 +52,7 @@ class admin_repository extends base_repository implements admin_repository_inter
        return $hasil;
    }
 
-   public function find_customer($id){
+   public function find($id){
         return $this->model->find($id);
    }
 
